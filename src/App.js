@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Navbar from './Components/TopNav';
 import PersistentDrawer from './Components/LeftDrawer'
+import Typography from '@material-ui/core/Typography';
 
 class App extends Component {
   render() {
@@ -9,6 +10,9 @@ class App extends Component {
       <React.Fragment>
         {/* <Navbar/> */}
         <PersistentDrawer/>
+        <main>
+          <Typography>{'Test.'}</Typography>
+        </main>
       </React.Fragment>
     );
   }

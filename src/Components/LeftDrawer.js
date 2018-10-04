@@ -14,6 +14,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import thing from '@material-ui/core/'
 // import { mailFolderListItems, otherMailFolderListItems } from './tileData';
 
 const drawerWidth = 240;
@@ -176,7 +177,7 @@ class PersistentDrawer extends React.Component {
             </Toolbar>
           </AppBar>
           {before}
-          <main
+          {/* <main
             className={classNames(classes.content, classes[`content-${anchor}`], {
               [classes.contentShift]: open,
               [classes[`contentShift-${anchor}`]]: open,
@@ -184,7 +185,7 @@ class PersistentDrawer extends React.Component {
           >
             <div className={classes.drawerHeader} />
             <Typography>{'Test.'}</Typography>
-          </main>
+          </main> */}
           {after}
         </div>
       </div>
