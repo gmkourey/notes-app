@@ -1,16 +1,22 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+<<<<<<< HEAD
 import API from "../utils/API";
 
+=======
+import Input from './Input.js'
+>>>>>>> 0741c5e648f53b163c8173192fd6244de03b6746
 import AuthUserContext from './AuthUserContext';
 import { firebase } from '../firebase';
 import * as routes from '../constants/routes';
 
 class Note extends Component {
     state = {
-        user: {}
+        title: "",
+        body: ""
     }
 
+<<<<<<< HEAD
     handleFormSubmit = event => {
         event.preventDefault();
 
@@ -22,18 +28,34 @@ class Note extends Component {
             .catch(err => console.log(err))
         }
     }
+=======
+    handleInputChange = event => {
+        const { name, value } = event.target;
+        this.setState({
+          [name]: value
+        });
+    };
+>>>>>>> 0741c5e648f53b163c8173192fd6244de03b6746
 
     render() {
         return(
-            <form>
-            <h3>Note Title</h3>
-            <input type="text" id="titleInput">
-            <h3>Note Body</h3>
-            <input type="text" id="bodyInput">
-            <button type="submit" id="submit">Submit</button>
-            </form>
-        )
+            <div>
+                <Input
+                    value={this.state.title}
+                    onChange={this.handleInputChange}
+                    name="title"
+                    placeholder="Title (required)"
+                />
+                <Input
+                    value={this.state.body}
+                    onChange={this.handleInputChange}
+                    name="body"
+                    placeholder="Note Body (required)"
+                />
+
+            </div>
+        );
     }
 }
 
-export default NotePage;
+export default Note;
