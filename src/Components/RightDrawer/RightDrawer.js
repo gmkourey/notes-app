@@ -16,7 +16,7 @@ const styles = theme => ({
     flexGrow: 1,
   },
   appFrame: {
-    height: '100vh',
+    height: '100vh', // Important
     zIndex: 1,
     overflow: 'hidden',
     position: 'relative',
@@ -54,17 +54,25 @@ const styles = theme => ({
   drawerPaper: {
     position: 'relative',
     width: drawerWidth,
+    // height: '100vh' // Needed if removing root/ app divs
   },
-  drawerHeader: {
+  drawerHeaderL: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: '0 8px',
     ...theme.mixins.toolbar,
   },
+  drawerHeaderR: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    padding: '0 8px',
+    ...theme.mixins.toolbar,
+  },
   content: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
+    // backgroundColor: theme.palette.background.default,
     padding: theme.spacing.unit * 3,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
@@ -106,7 +114,7 @@ class RightDrawer extends React.Component {
             }}
           >
             <div className={classes.drawerHeader}>
-              Header
+              Right Drawer
               <IconButton onClick={this.props.handleRightDrawer}>
                 <ChevronRightIcon/>
               </IconButton>

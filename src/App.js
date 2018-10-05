@@ -38,9 +38,8 @@ class App extends Component {
     // const classes = styles.theme;
     return (
       <React.Fragment>
-        {/* <div> */}
-      <div className='root'>
-      <div className='appFrame'>
+      {/* <div className='root'> */}
+      {/* <div className='appFrame'> */}
         <Navbar
           leftOpen={this.state.leftOpen}
           rightOpen={this.state.rightOpen}
@@ -53,16 +52,15 @@ class App extends Component {
           handleLeftDrawer={this.handleLeftDrawer}
           handleRightDrawer={this.handleRightDrawer}
         />
-        {/* <main>
+        <main>
           <Typography>{'Test from app.js.'}</Typography>
-        </main> */}
+        </main>
         {/* <RightDrawer
           rightOpen={this.state.rightOpen}
           handleRightDrawer={this.handleRightDrawer}
         /> */}
-         </div>
-       </div>
-      {/* </div> */}
+         {/* </div> */}
+        {/* </div> */}
       </React.Fragment>
     );
   }
