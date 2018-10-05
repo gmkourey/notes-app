@@ -14,7 +14,7 @@ import AccountPage from './components/Account';
 
 import withAuthentication from './components/withAuthentication';
 import * as routes from './constants/routes';
-
+ 
 const App = () =>
   <Router>
     <div>
