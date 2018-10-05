@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-<<<<<<< HEAD
 import API from "../utils/API";
 
-=======
 import Input from './Input.js'
->>>>>>> 0741c5e648f53b163c8173192fd6244de03b6746
 import AuthUserContext from './AuthUserContext';
 import { firebase } from '../firebase';
 import * as routes from '../constants/routes';
@@ -16,7 +13,6 @@ class Note extends Component {
         body: ""
     }
 
-<<<<<<< HEAD
     handleFormSubmit = event => {
         event.preventDefault();
 
@@ -28,14 +24,12 @@ class Note extends Component {
             .catch(err => console.log(err))
         }
     }
-=======
     handleInputChange = event => {
         const { name, value } = event.target;
         this.setState({
           [name]: value
         });
     };
->>>>>>> 0741c5e648f53b163c8173192fd6244de03b6746
 
     render() {
         return(
