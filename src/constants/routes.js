@@ -7,5 +7,7 @@ const LANDING = '/';
 const HOME = '/home';
 const ACCOUNT = '/account';
 const PASSWORD_FORGET = '/pw-forget';
+const NOTES = '/notes';
 
-module.exports = {SIGN_UP,SIGN_IN,LANDING,HOME,ACCOUNT,PASSWORD_FORGET}
+
+module.exports = {SIGN_UP,SIGN_IN,LANDING,HOME,ACCOUNT,PASSWORD_FORGET,NOTES}
