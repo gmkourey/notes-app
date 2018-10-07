@@ -1,9 +1,7 @@
 import axios from "axios";
 
 export const saveNote =  (NoteData) => {
-    axios.post("/api/note", NoteData)
-    .then(console.log(NoteData))
-    .catch(err => console.log(err))
+    return axios.post("/api/note", NoteData)
 }
 
 
