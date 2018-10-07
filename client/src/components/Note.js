@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import API from "../utils/API";
-
+import * as API from "../utils/API";
+import FormBtn from './FormBtn.js';
 import Input from './Input.js'
 import AuthUserContext from './AuthUserContext';
 import { firebase } from '../firebase';
@@ -21,7 +21,8 @@ class Note extends Component {
                 title: this.state.title,
                 body: this.state.body
             })
-            .catch(err => console.log(err))
+            // .then(console.log("hello"))
+            // .catch(err => console.log(err))
         }
     }
     handleInputChange = event => {
@@ -46,7 +47,12 @@ class Note extends Component {
                     name="body"
                     placeholder="Note Body (required)"
                 />
-
+                <FormBtn
+                disabled={!(this.state.body && this.state.title)}
+                onClick={this.handleFormSubmit}
+                >
+                    Add Note
+                </FormBtn>
             </div>
         );
     }

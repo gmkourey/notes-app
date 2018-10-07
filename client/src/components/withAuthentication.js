@@ -45,7 +45,7 @@ const withAuthentication = (Component) =>
       const { authUser } = this.state;
 
       return (
-        <>
+        <div>
         <AuthUserContext.Provider value={authUser}>
           <Component {...this.props} />
         </AuthUserContext.Provider>
@@ -76,7 +76,7 @@ const withAuthentication = (Component) =>
           {/* </div> */}
           {/* </div> */}
         </React.Fragment>
-        </>
+        </div>
       );
     }
   }
