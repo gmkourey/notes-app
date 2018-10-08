@@ -89,7 +89,7 @@ class AccountMenuList extends React.Component {
                                 Account
                               </Link>
                             </MenuItem>
-                            <MenuItem onClick={auth.doSignOut}>Logout</MenuItem>
+                            <MenuItem onClick={auth.doSignOut}>Log out</MenuItem>
                             </>
                           ) : (
                             <MenuItem onClick={this.handleClose}>

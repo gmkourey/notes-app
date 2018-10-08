@@ -32,14 +32,11 @@ class Navbar extends React.Component {
           [classes[`appBarShift-right`]]: this.props.rightOpen
         })}
       >
-        <Toolbar style={{maxHeight: 30}}>
+        <Toolbar>
         <AuthUserContext.Consumer>
           {authUser => authUser
             ? (
             <>
-              {/* For testing */}
-              {console.log("Retrieving user info from firebase...")}
-              {console.log(authUser)}
               <IconButton
                 color="inherit"
                 aria-label="Open left  drawer"

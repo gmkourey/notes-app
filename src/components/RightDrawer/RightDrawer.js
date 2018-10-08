@@ -1,13 +1,13 @@
-// NOT CURRENTLY IN USE
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import Typography from '@material-ui/core/Typography';
+// import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+// import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import Close from '@material-ui/icons/Close';
+// import classNames from 'classnames';
 
 const drawerWidth = 240;
 
@@ -20,7 +20,7 @@ const styles = theme => ({
     zIndex: 1,
     overflow: 'hidden',
     position: 'relative',
-    display: 'flex',
+    // display: 'flex',
     width: '100%',
   },
   appBar: {
@@ -39,10 +39,12 @@ const styles = theme => ({
     }),
   },
   'appBarShift-left': {
-    marginLeft: drawerWidth,
+    // marginLeft: drawerWidth,
+    marginLeft: 0
   },
   'appBarShift-right': {
-    marginRight: drawerWidth,
+    // marginRight: drawerWidth,
+    marginRight: 0 // or marginLeft??
   },
   menuButton: {
     marginLeft: 12,
@@ -54,15 +56,18 @@ const styles = theme => ({
   drawerPaper: {
     position: 'relative',
     width: drawerWidth,
-    // height: '100vh' // Needed if removing root/ app divs
+    marginRight: 0,
+    // marginLeft: `calc(${parentNode.width} - ${drawerWidth}px`,
+    // width: 0
+    height: '100vh' // Needed if removing root/ app divs
   },
-  drawerHeaderL: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-  },
+  // drawerHeaderL: {
+  //   display: 'flex',
+  //   alignItems: 'center',
+  //   justifyContent: 'flex-end',
+  //   padding: '0 8px',
+  //   ...theme.mixins.toolbar,
+  // },
   drawerHeaderR: {
     display: 'flex',
     alignItems: 'center',
@@ -70,33 +75,33 @@ const styles = theme => ({
     padding: '0 8px',
     ...theme.mixins.toolbar,
   },
-  content: {
-    flexGrow: 1,
-    // backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 3,
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  'content-left': {
-    marginLeft: -drawerWidth,
-  },
-  'content-right': {
-    marginRight: -drawerWidth,
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  'contentShift-left': {
-    marginLeft: 0,
-  },
-  'contentShift-right': {
-    marginRight: 0,
-  },
+  // content: {
+  //   flexGrow: 1,
+  //   // backgroundColor: theme.palette.background.default,
+  //   padding: theme.spacing.unit * 3,
+  //   transition: theme.transitions.create('margin', {
+  //     easing: theme.transitions.easing.sharp,
+  //     duration: theme.transitions.duration.leavingScreen,
+  //   }),
+  // },
+  // 'content-left': {
+  //   marginLeft: -drawerWidth,
+  // },
+  // 'content-right': {
+  //   marginRight: -drawerWidth,
+  // },
+  // contentShift: {
+  //   transition: theme.transitions.create('margin', {
+  //     easing: theme.transitions.easing.easeOut,
+  //     duration: theme.transitions.duration.enteringScreen,
+  //   }),
+  // },
+  // 'contentShift-left': {
+  //   marginLeft: 0,
+  // },
+  // 'contentShift-right': {
+  //   marginRight: 0,
+  // },
 });
 
 class RightDrawer extends React.Component {
@@ -104,9 +109,8 @@ class RightDrawer extends React.Component {
     const { classes, theme } = this.props;
 
     return (
-      // <div className={classes.root}>
-        // <div className={classes.appFrame}>
           <Drawer
+            anchor="right"
             variant="persistent"
             open={this.props.rightOpen}
             classes={{
@@ -114,21 +118,22 @@ class RightDrawer extends React.Component {
             }}
           >
             <div className={classes.drawerHeader}>
-              Right Drawer
               <IconButton onClick={this.props.handleRightDrawer}>
-                <ChevronRightIcon/>
+                {/* <ChevronRightIcon/> */}
+                <Close
+                  style={{
+                    width: 15,
+                    height: 15
+                  }}
+                />
               </IconButton>
+              Right Drawer
             </div>
             <Divider />
               Testing
             <Divider />
               Testing
           </Drawer>
-          // <main>
-          //   <Typography>Test</Typography>
-          // </main>
-        // </div>
-      // </div>
     );
   }
 }
