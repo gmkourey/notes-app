@@ -9,10 +9,21 @@ module.exports = {
             .catch(err => res.status(422).json(err))
     },
     createNote: function(req, res) {
-        console.log("test: " + JSON.stringify(req.body));
         db.Note
             .create(req.body)
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err))
+    },
+    updateNote: function (req, res) {
+        db.Note
+            .findOneAndUpdate({_id: req.params.id}, req.body)
+            .then(dbModel => res.json(dbModel))
+            .catch(err => res.json(err))
+    },
+    findNote: function(req, res) {
+        db.Note
+            .findById(req.params.id)
+            .then(dbModel => res.json(dbModel))
+            .catch(err => res.json(err))
     }
 }
