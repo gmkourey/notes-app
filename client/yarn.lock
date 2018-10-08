@@ -6728,6 +6728,11 @@ mobx-react@^5.2.8:
     hoist-non-react-statics "^2.5.0"
     react-lifecycles-compat "^3.0.2"
 
+mobx@^5.5.0:
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/mobx/-/mobx-5.5.0.tgz#a29f6a7526eed28edcd3f0e921a1edaa8bb22575"
+  integrity sha512-rD0Hsv9XtjS6axavvPX/XzWTeICRiH3bLR1L+MrJ7HOlx1hmSdWNzu8rQQ+1IkTiyJechRyGzs2tUgLRmEofJg==
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -8751,7 +8756,7 @@ realpath-native@^1.0.0:
   dependencies:
     util.promisify "^1.0.0"
 
-"recompose@0.28.0 - 0.30.0":
+"recompose@0.28.0 - 0.30.0", recompose@^0.30.0:
   version "0.30.0"
   resolved "https://registry.yarnpkg.com/recompose/-/recompose-0.30.0.tgz#82773641b3927e8c7d24a0d87d65aeeba18aabd0"
   integrity sha512-ZTrzzUDa9AqUIhRk4KmVFihH0rapdCSMFXjhHbNrjAWxBuUD/guYlyysMnuHjlZC/KRiOKRtB4jf96yYSkKE8w==
