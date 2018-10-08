@@ -11,9 +11,10 @@ import SignInPage from './SignIn';
 import PasswordForgetPage from './PasswordForget';
 import HomePage from './Home';
 import AccountPage from './Account';
+import NotePage from './Note';
 
-import withAuthentication from './withAuthentication';
 import * as routes from '../constants/routes';
+import withAuthentication from './withAuthentication';
 
 const App = () =>
   <Router>
@@ -28,6 +29,7 @@ const App = () =>
       <Route exact path={routes.PASSWORD_FORGET} component={PasswordForgetPage} />
       <Route exact path={routes.HOME} component={HomePage} />
       <Route exact path={routes.ACCOUNT} component={AccountPage} />
+      <Route exact path={routes.NOTE} component={NotePage} />
     </div>
   </Router>
 
