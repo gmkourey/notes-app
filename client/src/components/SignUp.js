@@ -157,7 +157,7 @@ class SignUpForm extends Component {
                     type="password"
                     id="passwordOne"
                     autoComplete="current-password"
-                    placeholder="Password must be at least 5 characters long."
+                    placeholder="Password must be at least 6 characters long."
                     onChange={event => this.setState(byPropKey('passwordOne', event.target.value))}
                   />
                 </FormControl>
