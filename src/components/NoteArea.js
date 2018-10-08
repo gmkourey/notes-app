@@ -8,7 +8,7 @@ class MyEditor extends React.Component {
     this.state = {editorState: EditorState.createEmpty()};
     this.onChange = (editorState) => {
       this.setState({editorState}); 
-      console.log(editorState);
+      console.log('');
     }
     this.setEditor = (editor) => {
       this.editor = editor;
@@ -35,7 +35,7 @@ class MyEditor extends React.Component {
       </div>
     );
   }
-}
+} 
 
 const styles = {
   editor: {
