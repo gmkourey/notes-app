@@ -32,7 +32,7 @@ const App = () =>
       <Route exact path={routes.ACCOUNT} component={AccountPage} />
       <Route exact path={routes.NOTE} component={Note}/>
 
-    </div>
+    </>
   </Router>
 
 export default withAuthentication(App);
