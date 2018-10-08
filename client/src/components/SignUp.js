@@ -199,14 +199,11 @@ const SignUpLink = () =>
     {' '}
     <Link to={routes.SIGN_UP}>Sign Up</Link>
   </p>
-
 SignUpForm.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-
 // export default withRouter(SignUpPage);
 export default withStyles(styles)(SignUpForm);
-
 export {
   SignUpForm,
   SignUpLink,

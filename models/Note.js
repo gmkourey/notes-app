@@ -6,7 +6,8 @@ var NoteSchema = new Schema({
 
     title: {
         type: String,
-        unique: false
+        unique: false,
+        required: true
     },
     body: {
         type: String,

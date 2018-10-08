@@ -1,0 +1,37 @@
+{
+  "name": "notes-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.18.0",
+    "express": "^4.16.3",
+    "if-env": "^1.0.4",
+    "mongojs": "^2.6.0",
+    "mongoose": "^5.3.1",
+    "register-service-worker": "^1.5.2"
+  },
+  "scripts": {
+    "start": "npm run start:dev",
+    "start:prod": "node server.js",
+    "start:dev": "concurrently \"nodemon server.js\" \"npm run client\"",
+    "client": "npm start --prefix client",
+    "seed": "node scripts/seedDB.js",
+    "install": "cd client && yarn install",
+    "build": "cd client && npm run build",
+    "heroku-postbuild": "npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.0",
+    "nodemon": "^1.11.0"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
+
