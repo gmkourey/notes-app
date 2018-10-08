@@ -28,7 +28,7 @@ class Content extends React.Component {
             </>
           ) : (
             // <SignInPage/>
-            <SignUpPage/>
+            <SignUpPage />
             // This page needs info about the app, ie. landing page
           )
         }
