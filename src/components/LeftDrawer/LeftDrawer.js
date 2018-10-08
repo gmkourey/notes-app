@@ -7,6 +7,7 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import Grid from '@material-ui/core/Grid';
 
 import classNames from 'classnames';
 // import AppBar from '@material-ui/core/AppBar';
@@ -48,10 +49,12 @@ const styles = theme => ({
     }),
   },
   'appBarShift-left': {
-    marginLeft: drawerWidth,
+    // marginLeft: drawerWidth,
+    marginLeft: 0
   },
   'appBarShift-right': {
-    marginRight: drawerWidth,
+    // marginRight: drawerWidth,
+    marginLeft: 0
   },
   menuButton: {
     marginLeft: 12,
@@ -63,6 +66,7 @@ const styles = theme => ({
   drawerPaper: {
     position: 'relative',
     width: drawerWidth,
+    // width: 0
     // height: '100vh' // Needed if removing root/ app divs
   },
   drawerHeaderL: {
@@ -116,6 +120,7 @@ class LeftDrawer extends React.Component {
       <div className={classes.root}>
          <div className={classes.appFrame}>
         {/* <React.Fragment> */}
+        {/* <Grid item xs={4} md={2}> */}
           <Drawer
             variant="persistent"
             open={this.props.leftOpen}
@@ -134,7 +139,9 @@ class LeftDrawer extends React.Component {
             <Divider />
               Testing
           </Drawer>
+        {/* </Grid> */}
           {/* <main style={{ marginLeft: 10 }}> */}
+        {/* <Grid item xs={4} md={8}> */}
           <main
             className={classNames(classes.content, classes['content-right content-left'], {
               // [classes.contentShift]: this.props.rightOpen,
@@ -144,6 +151,8 @@ class LeftDrawer extends React.Component {
           >
             <Typography>Test from leftdrawer.js</Typography>
           </main>
+        {/* </Grid> */}
+        {/* <Grid item xs={4} md={2}> */}
           <Drawer
             anchor="right"
             variant="persistent"
@@ -159,6 +168,7 @@ class LeftDrawer extends React.Component {
               Right Drawer
             </div>
           </Drawer>
+        {/* </Grid> */}
         {/* </React.Fragment> */}
          </div>
        </div>

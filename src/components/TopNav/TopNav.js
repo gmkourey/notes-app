@@ -1,5 +1,3 @@
-// this file is unused 
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -10,7 +8,11 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Settings from '@material-ui/icons/Settings';
+import AccountMenu from '../AccountMenu/AccountMenu';
 
+import AuthUserContext from '../AuthUserContext';
+// import { auth } from '../../firebase';
+// import * as routes from '../../constants/routes';
 
 const styles = {
   root: {
@@ -20,24 +22,27 @@ const styles = {
 
 // const Navbar = (props) => {
 class Navbar extends React.Component {
-  // const { classes } = this.props;
+
   render() {
     const { classes } = this.props;
-  return(
-    // <div className={classes.root}>
-        // <div className={classes.appFrame}>
-          <AppBar position="static" color="default"
-            className={classNames(classes.appBar, {
-              // [classes.appBarShift]: this.props.rightOpen,
-              [classes[`appBarShift-left`]]: this.props.leftOpen,
-              [classes[`appBarShift-right`]]: this.props.rightOpen
-            })}
-          >
-            <Toolbar>
+    return(
+      <AppBar position="static" color="default" // style={{maxHeight: 35}}
+        className={classNames(classes.appBar, {
+          [classes[`appBarShift-left`]]: this.props.leftOpen,
+          [classes[`appBarShift-right`]]: this.props.rightOpen
+        })}
+      >
+        <Toolbar style={{maxHeight: 30}}>
+        <AuthUserContext.Consumer>
+          {authUser => authUser
+            ? (
+            <>
+              {/* For testing */}
+              {console.log("Retrieving user info from firebase...")}
+              {console.log(authUser)}
               <IconButton
                 color="inherit"
                 aria-label="Open left  drawer"
-                // onClick={this.handleDrawerOpen}
                 onClick={this.props.handleLeftDrawer}
                 className={classNames(classes.menuButton, this.props.leftOpen && classes.hide)}
               >
@@ -46,45 +51,30 @@ class Navbar extends React.Component {
               <Typography variant="title" color="inherit" style={{flex: 1}}>
                 grantsnotes
               </Typography>
+              <AccountMenu/>
               <IconButton
                 color="inherit"
                 aria-label="Open right drawer"
-                // onClick={this.handleDrawerOpen}
                 onClick={this.props.handleRightDrawer}
                 className={classNames(classes.menuButton, this.props.rightOpen && classes.hide)}
               >
                 <Settings />
               </IconButton>
-            </Toolbar>
-          </AppBar>
-        // </div>
-      // </div>
-    
-    // <div className={classes.root}>
-    //   <AppBar position="static" color="default"
-    //       className={classNames(classes.appBar, {
-    //       [classes.appBarShift]: this.props.open,
-    //       [classes[`appBarShift-left`]]: this.props.open,
-    //     })}
-    //     >
-    //     <Toolbar disableGutters={!this.props.open}>
-    //       <IconButton
-    //         color="inherit"
-    //         aria-label="Open drawer"
-    //         // onClick={this.handleDrawerOpen}
-    //         onClick={this.props.handleLeftDrawer}
-    //         className={classNames(classes.menuButton, this.props.open && classes.hide)}
-    //       >
-    //         <MenuIcon />
-    //       </IconButton>
-    //       <Typography variant="title" color="inherit">
-    //         Test
-    //       </Typography>
-    //     </Toolbar>
-    //   </AppBar>
-    // </div>
-  );
-}
+            </>
+            ) : (
+            <>
+              <Typography variant="title" color="inherit" style={{flex: 1}}>
+                grantsnotes
+              </Typography>
+              <AccountMenu/>
+            </>
+            )
+          }
+        </AuthUserContext.Consumer>
+        </Toolbar>
+      </AppBar>
+    );
+  }
 }
 
 Navbar.propTypes = {
