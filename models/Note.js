@@ -1,6 +1,8 @@
+
 var mongoose = require("mongoose");
 
 var Schema = mongoose.Schema;
+
 
 var NoteSchema = new Schema({
 
@@ -16,7 +18,8 @@ var NoteSchema = new Schema({
     dateAdded: {
         type: Date,
         default: Date.now
-    }
+    },
+    
 })
 
 var Note = mongoose.model("Note", NoteSchema);
