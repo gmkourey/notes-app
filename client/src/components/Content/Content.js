@@ -3,6 +3,7 @@ import AuthUserContext from '../AuthUserContext';
 // import SignInPage from '../SignIn';
 import SignUpPage from '../SignUp';
 import Typography from '@material-ui/core/Typography';
+import Note from "../Note";
 
 class Content extends React.Component {
   // constructor(props) {
@@ -23,8 +24,9 @@ class Content extends React.Component {
             {/* For testing */}
             {console.log("Getting user info from firebase...")}
             {console.log(authUser)}
-            <Typography>{'You\'re logged in.'}</Typography>
-            <Typography>{'Component for draft-js goes here'}</Typography>
+            {/* <Typography>{'You\'re logged in.'}</Typography>
+            <Typography>{'Component for draft-js goes here'}</Typography> */}
+            <Note/>
             </>
           ) : (
             // <SignInPage/>

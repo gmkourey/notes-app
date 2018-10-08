@@ -2,17 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-// import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-// import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-// import AddBox from '@material-ui/icons/AddBox';
 import Add from '@material-ui/icons/Add';
 import Close from '@material-ui/icons/Close';
-// import classNames from 'classnames';
-// import Grid from '@material-ui/core/Grid';
 
-// import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import NoteList from '../NoteList/NoteList';
+import Hidden from '@material-ui/core/Hidden';
+import Divider from '@material-ui/core/Divider';
+
+// import Typography from '@material-ui/core/Typography';
+// import classNames from 'classnames';
+
+
 
 const drawerWidth = 240;
 
@@ -60,7 +61,13 @@ const styles = theme => ({
   },
   drawerPaper: {
     position: 'relative',
-    width: drawerWidth,
+    // width: drawerWidth,
+    [theme.breakpoints.down('sm')]: {
+      width: '100%'
+    },
+    [theme.breakpoints.up('md')]: {
+      width: '240px'
+    },
     // width: 0
     height: '100vh' // Needed if removing root/ app divs
   },
@@ -107,48 +114,59 @@ const styles = theme => ({
   // },
 });
 
+
+
 class LeftDrawer extends React.Component {
   render() {
     const { classes, theme } = this.props;
 
+    const drawer = (
+      <>
+        <div className={classes.drawerHeaderL}>
+          <IconButton>
+            <Add/>
+          </IconButton>
+            Left Drawer
+          <IconButton onClick={this.props.handleLeftDrawer}>
+            <Close style={{
+                width: 15,
+                height: 15
+              }}
+            />
+          </IconButton>
+        </div>
+        <Divider/>
+        <NoteList/>
+      </>
+    )
+
     return (
-      // <div className={classes.root}>
-        //  <div className={classes.appFrame}>
-        <React.Fragment>
+        <>
+        <Hidden mdUp>
           <Drawer
             // anchor="left"
-            variant="persistent"
+            variant="temporary"
             open={this.props.leftOpen}
             classes={{
               paper: classes.drawerPaper,
             }}
           >
-            <div className={classes.drawerHeaderL}>
-              <IconButton>
-                {/* <AddBox/> */}
-                <Add/>
-              </IconButton>
-              Left Drawer
-              <IconButton onClick={this.props.handleLeftDrawer}>
-                {/* <ChevronLeftIcon/> */}
-                <Close
-                  style={{
-                    width: 15,
-                    height: 15
-                  }}
-                />
-              </IconButton>
-            </div>
-            <Divider />
-              Testing
-              {/* This is where the file component goes */}
-            <Divider />
-              Testing
-            <Divider />
+            {drawer}
           </Drawer>
-        </React.Fragment>
-        //  </div>
-      //  </div>
+        </Hidden>
+
+        <Hidden smDown implementation="css">
+            <Drawer
+              variant="persistent"
+              open={this.props.leftOpen}
+              classes={{
+                paper: classes.drawerPaper,
+              }}
+            >
+              {drawer}
+            </Drawer>
+        </Hidden>
+        </>
     );
   }
 }

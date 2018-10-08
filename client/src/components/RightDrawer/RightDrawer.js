@@ -2,11 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-// import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-// import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Close from '@material-ui/icons/Close';
+
+import Hidden from '@material-ui/core/Hidden';
+
+// import Divider from '@material-ui/core/Divider';
+// import Typography from '@material-ui/core/Typography';
 // import classNames from 'classnames';
 
 const drawerWidth = 240;
@@ -55,7 +57,13 @@ const styles = theme => ({
   },
   drawerPaper: {
     position: 'relative',
-    width: drawerWidth,
+    // width: drawerWidth,
+    [theme.breakpoints.down('sm')]: {
+      width: '100%'
+    },
+    [theme.breakpoints.up('md')]: {
+      width: '240px'
+    },
     marginRight: 0,
     // marginLeft: `calc(${parentNode.width} - ${drawerWidth}px`,
     // width: 0
@@ -108,7 +116,37 @@ class RightDrawer extends React.Component {
   render() {
     const { classes, theme } = this.props;
 
+    const drawer = (
+      <>
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={this.props.handleRightDrawer}>
+            <Close style={{
+                width: 15,
+                height: 15
+              }}
+            />
+          </IconButton>
+          Right Drawer
+        </div>
+      </>
+    )
+
     return (
+      <>
+        <Hidden mdUp>
+          <Drawer
+              anchor="right"
+              variant="temporary"
+              open={this.props.rightOpen}
+              classes={{
+                paper: classes.drawerPaper,
+              }}
+            >
+              {drawer}
+          </Drawer>
+        </Hidden>
+
+        <Hidden smDown>
           <Drawer
             anchor="right"
             variant="persistent"
@@ -117,23 +155,10 @@ class RightDrawer extends React.Component {
               paper: classes.drawerPaper,
             }}
           >
-            <div className={classes.drawerHeader}>
-              <IconButton onClick={this.props.handleRightDrawer}>
-                {/* <ChevronRightIcon/> */}
-                <Close
-                  style={{
-                    width: 15,
-                    height: 15
-                  }}
-                />
-              </IconButton>
-              Right Drawer
-            </div>
-            <Divider />
-              Testing
-            <Divider />
-              Testing
+            {drawer}
           </Drawer>
+        </Hidden>
+      </>
     );
   }
 }
