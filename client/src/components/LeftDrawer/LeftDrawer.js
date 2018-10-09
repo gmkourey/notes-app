@@ -101,7 +101,6 @@ class LeftDrawer extends Component {
   //   // this.loadNotes();
   // }
 
-
   // new note doesn't update the note list until the drawer is closed and opened again
   handleNewNote () {
     console.log("Hit handleNewNote function");
@@ -113,13 +112,6 @@ class LeftDrawer extends Component {
     })
       .then(this.child.current.loadNotes());
   };
-
-  // loadNotes = () => {
-  //   console.log('Ran loadNotes function from LeftDrawer.js.')
-  //   API.getNotes()
-  //     .then(res => this.setState({ notes: res.data }))
-  //     .catch(err => console.log(err));
-  // };
 
   render() {
     const { classes } = this.props;
@@ -144,9 +136,9 @@ class LeftDrawer extends Component {
         </div>
         <Divider/>
         <NoteList
-          ref={this.child}
           notes={this.state.notes}
           handleSelectedNote={this.handleSelectedNote}
+          innerRef={this.child}
         />
       </>
     )
