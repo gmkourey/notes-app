@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const saveNote =  (NoteData) => {
-    return axios.post("/api/note", NoteData)
+    return axios.post("/api/note/:id", NoteData)
 };
 
 export const saveUser =  (UserData) => {

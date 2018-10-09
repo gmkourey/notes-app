@@ -12,7 +12,23 @@ module.exports = {
         console.log("test: " + JSON.stringify(req.body));
         db.Note
             .create(req.body)
-            .then(dbModel => res.json(dbModel))
+            .then(dbNote => {
+                console.log(db.User)
+                console.log("text" + req.params.id)
+                return db.User.findOneAndUpdate({
+                    _id: req.params.id
+                },
+                {
+                    $push: {notes: dbNote }
+                },
+                {
+                    new: true
+                })
+                .then(console.log(dbNote))
+            })
+            .then(dbUser => {
+                console.log(dbUser)
+                res.json(dbUser)})
             .catch(err => res.status(422).json(err))
     }
 }
