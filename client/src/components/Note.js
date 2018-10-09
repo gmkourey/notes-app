@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import * as API from "../utils/API";
+import API from "../utils/API";
 import FormBtn from './FormBtn.js';
 import Input from './Input.js'
 import AuthUserContext from './AuthUserContext';

@@ -6,7 +6,7 @@ module.exports = {
             .find(req.query)
             .sort({dateAdded: -1})
             .then(dbModel => res.json(dbModel))
-            .catch(err => res.status(422).json(err))
+            .catch(err => res.json(err))
     },
     createNote: function(req, res) {
         db.Note
@@ -23,6 +23,13 @@ module.exports = {
     findNote: function(req, res) {
         db.Note
             .findById(req.params.id)
+            .then(dbModel => res.json(dbModel))
+            .catch(err => res.json(err))
+    },
+    deleteNote: function(req, res) {
+        db.Note
+            .deleteOne({_id: req.params.id})
+            .then(dbModel => dbModel.remove())
             .then(dbModel => res.json(dbModel))
             .catch(err => res.json(err))
     }

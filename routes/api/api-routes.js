@@ -6,8 +6,9 @@ router.route("/note")
     .post(notesController.createNote)
 
 router.route("/:id")
-    .get(notesController.findById)
-    .update(notesController.findOneAndUpdate)
+    .get(notesController.findNote)
+    .put(notesController.updateNote)
+    .delete(notesController.deleteNote)
  
 
 module.exports = router; 
