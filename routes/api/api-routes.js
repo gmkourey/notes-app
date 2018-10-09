@@ -9,6 +9,11 @@ router.route("/note/:id")
 router.route("/user")
     .get(userController.findAll)
     .post(userController.createUser)
+
+router.route("/:id")
+    .get(notesController.findNote)
+    .put(notesController.updateNote)
+    .delete(notesController.deleteNote)
  
 
 module.exports = router; 

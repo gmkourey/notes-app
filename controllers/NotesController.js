@@ -6,10 +6,9 @@ module.exports = {
             .find(req.query)
             .sort({dateAdded: -1})
             .then(dbModel => res.json(dbModel))
-            .catch(err => res.status(422).json(err))
+            .catch(err => res.json(err))
     },
     createNote: function(req, res) {
-        console.log("test: " + JSON.stringify(req.body));
         db.Note
             .create(req.body)
             .then(dbNote => {
@@ -30,5 +29,24 @@ module.exports = {
                 console.log(dbUser)
                 res.json(dbUser)})
             .catch(err => res.status(422).json(err))
+    },
+    updateNote: function (req, res) {
+        db.Note
+            .findOneAndUpdate({_id: req.params.id}, req.body)
+            .then(dbModel => res.json(dbModel))
+            .catch(err => res.json(err))
+    },
+    findNote: function(req, res) {
+        db.Note
+            .findById(req.params.id)
+            .then(dbModel => res.json(dbModel))
+            .catch(err => res.json(err))
+    },
+    deleteNote: function(req, res) {
+        db.Note
+            .deleteOne({_id: req.params.id})
+            .then(dbModel => dbModel.remove())
+            .then(dbModel => res.json(dbModel))
+            .catch(err => res.json(err))
     }
 }
