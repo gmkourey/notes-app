@@ -2,11 +2,38 @@ import React, { Component } from 'react';
 import API from '../../utils/API';
 import TextField from '@material-ui/core/TextField';
 
+import Menu from '@material-ui/core/Menu';
+
+import PropTypes from 'prop-types';
+import MenuList from '@material-ui/core/MenuList';
+import MenuItem from '@material-ui/core/MenuItem';
+import DeleteIcon from '@material-ui/icons/Delete';
+// import Paper from '@material-ui/core/Paper';
+import FolderShared from '@material-ui/icons/FolderShared';
+import { withStyles } from '@material-ui/core/styles';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+
+const styles = theme => ({
+  menuItem: {
+    '&:focus': {
+      backgroundColor: theme.palette.primary.main,
+      '& $primary, & $icon': {
+        color: theme.palette.common.white,
+      },
+    },
+  },
+  primary: {},
+  icon: {},
+});
+
 class NoteList extends Component {
   state = {
     notes: this.props.notes,
     isEditable: [],
-    val: []
+    val: [],
+    anchorEl: null, // context menu anchor
+    targetId: null // id for context menu to access
   };
 
   componentDidMount() {
@@ -14,11 +41,10 @@ class NoteList extends Component {
     this.loadNotes();
   }
 
+  // is this necessary? 
   componentWillReceiveProps(props) {
     console.log(this.props.notes);
     console.log("NoteList.js componentWilLReceiveProps()");
-    // unclear how this is working currently, but it's needed to render newly creates notes
-    // without the conditional, it clears the notes list AFTER the notes list is loaded initially
     if (this.props.notes.length) {
       this.setState({notes: this.props.notes});
     }
@@ -40,7 +66,6 @@ class NoteList extends Component {
       .then(res => this.forceUpdate())
       .catch(err => console.log(err));
     }
-
     notes[index].title = event.target.value;
     // this.forceUpdate();
   }
@@ -52,15 +77,6 @@ class NoteList extends Component {
   }
 
   handleBlur (event, id, index) {
-    // console.log(event.target.value);
-    // console.log(this.state.notes[index].title)
-    // console.log(id);
-    // if (event.target.value != this.state.notes[index].title) {
-    //   API.updateNote(id, {title: event.target.value} )
-    //   .then(res => this.loadNotes())
-    //   .catch(err => console.log(err));
-    // }
-    
     let edit = this.state.isEditable.map((val, index) => {
       return (val = false);
     });
@@ -73,14 +89,39 @@ class NoteList extends Component {
     event.target.select();
   }
 
+  handleContextMenu = (event, id) => {
+    event.preventDefault();
+      console.log('Right clicked');
+      this.setState({ 
+        anchorEl: event.currentTarget,
+        targetId: id
+      });
+  }
+
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
+
   loadNotes = () => {
     console.log('Ran loadNotes function from NoteList.js.')
     API.getNotes()
       .then(res => this.setState({ notes: res.data }))
       .catch(err => console.log(err));
   }
+
+  // need to select the "next" note when one note is deleted, otherwise the body stays the same
+  deleteNote = (id) => {
+    console.log('Delete method called.');
+    this.setState({ anchorEl: null });
+    API.deleteNote(id)
+      .then(res => this.loadNotes())
+      .catch(err => console.log(err));
+  }
  
   render() {
+    const { anchorEl, targetId } = this.state;
+    const { classes } = this.props;
+
     return(
       <>
       {this.state.notes.length ? (
@@ -100,7 +141,6 @@ class NoteList extends Component {
                 onBlur={(event) => this.handleBlur(event, note._id, index)}
                 onKeyDown={(event) => this.keyPress(event, note._id, index)}
               />
-              // </form>
             ) : (
               // Read only text field
               <TextField
@@ -110,13 +150,51 @@ class NoteList extends Component {
                 }}
                 defaultValue={note.title}
                 onClick={() => this.props.handleSelectedNote(note.body)}
-                // onClick={this.props.handleSelectedNote}
                 onDoubleClick={(e) => this.handleDoubleClick(e, index)}
+                aria-owns={anchorEl ? 'simple-menu' : null}
+                aria-haspopup="true"
+                onContextMenu={(e) => this.handleContextMenu(e, note._id)}
               />
             )}
           </>
           );
         })}
+        {/* <Paper> */}
+        {/* {console.log(targetId)} */}
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={this.handleClose}
+        >
+          <MenuList>
+            <MenuItem className={classes.menuitem}>
+              <ListItemIcon className={classes.icon}>
+                <FolderShared/>
+              </ListItemIcon>
+              <ListItemText classes={{ primary: classes.primary }} inset primary="Share"/>
+            </MenuItem>
+            <MenuItem className={classes.menuitem} onClick={() => this.deleteNote(targetId)}>
+              <ListItemIcon className={classes.icon}>
+                <DeleteIcon/>
+              </ListItemIcon>
+              <ListItemText classes={{ primary: classes.primary }} inset primary="Delete"/>
+            </MenuItem>
+          </MenuList>
+        </Menu>
+        {/* </Paper> */}
+        {/* <div>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={this.handleClose}
+          >
+            <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+            <MenuItem onClick={this.handleClose}>My account</MenuItem>
+            <MenuItem onClick={this.handleClose}>Logout</MenuItem>
+          </Menu>
+        </div> */}
         </>
       ) : (
         // <>
@@ -128,4 +206,8 @@ class NoteList extends Component {
   }
 }
 
-export default NoteList;
+NoteList.propTypes = {
+  classes: PropTypes.object.isRequired,
+}
+
+export default withStyles(styles)(NoteList);

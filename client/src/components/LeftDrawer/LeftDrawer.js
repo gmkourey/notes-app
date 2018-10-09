@@ -93,12 +93,13 @@ class LeftDrawer extends Component {
     this.handleNewNote = this.handleNewNote.bind(this);
     // this.loadNotes = this.loadNotes.bind(this);
     this.handleSelectedNote = this.props.handleSelectedNote.bind(this);
+    this.child = React.createRef();
   }
 
-  componentDidMount() {
-    console.log("LeftDrawer.js componentDidMount()");
-    // this.loadNotes();
-  }
+  // componentDidMount() {
+  //   console.log("LeftDrawer.js componentDidMount()");
+  //   // this.loadNotes();
+  // }
 
 
   // new note doesn't update the note list until the drawer is closed and opened again
@@ -110,9 +111,7 @@ class LeftDrawer extends Component {
       title: this.state.title,
       body: this.state.body
     })
-      // .then(res => this.loadNotes())
-      // .then(res => this.forceUpdate())
-      // .catch(err => console.log(err));
+      .then(this.child.current.loadNotes());
   };
 
   // loadNotes = () => {
@@ -145,6 +144,7 @@ class LeftDrawer extends Component {
         </div>
         <Divider/>
         <NoteList
+          ref={this.child}
           notes={this.state.notes}
           handleSelectedNote={this.handleSelectedNote}
         />
