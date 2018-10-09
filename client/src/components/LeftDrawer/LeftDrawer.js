@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -10,10 +10,10 @@ import NoteList from '../NoteList/NoteList';
 import Hidden from '@material-ui/core/Hidden';
 import Divider from '@material-ui/core/Divider';
 
+import API from '../../utils/API';
+
 // import Typography from '@material-ui/core/Typography';
 // import classNames from 'classnames';
-
-
 
 const drawerWidth = 240;
 
@@ -68,7 +68,6 @@ const styles = theme => ({
     [theme.breakpoints.up('md')]: {
       width: '240px'
     },
-    // width: 0
     height: '100vh' // Needed if removing root/ app divs
   },
   drawerHeaderL: {
@@ -78,53 +77,62 @@ const styles = theme => ({
     padding: '0 8px',
     ...theme.mixins.toolbar,
   },
-  // drawerHeaderR: {
-  //   display: 'flex',
-  //   alignItems: 'center',
-  //   justifyContent: 'flex-start',
-  //   padding: '0 8px',
-  //   ...theme.mixins.toolbar,
-  // },
-  // content: {
-  //   flexGrow: 1,
-  //   // backgroundColor: theme.palette.background.default,
-  //   padding: theme.spacing.unit * 3,
-  //   transition: theme.transitions.create('margin', {
-  //     easing: theme.transitions.easing.sharp,
-  //     duration: theme.transitions.duration.leavingScreen,
-  //   }),
-  // },
-  // 'content-left': {
-  //   marginLeft: -drawerWidth,
-  // },
-  // 'content-right': {
-  //   marginRight: -drawerWidth,
-  // },
-  // contentShift: {
-  //   transition: theme.transitions.create('margin', {
-  //     easing: theme.transitions.easing.easeOut,
-  //     duration: theme.transitions.duration.enteringScreen,
-  //   }),
-  // },
-  // 'contentShift-left': {
-  //   marginLeft: 0,
-  // },
-  // 'contentShift-right': {
-  //   marginRight: 0,
-  // },
 });
 
 
+class LeftDrawer extends Component {
 
-class LeftDrawer extends React.Component {
+  state = {
+    title: "Untitled",
+    body: "",
+    notes: []
+  }
+
+  constructor(props) {
+    super(props);
+    this.handleNewNote = this.handleNewNote.bind(this);
+    // this.loadNotes = this.loadNotes.bind(this);
+    this.handleSelectedNote = this.props.handleSelectedNote.bind(this);
+  }
+
+  componentDidMount() {
+    console.log("LeftDrawer.js componentDidMount()");
+    // this.loadNotes();
+  }
+
+
+  // new note doesn't update the note list until the drawer is closed and opened again
+  handleNewNote () {
+    console.log("Hit handleNewNote function");
+    console.log(this.state.title);
+
+    API.saveNote({
+      title: this.state.title,
+      body: this.state.body
+    })
+      // .then(res => this.loadNotes())
+      // .then(res => this.forceUpdate())
+      // .catch(err => console.log(err));
+  };
+
+  // loadNotes = () => {
+  //   console.log('Ran loadNotes function from LeftDrawer.js.')
+  //   API.getNotes()
+  //     .then(res => this.setState({ notes: res.data }))
+  //     .catch(err => console.log(err));
+  // };
+
   render() {
-    const { classes, theme } = this.props;
+    const { classes } = this.props;
 
     const drawer = (
       <>
         <div className={classes.drawerHeaderL}>
           <IconButton>
-            <Add/>
+            <Add 
+              title={this.state.title}
+              body={this.state.body}
+              onClick={this.handleNewNote}/>
           </IconButton>
             Left Drawer
           <IconButton onClick={this.props.handleLeftDrawer}>
@@ -136,7 +144,10 @@ class LeftDrawer extends React.Component {
           </IconButton>
         </div>
         <Divider/>
-        <NoteList/>
+        <NoteList
+          notes={this.state.notes}
+          handleSelectedNote={this.handleSelectedNote}
+        />
       </>
     )
 

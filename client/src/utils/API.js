@@ -12,7 +12,13 @@ export default {
     },
     //
     getNotes: function() {
-        return axios.get("/api/note");
+        return axios.get("/api/note/");
+    },
+    getNote: function(id) {
+        return axios.get("/api/note/" + id);
+    },
+    updateNote: function(id, title) {
+        return axios.put("/api/note/" + id, title);
     }
 }
 
