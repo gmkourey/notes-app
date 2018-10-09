@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import * as routes from '../constants/routes';
-import * as API from "../utils/API";
+import API from "../utils/API";
 
 import PropTypes from 'prop-types';
 // import Avatar from '@material-ui/core/Avatar';
