@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import * as API from "../utils/API";
+// import { withRouter } from 'react-router-dom';
+import API from "../utils/API";
 import FormBtn from './FormBtn.js';
 import Input from './Input.js'
-import AuthUserContext from './AuthUserContext';
-import { firebase } from '../firebase';
-import * as routes from '../constants/routes';
+// import AuthUserContext from './AuthUserContext';
+// import { firebase } from '../firebase';
+// import * as routes from '../constants/routes';
 
 class Note extends Component {
     state = {

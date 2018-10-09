@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link,  withRouter, } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import * as routes from '../constants/routes';
 import * as API from "../utils/API";
@@ -53,12 +53,12 @@ const styles = theme => ({
   },
 });
 
-const SignUpPage = ({ history }) =>
+// const SignUpPage = ({ history }) =>
 
-  <div>
-    <h1>SignUp</h1>
-    <SignUpForm history={history} />
-  </div>
+//   <div>
+//     <h1>SignUp</h1>
+//     <SignUpForm history={history} />
+//   </div>
 
 const INITIAL_STATE = {
   username: '',
@@ -124,7 +124,7 @@ class SignUpForm extends Component {
       email,
       passwordOne,
       passwordTwo,
-      error,
+      // error,
     } = this.state;
 
     const isInvalid =
