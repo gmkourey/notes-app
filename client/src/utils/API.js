@@ -13,7 +13,6 @@ export default {
     getNotes: function(userId) {
         return axios.get("/api/notes/user/" + userId)
     },
-
     saveNote: function(NoteData) {
         return axios.post("/api/note", NoteData);
     },
@@ -34,6 +33,4 @@ export default {
     deleteNote: function (id) {
         return axios.delete("/api/" + id);
     }
-
-
 }
