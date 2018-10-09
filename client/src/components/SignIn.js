@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 
-import { SignUpLink } from './SignUp';
-import { PasswordForgetLink } from './PasswordForget';
+// import { SignUpLink } from './SignUp';
+// import { PasswordForgetLink } from './PasswordForget';
 import { auth } from '../firebase';
 import * as routes from '../constants/routes';
 
@@ -53,13 +53,13 @@ const styles = theme => ({
 });
 
 
-const SignInPage = ({ history }) => 
-  <div>
-    <h1>SignIn</h1>
-    <SignInForm history={history} />
-    <PasswordForgetLink />
-    <SignUpLink />
-  </div>
+// const SignInPage = ({ history }) => 
+//   <div>
+//     <h1>SignIn</h1>
+//     <SignInForm history={history} />
+//     <PasswordForgetLink />
+//     <SignUpLink />
+//   </div>
 
 const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,
@@ -84,7 +84,7 @@ class SignInForm extends Component {
       password,
     } = this.state;
 
-    const { history, classes } = this.props;
+    const { history } = this.props;
 
     auth.doSignInWithEmailAndPassword(email, password)
       .then(() => {
@@ -104,7 +104,7 @@ class SignInForm extends Component {
     const {
       email,
       password,
-      error,
+      // error,
     } = this.state;
 
     const isInvalid =
@@ -116,9 +116,6 @@ class SignInForm extends Component {
           <CssBaseline />
           <main className={classes.layout}>
             <Paper className={classes.paper}>
-              {/* <Avatar className={classes.avatar}>
-                <LockIcon />
-              </Avatar> */}
               <Typography variant="headline">Sign in</Typography>
               <form className={classes.form} onSubmit={this.onSubmit}>
                 <FormControl margin="normal" required fullWidth>
@@ -126,7 +123,6 @@ class SignInForm extends Component {
                   <Input 
                     id="email"
                     name="email"
-                    // value="email"
                     autoComplete="email"
                     onChange={event => this.setState(byPropKey('email', event.target.value))}
                     autoFocus />
@@ -135,7 +131,6 @@ class SignInForm extends Component {
                   <InputLabel htmlFor="password">Password</InputLabel>
                   <Input
                     name="password"
-                    // value="password"
                     type="password"
                     id="password"
                     autoComplete="current-password"

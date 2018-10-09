@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Link,  withRouter, } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import * as routes from '../constants/routes';
+import * as API from "../utils/API";
 
 import PropTypes from 'prop-types';
 // import Avatar from '@material-ui/core/Avatar';
@@ -16,6 +17,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
+
+
+
 
 const styles = theme => ({
   layout: {
@@ -49,12 +53,12 @@ const styles = theme => ({
   },
 });
 
-const SignUpPage = ({ history }) =>
+// const SignUpPage = ({ history }) =>
 
-  <div>
-    <h1>SignUp</h1>
-    <SignUpForm history={history} />
-  </div>
+//   <div>
+//     <h1>SignUp</h1>
+//     <SignUpForm history={history} />
+//   </div>
 
 const INITIAL_STATE = {
   username: '',
@@ -103,6 +107,12 @@ class SignUpForm extends Component {
         this.setState(byPropKey('error', error));
       });
 
+      if(this.state.username && this.state.email) {
+        
+        API.saveUser({
+            username: this.state.username,
+            email: this.state.email
+        })}
     event.preventDefault();
   }
 
@@ -114,7 +124,7 @@ class SignUpForm extends Component {
       email,
       passwordOne,
       passwordTwo,
-      error,
+      // error,
     } = this.state;
 
     const isInvalid =

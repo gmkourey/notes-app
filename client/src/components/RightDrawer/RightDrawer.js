@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-// import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-// import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Close from '@material-ui/icons/Close';
+
+import Hidden from '@material-ui/core/Hidden';
+import Divider from '@material-ui/core/Divider';
+
+// import Typography from '@material-ui/core/Typography';
 // import classNames from 'classnames';
 
 const drawerWidth = 240;
@@ -55,19 +57,18 @@ const styles = theme => ({
   },
   drawerPaper: {
     position: 'relative',
-    width: drawerWidth,
+    // width: drawerWidth,
+    [theme.breakpoints.down('sm')]: {
+      width: '100%'
+    },
+    [theme.breakpoints.up('md')]: {
+      width: '240px'
+    },
     marginRight: 0,
     // marginLeft: `calc(${parentNode.width} - ${drawerWidth}px`,
     // width: 0
     height: '100vh' // Needed if removing root/ app divs
   },
-  // drawerHeaderL: {
-  //   display: 'flex',
-  //   alignItems: 'center',
-  //   justifyContent: 'flex-end',
-  //   padding: '0 8px',
-  //   ...theme.mixins.toolbar,
-  // },
   drawerHeaderR: {
     display: 'flex',
     alignItems: 'center',
@@ -75,40 +76,44 @@ const styles = theme => ({
     padding: '0 8px',
     ...theme.mixins.toolbar,
   },
-  // content: {
-  //   flexGrow: 1,
-  //   // backgroundColor: theme.palette.background.default,
-  //   padding: theme.spacing.unit * 3,
-  //   transition: theme.transitions.create('margin', {
-  //     easing: theme.transitions.easing.sharp,
-  //     duration: theme.transitions.duration.leavingScreen,
-  //   }),
-  // },
-  // 'content-left': {
-  //   marginLeft: -drawerWidth,
-  // },
-  // 'content-right': {
-  //   marginRight: -drawerWidth,
-  // },
-  // contentShift: {
-  //   transition: theme.transitions.create('margin', {
-  //     easing: theme.transitions.easing.easeOut,
-  //     duration: theme.transitions.duration.enteringScreen,
-  //   }),
-  // },
-  // 'contentShift-left': {
-  //   marginLeft: 0,
-  // },
-  // 'contentShift-right': {
-  //   marginRight: 0,
-  // },
 });
 
-class RightDrawer extends React.Component {
+class RightDrawer extends Component {
   render() {
-    const { classes, theme } = this.props;
+    const { classes } = this.props;
+
+    const drawer = (
+      <>
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={this.props.handleRightDrawer}>
+            <Close style={{
+                width: 15,
+                height: 15
+              }}
+            />
+          </IconButton>
+          Right Drawer
+        </div>
+        <Divider/>
+      </>
+    )
 
     return (
+      <>
+        <Hidden mdUp>
+          <Drawer
+              anchor="right"
+              variant="temporary"
+              open={this.props.rightOpen}
+              classes={{
+                paper: classes.drawerPaper,
+              }}
+            >
+              {drawer}
+          </Drawer>
+        </Hidden>
+
+        <Hidden smDown>
           <Drawer
             anchor="right"
             variant="persistent"
@@ -117,23 +122,10 @@ class RightDrawer extends React.Component {
               paper: classes.drawerPaper,
             }}
           >
-            <div className={classes.drawerHeader}>
-              <IconButton onClick={this.props.handleRightDrawer}>
-                {/* <ChevronRightIcon/> */}
-                <Close
-                  style={{
-                    width: 15,
-                    height: 15
-                  }}
-                />
-              </IconButton>
-              Right Drawer
-            </div>
-            <Divider />
-              Testing
-            <Divider />
-              Testing
+            {drawer}
           </Drawer>
+        </Hidden>
+      </>
     );
   }
 }

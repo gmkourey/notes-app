@@ -4,10 +4,10 @@ import AuthUserContext from './AuthUserContext';
 import { firebase } from '../firebase';
 
 // trying to implement the user frontend
-import Navbar from './TopNav/TopNav';
-import LeftDrawer from './LeftDrawer/LeftDrawer';
+// import Navbar from './TopNav/TopNav';
+// import LeftDrawer from './LeftDrawer/LeftDrawer';
 // import RightDrawer from './RightDrawer/RightDrawer';
-import Typography from '@material-ui/core/Typography';
+// import Typography from '@material-ui/core/Typography';
 
 const withAuthentication = (Component) =>
   class WithAuthentication extends React.Component {
@@ -45,38 +45,9 @@ const withAuthentication = (Component) =>
       const { authUser } = this.state;
 
       return (
-        <div>
         <AuthUserContext.Provider value={authUser}>
           <Component {...this.props} />
         </AuthUserContext.Provider>
-
-        <React.Fragment>
-          
-          {/* <div className='root'> */}
-          {/* <div className='appFrame'> */}
-          <Navbar
-            leftOpen={this.state.leftOpen}
-            rightOpen={this.state.rightOpen}
-            handleLeftDrawer={this.handleLeftDrawer}
-            handleRightDrawer={this.handleRightDrawer}
-          />
-          <LeftDrawer
-            leftOpen={this.state.leftOpen}
-            rightOpen={this.state.rightOpen}
-            handleLeftDrawer={this.handleLeftDrawer}
-            handleRightDrawer={this.handleRightDrawer}
-          />
-          <main>
-            <Typography>{'Test from app.js.'}</Typography>
-          </main>
-          {/* <RightDrawer
-            rightOpen={this.state.rightOpen}
-            handleRightDrawer={this.handleRightDrawer}
-          /> */}
-          {/* </div> */}
-          {/* </div> */}
-        </React.Fragment>
-        </div>
       );
     }
   }

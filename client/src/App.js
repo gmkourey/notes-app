@@ -8,7 +8,7 @@ import SignUpPage from './components/SignUp';
 import SignInPage from './components/SignIn';
 import PasswordForgetPage from './components/PasswordForget';
 import AccountPage from './components/Account';
-import Note from "./components/Note";
+// import Note from "./components/Note";
 
 import withAuthentication from './components/withAuthentication';
 import * as routes from './constants/routes';
@@ -30,9 +30,9 @@ const App = () =>
       <Route exact path={routes.PASSWORD_FORGET} component={PasswordForgetPage} />
       <Route exact path={routes.HOME} component={MainPage} />
       <Route exact path={routes.ACCOUNT} component={AccountPage} />
-      <Route exact path={routes.NOTE} component={Note}/>
+      {/* <Route exact path={routes.NOTE} component={Note}/> */}
 
-    </div>
+    </>
   </Router>
 
 export default withAuthentication(App);

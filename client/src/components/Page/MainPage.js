@@ -3,14 +3,13 @@ import Navbar from '../TopNav/TopNav';
 import { withStyles } from '@material-ui/core/styles';
 import LeftDrawer from '../LeftDrawer/LeftDrawer'
 import RightDrawer from '../RightDrawer/RightDrawer';
-import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-
-import AuthUserContext from '../AuthUserContext';
-import SignInPage from '../SignIn';
-import SignUpPage from '../SignUp';
 import Content from '../Content/Content';
 
+// import Typography from '@material-ui/core/Typography';
+// import AuthUserContext from '../AuthUserContext';
+// import SignInPage from '../SignIn';
+// import SignUpPage from '../SignUp';
 // import { firebase } from '../../firebase';
 
 const styles = {
@@ -33,11 +32,15 @@ class MainPage extends React.Component {
 
     this.state = {
       // authUser: null,
-      leftOpen: false,
+      leftOpen: true,
       rightOpen: false,
-      // content: 
+      selectedNote: 'start'
     };
   }
+
+  // componentDidMount() {
+  //   this.handleSelectedNote();
+  // }
 
   handleLeftDrawer = () => {
     this.setState({
@@ -48,6 +51,14 @@ class MainPage extends React.Component {
   handleRightDrawer = () => {
     this.setState({
       rightOpen: !this.state.rightOpen
+    })
+  }
+
+  handleSelectedNote = (body) => {
+    console.log(body);
+
+    this.setState({
+      selectedNote: body
     })
   }
 
@@ -77,12 +88,15 @@ class MainPage extends React.Component {
                 <LeftDrawer
                   leftOpen={this.state.leftOpen}
                   handleLeftDrawer={this.handleLeftDrawer}
+                  handleSelectedNote={this.handleSelectedNote}
                 />
               </Grid>
 
               <Grid item md={8}>
                 <main>
-                  <Content/>
+                  <Content
+                    selectedNote={this.state.selectedNote}
+                  />
                 </main>
               </Grid>
 
