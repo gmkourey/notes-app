@@ -6,7 +6,7 @@ module.exports = {
             .find(req.query)
             .sort({dateAdded: -1})
             .then(dbModel => res.json(dbModel))
-            .catch(err => res.status(422).json(err))
+            .catch(err => res.json(err))
     },
     findById: function(req, res) {
         db.Note
@@ -15,12 +15,28 @@ module.exports = {
             .catch(err => res.status(422).json(err));
     },
     createNote: function(req, res) {
-        console.log("test: " + JSON.stringify(req.body));
         db.Note
             .create(req.body)
-            .then(dbModel => res.json(dbModel))
+            .then(dbNote => {
+                console.log(db.User)
+                console.log("text" + req.params.id)
+                return db.User.findOneAndUpdate({
+                    _id: req.params.id
+                },
+                {
+                    $push: {notes: dbNote }
+                },
+                {
+                    new: true
+                })
+                .then(console.log(dbNote))
+            })
+            .then(dbUser => {
+                console.log(dbUser)
+                res.json(dbUser)})
             .catch(err => res.status(422).json(err))
     },
+<<<<<<< HEAD
     update: function(req, res) {
         console.log("test: " + JSON.stringify(req.body));
         db.Note
@@ -34,5 +50,25 @@ module.exports = {
             .then(dbModel => dbModel.remove())
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
+=======
+    updateNote: function (req, res) {
+        db.Note
+            .findOneAndUpdate({_id: req.params.id}, req.body)
+            .then(dbModel => res.json(dbModel))
+            .catch(err => res.json(err))
+    },
+    findNote: function(req, res) {
+        db.Note
+            .findById(req.params.id)
+            .then(dbModel => res.json(dbModel))
+            .catch(err => res.json(err))
+    },
+    deleteNote: function(req, res) {
+        db.Note
+            .deleteOne({_id: req.params.id})
+            .then(dbModel => dbModel.remove())
+            .then(dbModel => res.json(dbModel))
+            .catch(err => res.json(err))
+>>>>>>> c9855dc647407bed4b8582e594821fe984d921e6
     }
 };

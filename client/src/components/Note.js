@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
+<<<<<<< HEAD
 // import { withRouter } from 'react-router-dom';
+=======
+import { withRouter } from 'react-router-dom';
+>>>>>>> c9855dc647407bed4b8582e594821fe984d921e6
 import API from "../utils/API";
 import FormBtn from './FormBtn.js';
 import Input from './Input.js'
