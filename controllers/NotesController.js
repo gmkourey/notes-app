@@ -36,21 +36,6 @@ module.exports = {
                 res.json(dbUser)})
             .catch(err => res.status(422).json(err))
     },
-<<<<<<< HEAD
-    update: function(req, res) {
-        console.log("test: " + JSON.stringify(req.body));
-        db.Note
-            .findOneAndUpdate({ _id: req.params.id }, req.body)
-            .then(dbModel => res.json(dbModel))
-            .catch(err => res.status(422).json(err));
-    },
-    remove: function(req, res) {
-        db.Note
-            .findById({ _id: req.params.id })
-            .then(dbModel => dbModel.remove())
-            .then(dbModel => res.json(dbModel))
-            .catch(err => res.status(422).json(err));
-=======
     updateNote: function (req, res) {
         db.Note
             .findOneAndUpdate({_id: req.params.id}, req.body)
@@ -69,6 +54,5 @@ module.exports = {
             .then(dbModel => dbModel.remove())
             .then(dbModel => res.json(dbModel))
             .catch(err => res.json(err))
->>>>>>> c9855dc647407bed4b8582e594821fe984d921e6
     }
 };
