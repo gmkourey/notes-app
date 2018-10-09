@@ -2,6 +2,7 @@ import React from 'react';
 import AuthUserContext from '../AuthUserContext';
 import SignUpPage from '../SignUp';
 import Note from "../Note";
+import NoteArea from "../NoteArea";
 
 // import Typography from '@material-ui/core/Typography';
 // import SignInPage from '../SignIn';
@@ -23,8 +24,9 @@ class Content extends React.Component {
           ? (
             <>
             {/* For testing */}
-            {console.log("Getting user info from firebase...")}
-            {console.log(authUser)}
+            {/* {console.log("Getting user info from firebase...")}
+            {console.log(authUser)} */}
+            <NoteArea />
             <div>
               {this.props.selectedNote}
             </div>

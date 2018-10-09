@@ -6,12 +6,7 @@ var Schema = mongoose.Schema;
 
 var NoteSchema = new Schema({
 
-    title: {
-        type: String,
-        unique: false,
-        required: true
-    },
-    body: {
+    content: {
         type: String,
         unique: false
     },
@@ -19,6 +14,9 @@ var NoteSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    userId: {
+        type: String
+    }
     
 })
 

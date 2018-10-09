@@ -8,6 +8,7 @@
     "@material-ui/icons": "^3.0.1",
     "axios": "^0.16.2",
     "firebase": "^5.5.3",
+    "immutable": "^3.8.2",
     "material-ui": "^0.20.2",
     "mobx": "^5.5.0",
     "mobx-react": "^5.2.8",
@@ -19,7 +20,9 @@
     "react-scripts": "^2.0.4",
     "react-syntax-highlighter": "^8.0.1",
     "recompose": "^0.30.0",
-    "redux": "^4.0.0"
+    "redux": "^4.0.0",
+    "slate": "^0.41.2",
+    "slate-react": "^0.18.10"
   },
   "scripts": {
     "start": "react-scripts start",

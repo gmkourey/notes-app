@@ -10,12 +10,11 @@ import axios from "axios";
 // };
 
 export default {
-    getNotes: function() {
-        return axios.get("/api/note")
+    getNotes: function(userId) {
+        return axios.get("/api/notes/user/" + userId)
     },
 
     saveNote: function(NoteData) {
-        console.log(NoteData)
         return axios.post("/api/note", NoteData);
     },
 

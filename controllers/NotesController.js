@@ -3,7 +3,7 @@ const db = require("../models");
 module.exports = {
     findAll: function(req, res) {
         db.Note
-            .find(req.query)
+            .find({userId: req.params.email})
             .sort({dateAdded: -1})
             .then(dbModel => res.json(dbModel))
             .catch(err => res.json(err))

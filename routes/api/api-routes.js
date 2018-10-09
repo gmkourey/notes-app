@@ -4,9 +4,10 @@ var userController = require("../../controllers/UserController");
 
 // api/note
 router.route("/note")
-    .get(notesController.findAll)
     .post(notesController.createNote);
 
+router.route("/notes/user/:email")
+    .get(notesController.findAll)
 // router.route("/note/:id")
 //     .post(notesController.createNote);
 
