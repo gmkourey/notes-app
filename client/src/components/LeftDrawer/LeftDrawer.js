@@ -11,6 +11,7 @@ import Hidden from '@material-ui/core/Hidden';
 import Divider from '@material-ui/core/Divider';
 
 import API from '../../utils/API';
+import {firebase} from "../../firebase";
 
 // import Typography from '@material-ui/core/Typography';
 // import classNames from 'classnames';
@@ -85,7 +86,8 @@ class LeftDrawer extends Component {
   state = {
     title: "Untitled",
     body: "",
-    notes: []
+    notes: [],
+    email: "",
   }
 
   constructor(props) {
@@ -96,6 +98,10 @@ class LeftDrawer extends Component {
   }
 
   componentDidMount() {
+    firebase.auth.onAuthStateChanged(authUser => {
+      this.setState({ email: authUser.email }, function() {
+      })
+    })
     console.log("LeftDrawer.js componentDidMount()");
     // this.loadNotes();
   }
@@ -107,8 +113,8 @@ class LeftDrawer extends Component {
     console.log(this.state.title);
 
     API.saveNote({
-      title: this.state.title,
-      body: this.state.body
+      title: "Untitled",
+      userId: this.state.email
     })
       // .then(res => this.loadNotes())
       // .then(res => this.forceUpdate())

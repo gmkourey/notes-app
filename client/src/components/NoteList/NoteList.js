@@ -1,17 +1,24 @@
 import React, { Component } from 'react';
 import API from '../../utils/API';
 import TextField from '@material-ui/core/TextField';
+import {firebase} from "../../firebase";
 
 class NoteList extends Component {
   state = {
     notes: this.props.notes,
     isEditable: [],
-    val: []
+    val: [],
+    email: "",
   };
 
   componentDidMount() {
+    firebase.auth.onAuthStateChanged(authUser => {
+      this.setState({ email: authUser.email }, function() {
+        this.loadNotes();
+      })
+    })
     console.log("NoteList.js componentDidMount()")
-    this.loadNotes();
+
   }
 
   componentWillReceiveProps(props) {
@@ -75,7 +82,8 @@ class NoteList extends Component {
 
   loadNotes = () => {
     console.log('Ran loadNotes function from NoteList.js.')
-    API.getNotes()
+    console.log(this.state.email);
+    API.getNotes(this.state.email)
       .then(res => this.setState({ notes: res.data }))
       .catch(err => console.log(err));
   }
