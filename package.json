@@ -30,6 +30,8 @@
     "heroku-postbuild": "npm run build"
   },
   "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
     "concurrently": "^3.5.0",
     "nodemon": "^1.11.0"
   },
