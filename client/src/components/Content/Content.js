@@ -26,10 +26,13 @@ class Content extends React.Component {
             {/* For testing */}
             {/* {console.log("Getting user info from firebase...")}
             {console.log(authUser)} */}
-            <NoteArea />
-            <div>
+            <NoteArea 
+              selectedNoteBody={this.props.selectedNoteBody}
+              selectedNoteID={this.props.selectedNoteID}
+            />
+            {/* <div>
               {this.props.selectedNote}
-            </div>
+            </div> */}
             {/* <Typography>{'You\'re logged in.'}</Typography>
             <Typography>{'Component for draft-js goes here'}</Typography> */}
             <Note/>

@@ -26,8 +26,12 @@ export default {
         return axios.get("/api/note" + id)
     },
 
-    updateNote: function(id, title) {
+    updateTitle: function(id, title) {
         return axios.put("/api/" + id, title);
+    },
+
+    updateNote: function(id, content) {
+        return axios.put("/api/" + id, content);
     },
 
     deleteNote: function (id) {

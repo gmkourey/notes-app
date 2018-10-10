@@ -35,7 +35,8 @@ class MainPage extends React.Component {
       // authUser: null,
       leftOpen: true,
       rightOpen: false,
-      selectedNote: 'start',
+      selectedNoteID: null,
+      selectedNoteBody: null,
       deleteAlertOpen: false
     };
   }
@@ -56,11 +57,21 @@ class MainPage extends React.Component {
     })
   }
 
-  handleSelectedNote = (body) => {
-    console.log(body);
+  // handleSelectedNote = (body) => {
+  //   console.log(body);
+
+  //   this.setState({
+  //     selectedNote: body
+  //   })
+  // }
+
+  handleSelectedNote = (id, content) => {
+    // console.log(id);
+    // console.log(content);
 
     this.setState({
-      selectedNote: body
+      selectedNoteID: id,
+      selectedNoteBody: content
     })
   }
 
@@ -116,7 +127,8 @@ class MainPage extends React.Component {
               <Grid item md={8}>
                 <main>
                   <Content
-                    selectedNote={this.state.selectedNote}
+                    selectedNoteID={this.state.selectedNoteID}
+                    selectedNoteBody={this.state.selectedNoteBody}
                   />
                 </main>
               </Grid>

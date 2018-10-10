@@ -63,7 +63,7 @@ class NoteList extends Component {
 
   // is this necessary? 
   componentWillReceiveProps(props) {
-    console.log(this.props.notes);
+    // console.log(this.props.notes);
     console.log("NoteList.js componentWilLReceiveProps()");
     if (this.props.notes.length) {
       this.setState({notes: this.props.notes});
@@ -82,7 +82,7 @@ class NoteList extends Component {
   handleChange (event, id, index) {
     const notes = this.state.notes;
     if (event.target.value !== this.state.notes[index].title) {
-      API.updateNote(id, {title: event.target.value} )
+      API.updateTitle(id, {title: event.target.value} )
       .then(res => this.forceUpdate())
       .catch(err => console.log(err));
     }
@@ -227,7 +227,7 @@ class NoteList extends Component {
                   ),
                 }}
                 defaultValue={note.title}
-                onClick={() => this.props.handleSelectedNote(note.body)}
+                onClick={() => this.props.handleSelectedNote(note._id, note.content)}
                 onDoubleClick={(e) => this.handleDoubleClick(e, index)}
                 aria-owns={open ? 'simple-menu' : null}
                 aria-haspopup="true"
