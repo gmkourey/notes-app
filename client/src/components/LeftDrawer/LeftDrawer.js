@@ -11,6 +11,7 @@ import Hidden from '@material-ui/core/Hidden';
 import Divider from '@material-ui/core/Divider';
 
 import API from '../../utils/API';
+import {firebase} from "../../firebase";
 
 // import Typography from '@material-ui/core/Typography';
 // import classNames from 'classnames';
@@ -98,7 +99,8 @@ class LeftDrawer extends Component {
   state = {
     title: "Untitled",
     body: "",
-    notes: []
+    notes: [],
+    email: "",
   }
 
   constructor(props) {
@@ -109,10 +111,15 @@ class LeftDrawer extends Component {
     this.child = React.createRef();
   }
 
-  // componentDidMount() {
-  //   console.log("LeftDrawer.js componentDidMount()");
-  //   // this.loadNotes();
-  // }
+  componentDidMount() {
+    firebase.auth.onAuthStateChanged(authUser => {
+      this.setState({ email: authUser.email }, function() {
+      })
+    })
+    console.log("LeftDrawer.js componentDidMount()");
+    // this.loadNotes();
+  }
+
 
   // new note doesn't update the note list until the drawer is closed and opened again
   handleNewNote () {
@@ -120,8 +127,8 @@ class LeftDrawer extends Component {
     console.log(this.state.title);
 
     API.saveNote({
-      title: this.state.title,
-      body: this.state.body
+      title: "Untitled",
+      userId: this.state.email
     })
       // .then(this.child.current.loadNotes());
       .then(this.child.current.refreshNewNote());

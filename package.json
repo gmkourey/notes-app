@@ -8,7 +8,9 @@
     "if-env": "^1.0.4",
     "mongojs": "^2.6.0",
     "mongoose": "^5.3.1",
-    "register-service-worker": "^1.5.2"
+    "register-service-worker": "^1.5.2",
+    "slate": "^0.41.2",
+    "slate-react": "^0.18.10"
   },
   "scripts": {
     "start": "npm run start:dev",
@@ -34,4 +36,3 @@
     "not op_mini all"
   ]
 }
-

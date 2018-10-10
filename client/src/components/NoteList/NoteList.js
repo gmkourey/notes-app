@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import API from '../../utils/API';
 import TextField from '@material-ui/core/TextField';
+import {firebase} from "../../firebase";
 import PropTypes from 'prop-types';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -43,15 +44,21 @@ class NoteList extends Component {
     notes: this.props.notes,
     isEditable: [],
     val: [],
+    email: "",
     targetId: null, // id for context menu to access
     open: false,
     positionTop: 300, // should these be null by default?
     positionLeft: 400,
-  };
+  };  
 
   componentDidMount() {
+    firebase.auth.onAuthStateChanged(authUser => {
+      this.setState({ email: authUser.email }, function() {
+        this.loadNotes();
+      })
+    })
     console.log("NoteList.js componentDidMount()")
-    this.loadNotes();
+
   }
 
   // is this necessary? 
@@ -134,7 +141,8 @@ class NoteList extends Component {
 
   loadNotes = () => {
     console.log('Ran loadNotes function from NoteList.js.')
-    API.getNotes()
+    console.log(this.state.email);
+    API.getNotes(this.state.email)
       .then(res => this.setState({ notes: res.data }))
       .catch(err => console.log(err));
   }
