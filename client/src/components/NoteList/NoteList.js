@@ -155,7 +155,7 @@ class NoteList extends Component {
         this.setState({ isEditable });
       }
       .bind(this),
-      270
+      310
     );
   }
 
