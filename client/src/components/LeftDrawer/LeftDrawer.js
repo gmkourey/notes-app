@@ -105,6 +105,7 @@ class LeftDrawer extends Component {
     super(props);
     this.handleNewNote = this.handleNewNote.bind(this);
     this.handleSelectedNote = this.props.handleSelectedNote.bind(this);
+    this.handleDeleteAlert = this.props.handleDeleteAlert.bind(this);
     this.child = React.createRef();
   }
 
@@ -135,6 +136,7 @@ class LeftDrawer extends Component {
         <NoteList
           notes={this.state.notes}
           handleSelectedNote={this.handleSelectedNote}
+          handleDeleteAlert={this.props.handleDeleteAlert}
           innerRef={this.child}
         />
       </>

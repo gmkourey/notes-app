@@ -165,6 +165,7 @@ class NoteList extends Component {
     this.handleClose(event);
     API.deleteNote(id)
       .then(res => this.loadNotes())
+      // .then(this.props.handleDeleteAlert())
       .catch(err => console.log(err));
   }
  
@@ -176,7 +177,6 @@ class NoteList extends Component {
       positionTop,
       positionLeft,
     } = this.state;
-    
 
     return(
       <>
@@ -256,7 +256,9 @@ class NoteList extends Component {
               </ListItemIcon>
               <ListItemText classes={{ primary: classes.primary }} inset primary="Share"/>
             </MenuItem>
-            <MenuItem className={classes.menuitem} onClick={(e) => this.deleteNote(e, targetId)}>
+            <MenuItem 
+              className={classes.menuitem}
+              onClick={(e) => { this.deleteNote(e, targetId); this.props.handleDeleteAlert(); }}>
               <ListItemIcon className={classes.icon}>
                 <DeleteIcon/>
               </ListItemIcon>
