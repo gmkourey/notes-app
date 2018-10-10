@@ -2,54 +2,54 @@ const db = require("../models");
 
 module.exports = {
     findAll: function(req, res) {
-        db.Note
-            .find({userId: req.params.email})
+        db.Folder
+            .find(req.query)
             .sort({dateAdded: -1})
             .then(dbModel => res.json(dbModel))
             .catch(err => res.json(err))
     },
     findById: function(req, res) {
-        db.Note
+        db.Folder
             .findById(req.params.id)
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
-    createNote: function(req, res) {
-        db.Note
+    createFolder: function(req, res) {
+        db.Folder
             .create(req.body)
-            .then(dbNote => {
-                // console.log(db.User)
-                // console.log("text" + req.params.id)
+            .then(dbFolder => {
+                console.log(db.User)
+                console.log("text" + req.params.id)
                 return db.User.findOneAndUpdate({
                     _id: req.params.id
                 },
                 {
-                    $push: {notes: dbNote }
+                    $push: {Folders: dbFolder }
                 },
                 {
                     new: true
                 })
-                // .then(console.log(dbNote))
+                .then(console.log(dbFolder))
             })
             .then(dbUser => {
-                // console.log(dbUser)
+                console.log(dbUser)
                 res.json(dbUser)})
             .catch(err => res.status(422).json(err))
     },
-    updateNote: function (req, res) {
-        db.Note
+    updateFolder: function (req, res) {
+        db.Folder
             .findOneAndUpdate({_id: req.params.id}, req.body)
             .then(dbModel => res.json(dbModel))
             .catch(err => res.json(err))
     },
-    findNote: function(req, res) {
-        db.Note
+    findFolder: function(req, res) {
+        db.Folder
             .findById(req.params.id)
             .then(dbModel => res.json(dbModel))
             .catch(err => res.json(err))
     },
-    deleteNote: function(req, res) {
-        db.Note
+    deleteFolder: function(req, res) {
+        db.Folder
             .deleteOne({_id: req.params.id})
             .then(dbModel => dbModel.remove())
             .then(dbModel => res.json(dbModel))

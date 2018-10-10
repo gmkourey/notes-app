@@ -18,7 +18,12 @@ var NoteSchema = new Schema({
     },
     userId: {
         type: String
+    },
+    key:{
+        type:Number,
+        unique: true
     }
+
     
 })
 

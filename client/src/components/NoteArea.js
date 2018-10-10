@@ -3,7 +3,7 @@ import React from 'react';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
 import API from "../utils/API";
-import AuthUserContext from './AuthUserContext';
+// import AuthUserContext from './AuthUserContext';
 import {firebase} from '../firebase';
 
 const initialValue = Value.fromJSON({
@@ -39,12 +39,16 @@ class NoteArea extends React.Component {
 
   state = {
     value: initialValue,
-    email: "test"
+    email: "test",
+    id:this._id
   }
+
+  holder = []
+
 
   // On change, update the app's React state with the new editor value.
   onChange = ({ value }) => {
-      console.log(this.state.email);
+    //   console.log(this.state.email);
     // authUser => authUser
     //     ? (
     //       console.log("Getting user info from firebase...");
@@ -53,7 +57,9 @@ class NoteArea extends React.Component {
     //     console.log("No user")
     // )
     this.setState({ value })
-    API.saveNote({content: JSON.stringify(value), userId: this.state.email});
+
+    API.updateNote({content: JSON.stringify(value), userId: this.state.email,_id:this.state._id});
+     console.log(value)
   }
 
   // Render the editor.
