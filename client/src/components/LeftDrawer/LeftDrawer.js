@@ -128,7 +128,6 @@ class LeftDrawer extends Component {
     console.log("Hit handleNewNote function");
     console.log(this.state.title);
 
-    // const initialValue = Value.fromJSON({
     const initialValue = {
       document: {
         nodes: [
@@ -149,15 +148,12 @@ class LeftDrawer extends Component {
         ],
       },
     }
-  // )
 
     API.saveNote({
       title: "Untitled",
       userId: this.state.email,
       content: JSON.stringify(initialValue)
-      // content: initialValue
     })
-      // .then(this.child.current.loadNotes());
       .then(this.child.current.refreshNewNote(this.state.email));
   };
 

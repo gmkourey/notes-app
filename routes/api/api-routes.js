@@ -17,9 +17,11 @@ router.route("/user")
 
 router.route("/:id")
     .get(notesController.findNote)
-    // .put(notesController.updateTitle)
     .put(notesController.updateNote)
     .delete(notesController.deleteNote)
+
+// router.route("/title/:id")
+//     .put(notesController.updateTitle)
  
 // api/note/:id
 // router

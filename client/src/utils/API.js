@@ -30,8 +30,8 @@ export default {
     //     return axios.put("/api/" + id, title);
     // },
 
-    updateNote: function(id, content) {
-        return axios.put("/api/" + id, content);
+    updateNote: function(id, body) {
+        return axios.put("/api/" + id, body);
     },
 
     deleteNote: function (id) {
