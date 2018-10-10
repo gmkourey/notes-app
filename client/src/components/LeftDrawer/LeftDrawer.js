@@ -61,6 +61,8 @@ const styles = theme => ({
   },
   drawerPaper: {
     position: 'relative',
+    display: 'block',
+    // width: '100%',
     // width: drawerWidth,
     [theme.breakpoints.down('sm')]: {
       width: '100%'
@@ -68,9 +70,20 @@ const styles = theme => ({
     [theme.breakpoints.up('md')]: {
       width: '240px'
     },
-    height: '100vh' // Needed if removing root/ app divs
+    height: '100vh'
+  },
+  headerPaper: {
+    position: 'relative',
+    display: 'block',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%'
+    },
+    [theme.breakpoints.up('md')]: {
+      width: '240px'
+    },
   },
   drawerHeaderL: {
+    // position: 'absolute',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
@@ -109,7 +122,8 @@ class LeftDrawer extends Component {
       title: this.state.title,
       body: this.state.body
     })
-      .then(this.child.current.loadNotes());
+      // .then(this.child.current.loadNotes());
+      .then(this.child.current.refreshNewNote());
   };
 
   render() {
@@ -117,22 +131,6 @@ class LeftDrawer extends Component {
 
     const drawer = (
       <>
-        <div className={classes.drawerHeaderL}>
-          <IconButton>
-            <Add 
-              title={this.state.title}
-              body={this.state.body}
-              onClick={this.handleNewNote}/>
-          </IconButton>
-            Left Drawer
-          <IconButton onClick={this.props.handleLeftDrawer}>
-            <Close style={{
-                width: 15,
-                height: 15
-              }}
-            />
-          </IconButton>
-        </div>
         <Divider/>
         <NoteList
           notes={this.state.notes}
@@ -140,6 +138,25 @@ class LeftDrawer extends Component {
           innerRef={this.child}
         />
       </>
+    )
+
+    const header = (
+      <div className={classes.drawerHeaderL}>
+        <IconButton>
+          <Add 
+            title={this.state.title}
+            body={this.state.body}
+            onClick={this.handleNewNote}/>
+        </IconButton>
+          Left Drawer
+        <IconButton onClick={this.props.handleLeftDrawer}>
+          <Close style={{
+              width: 15,
+              height: 15
+            }}
+          />
+        </IconButton>
+      </div>
     )
 
     return (
@@ -152,6 +169,7 @@ class LeftDrawer extends Component {
               paper: classes.drawerPaper,
             }}
           >
+            {header}
             {drawer}
           </Drawer>
         </Hidden>
@@ -161,9 +179,19 @@ class LeftDrawer extends Component {
               variant="persistent"
               open={this.props.leftOpen}
               classes={{
+                paper: classes.headerPaper,
+              }}
+            >
+              {header}
+            </Drawer>
+            <Drawer
+              variant="persistent"
+              open={this.props.leftOpen}
+              classes={{
                 paper: classes.drawerPaper,
               }}
             >
+              {/* {header} */}
               {drawer}
             </Drawer>
         </Hidden>

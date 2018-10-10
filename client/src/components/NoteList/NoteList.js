@@ -11,7 +11,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Popover from '@material-ui/core/Popover';
-
+import Layers from '@material-ui/icons/Layers';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 const styles = theme => ({
   root: {
@@ -19,6 +20,7 @@ const styles = theme => ({
   },
   paper: {
     marginRight: theme.spacing.unit * 2,
+    justifyContent: 'flex-end',
   },
   menuItem: {
     '&:focus': {
@@ -30,6 +32,10 @@ const styles = theme => ({
   },
   primary: {},
   icon: {},
+  noteField: {
+    justifyContent: 'flex-end',
+    width: '100%'
+  },
 });
 
 class NoteList extends Component {
@@ -133,6 +139,26 @@ class NoteList extends Component {
       .catch(err => console.log(err));
   }
 
+  refreshNewNote = () => {
+    console.log('Ran refreshNewNote function from NoteList.js.');
+    API.getNotes()
+      .then(res => this.setState({ notes: res.data }))
+      .catch(err => console.log(err));
+
+    setTimeout(
+      function() {
+        let edit = this.state.isEditable.map((val) => {
+          return (val = false);
+        });
+        let isEditable = edit.slice();
+        isEditable[0] = true;
+        this.setState({ isEditable });
+      }
+      .bind(this),
+      270
+    );
+  }
+
   // need to select the "next" note when one note is deleted, otherwise the body stays the same
   deleteNote = (event, id) => {
     console.log('Delete method called.');
@@ -162,6 +188,7 @@ class NoteList extends Component {
             {this.state.isEditable[index] ? (
               // Editable text field
               <TextField
+                className={classes.noteField}
                 key={note._id}
                 autoFocus
                 onFocus={this.handleFocus}
@@ -170,13 +197,26 @@ class NoteList extends Component {
                 onChange={(e) => this.handleChange(e, note._id, index)}
                 onBlur={(e) => this.handleBlur(e, note._id, index)}
                 onKeyDown={(e) => this.keyPress(e, note._id, index)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Layers />
+                    </InputAdornment>
+                  ),
+                }}
               />
             ) : (
               // Read only text field
               <TextField
+                className={classes.noteField}
                 key={note._id}
                 InputProps={{
                   readOnly: true,
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Layers />
+                    </InputAdornment>
+                  ),
                 }}
                 defaultValue={note.title}
                 onClick={() => this.props.handleSelectedNote(note.body)}
@@ -184,7 +224,6 @@ class NoteList extends Component {
                 aria-owns={open ? 'simple-menu' : null}
                 aria-haspopup="true"
                 onContextMenu={(e) => this.handleContextMenu(e, note._id)}
-                // onClickAway={this.handleClose}
               />
             )}
           </>
