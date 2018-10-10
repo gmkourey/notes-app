@@ -131,7 +131,7 @@ class LeftDrawer extends Component {
       userId: this.state.email
     })
       // .then(this.child.current.loadNotes());
-      .then(this.child.current.refreshNewNote());
+      .then(this.child.current.refreshNewNote(this.state.email));
   };
 
   render() {
