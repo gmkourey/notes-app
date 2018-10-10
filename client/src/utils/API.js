@@ -26,9 +26,9 @@ export default {
         return axios.get("/api/note" + id)
     },
 
-    updateTitle: function(id, title) {
-        return axios.put("/api/" + id, title);
-    },
+    // updateTitle: function(id, title) {
+    //     return axios.put("/api/" + id, title);
+    // },
 
     updateNote: function(id, content) {
         return axios.put("/api/" + id, content);

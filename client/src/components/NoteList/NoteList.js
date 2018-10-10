@@ -82,7 +82,7 @@ class NoteList extends Component {
   handleChange (event, id, index) {
     const notes = this.state.notes;
     if (event.target.value !== this.state.notes[index].title) {
-      API.updateTitle(id, {title: event.target.value} )
+      API.updateNote(id, {title: event.target.value} )
       .then(res => this.forceUpdate())
       .catch(err => console.log(err));
     }

@@ -52,25 +52,25 @@ class NoteArea extends React.Component {
     // }
   }
 
-  // componentWillReceiveProps() {
-  //   if (this.props.selectedNoteBody) {
+  componentWillReceiveProps() {
+    console.log('content prop: ' + this.props.selectedNoteBody);
+    console.log('id prop: ' + this.props.selectedNoteID);
+    console.log("------------------------");
 
-  //     console.log('INIT VALUE' + this.state.value);
-  //     let content = this.props.selectedNoteBody;
-  //     // console.log(content);
-  //     // console.log(JSON.parse(content));
-
-  //     console.log("------------------------")
-  //     let slateContent = Value.fromJSON(content);
-  //     console.log(slateContent);
-
-  //     this.setState({ 
-  //       value: slateContent,
-  //       id: this.props.selectedNoteID
-  //     })
-  //     console.log('NEW VALUE' + this.state.value);
-  //   }
-  // }
+    if (this.props.selectedNoteBody) {
+      let contentStr = this.props.selectedNoteBody;
+      let contentObj = JSON.parse(contentStr);
+      let slateContent = Value.fromJSON(contentObj);
+      // let slateContent = JSON.stringify(content);
+      // console.log('content prop after fromJSON method: ' + slateContent);
+      
+      this.setState({ 
+        value: slateContent,
+        id: this.props.selectedNoteID
+      })
+      // console.log('NEW VALUE' + this.state.value);
+    }
+  }
 
   state = {
     // value: this.props.selectedNoteBody,
@@ -81,10 +81,12 @@ class NoteArea extends React.Component {
 
   // On change, update the app's React state with the new editor value.
   onChange = ({ value }) => {
-      console.log(this.state.email);
+      // console.log(this.state.email);
 
-      console.log(this.state.content);
-      console.log(this.state.id);
+      // console.log(JSON.stringify(this.state.value));
+      // console.log('value state from onChange ' + this.state.value)
+      
+      // console.log(this.state.id);
     // authUser => authUser
     //     ? (
     //       console.log("Getting user info from firebase...");
@@ -94,7 +96,7 @@ class NoteArea extends React.Component {
     // )
     this.setState({ value })
     // API.saveNote({content: JSON.stringify(value), userId: this.state.email});
-    API.updateNote({ id: this.state.id }, { content: JSON.stringify(value) });
+    API.updateNote(this.state.id, { content: JSON.stringify(value) });
   }
 
   // Render the editor.
@@ -118,8 +120,8 @@ class NoteArea extends React.Component {
         value={this.state.value} 
         onChange={this.onChange}
       />
-      {console.log(this.props.selectedNoteBody)}
-      {console.log(this.props.selectedNoteID)}
+      {/* {console.log(this.props.selectedNoteBody)}
+      {console.log(this.props.selectedNoteID)} */}
       </>
     ) 
   }
