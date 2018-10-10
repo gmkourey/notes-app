@@ -54,5 +54,15 @@ module.exports = {
             .then(dbModel => dbModel.remove())
             .then(dbModel => res.json(dbModel))
             .catch(err => res.json(err))
+    },
+    addSharedUser: function(req, res) {
+        db.Note
+            .findOneAndUpdate({_id: req.params.id}, {$push: {sharedWith: req.params.sharedId}})
+            .then(dbModel => res.json(dbModel))
+            .catch(err => res.json(err))
+    },
+    getSharedNotes: function(req, res) {
+        db.Note
+            .findAll({sharedWith: req.params.id})
     }
 };

@@ -18,6 +18,9 @@ var NoteSchema = new Schema({
     },
     userId: {
         type: String
+    },
+    sharedWith: {
+        type: Array,
     }
     
 })

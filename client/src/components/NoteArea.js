@@ -45,6 +45,7 @@ class NoteArea extends React.Component {
   // On change, update the app's React state with the new editor value.
   onChange = ({ value }) => {
       console.log(this.state.email);
+      console.log(value);
     // authUser => authUser
     //     ? (
     //       console.log("Getting user info from firebase...");
