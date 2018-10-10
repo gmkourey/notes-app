@@ -25,6 +25,7 @@ class Content extends React.Component {
             {/* For testing */}
             {console.log("Getting user info from firebase...")}
             {console.log(authUser)}
+            {console.log(authUser.email)}
             <div>
               {this.props.selectedNote}
             </div>

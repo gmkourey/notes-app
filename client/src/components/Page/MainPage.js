@@ -5,6 +5,7 @@ import LeftDrawer from '../LeftDrawer/LeftDrawer'
 import RightDrawer from '../RightDrawer/RightDrawer';
 import Grid from '@material-ui/core/Grid';
 import Content from '../Content/Content';
+import DeleteAlert from '../DeleteAlert/DeleteAlert';
 
 // import Typography from '@material-ui/core/Typography';
 // import AuthUserContext from '../AuthUserContext';
@@ -34,7 +35,8 @@ class MainPage extends React.Component {
       // authUser: null,
       leftOpen: true,
       rightOpen: false,
-      selectedNote: 'start'
+      selectedNote: 'start',
+      deleteAlertOpen: false
     };
   }
 
@@ -62,6 +64,20 @@ class MainPage extends React.Component {
     })
   }
 
+  handleDeleteAlert = () => {
+    console.log("Delete alert function fired.");
+    this.setState({
+      deleteAlertOpen: true
+    })
+  }
+
+  handleAlertClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    this.setState({ deleteAlertOpen: false });
+  };
+
   // componentDidMount() {
   //   firebase.auth.onAuthStateChanged(authUser => {
   //     authUser
@@ -83,12 +99,17 @@ class MainPage extends React.Component {
               handleLeftDrawer={this.handleLeftDrawer}
               handleRightDrawer={this.handleRightDrawer}
             />
+            <DeleteAlert
+              deleteAlertOpen={this.state.deleteAlertOpen}
+              handleAlertClose={this.handleAlertClose}
+            />
             <Grid container>
               <Grid item md={2}>
                 <LeftDrawer
                   leftOpen={this.state.leftOpen}
                   handleLeftDrawer={this.handleLeftDrawer}
                   handleSelectedNote={this.handleSelectedNote}
+                  handleDeleteAlert={this.handleDeleteAlert}
                 />
               </Grid>
 

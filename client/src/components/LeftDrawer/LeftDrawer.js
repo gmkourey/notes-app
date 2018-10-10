@@ -61,6 +61,8 @@ const styles = theme => ({
   },
   drawerPaper: {
     position: 'relative',
+    display: 'block',
+    // width: '100%',
     // width: drawerWidth,
     [theme.breakpoints.down('sm')]: {
       width: '100%'
@@ -68,9 +70,20 @@ const styles = theme => ({
     [theme.breakpoints.up('md')]: {
       width: '240px'
     },
-    height: '100vh' // Needed if removing root/ app divs
+    height: '100vh'
+  },
+  headerPaper: {
+    position: 'relative',
+    display: 'block',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%'
+    },
+    [theme.breakpoints.up('md')]: {
+      width: '240px'
+    },
   },
   drawerHeaderL: {
+    // position: 'absolute',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
@@ -91,15 +104,15 @@ class LeftDrawer extends Component {
   constructor(props) {
     super(props);
     this.handleNewNote = this.handleNewNote.bind(this);
-    // this.loadNotes = this.loadNotes.bind(this);
     this.handleSelectedNote = this.props.handleSelectedNote.bind(this);
+    this.handleDeleteAlert = this.props.handleDeleteAlert.bind(this);
+    this.child = React.createRef();
   }
 
-  componentDidMount() {
-    console.log("LeftDrawer.js componentDidMount()");
-    // this.loadNotes();
-  }
-
+  // componentDidMount() {
+  //   console.log("LeftDrawer.js componentDidMount()");
+  //   // this.loadNotes();
+  // }
 
   // new note doesn't update the note list until the drawer is closed and opened again
   handleNewNote () {
@@ -110,58 +123,55 @@ class LeftDrawer extends Component {
       title: this.state.title,
       body: this.state.body
     })
-      // .then(res => this.loadNotes())
-      // .then(res => this.forceUpdate())
-      // .catch(err => console.log(err));
+      // .then(this.child.current.loadNotes());
+      .then(this.child.current.refreshNewNote());
   };
-
-  // loadNotes = () => {
-  //   console.log('Ran loadNotes function from LeftDrawer.js.')
-  //   API.getNotes()
-  //     .then(res => this.setState({ notes: res.data }))
-  //     .catch(err => console.log(err));
-  // };
 
   render() {
     const { classes } = this.props;
 
     const drawer = (
       <>
-        <div className={classes.drawerHeaderL}>
-          <IconButton>
-            <Add 
-              title={this.state.title}
-              body={this.state.body}
-              onClick={this.handleNewNote}/>
-          </IconButton>
-            Left Drawer
-          <IconButton onClick={this.props.handleLeftDrawer}>
-            <Close style={{
-                width: 15,
-                height: 15
-              }}
-            />
-          </IconButton>
-        </div>
         <Divider/>
         <NoteList
           notes={this.state.notes}
           handleSelectedNote={this.handleSelectedNote}
+          handleDeleteAlert={this.props.handleDeleteAlert}
+          innerRef={this.child}
         />
       </>
+    )
+
+    const header = (
+      <div className={classes.drawerHeaderL}>
+        <IconButton>
+          <Add 
+            title={this.state.title}
+            body={this.state.body}
+            onClick={this.handleNewNote}/>
+        </IconButton>
+          Left Drawer
+        <IconButton onClick={this.props.handleLeftDrawer}>
+          <Close style={{
+              width: 15,
+              height: 15
+            }}
+          />
+        </IconButton>
+      </div>
     )
 
     return (
         <>
         <Hidden mdUp>
           <Drawer
-            // anchor="left"
             variant="temporary"
             open={this.props.leftOpen}
             classes={{
               paper: classes.drawerPaper,
             }}
           >
+            {header}
             {drawer}
           </Drawer>
         </Hidden>
@@ -171,9 +181,19 @@ class LeftDrawer extends Component {
               variant="persistent"
               open={this.props.leftOpen}
               classes={{
+                paper: classes.headerPaper,
+              }}
+            >
+              {header}
+            </Drawer>
+            <Drawer
+              variant="persistent"
+              open={this.props.leftOpen}
+              classes={{
                 paper: classes.drawerPaper,
               }}
             >
+              {/* {header} */}
               {drawer}
             </Drawer>
         </Hidden>
