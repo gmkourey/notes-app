@@ -1,23 +1,26 @@
+/**
+ * This converts a Slate operation to operations that act on an Automerge
+ * document. This converts the functions in
+ * https://github.com/ianstormtaylor/slate/blob/master/packages/slate/src/operations/apply.js
+ * to modify the Automerge JSON instead of the Slate Value.
+ *
+ * NOTE: The move operation in Slate is a linking op in Automerge. For now, to
+ * simplify the conversion from Automerge operationsto Slate, rather than move,
+ * we delete the node and re-insert a new node. This results in more Automerge
+ * ops but makes it so that the reverse conversion
+ * (in applyAutomergeOperations.automergeOpInsertText) does not need to know the
+ * path to the previous node. If we update Automerge to contain the path to the
+ * old node, we can use the move node operation.
+ */
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.applySlateOperations = undefined;
+import Automerge from "automerge"
+import slateCustomToJson from "./slateCustomToJson"
 
-var _automerge = require("automerge");
-
-var _automerge2 = _interopRequireDefault(_automerge);
-
-var _slateCustomToJson = require("./slateCustomToJson");
-
-var _slateCustomToJson2 = _interopRequireDefault(_slateCustomToJson);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-var allowedOperations = ["insert_text", "remove_text", "insert_node", "split_node", "remove_node", "merge_node", "set_node", "move_node"];
+const allowedOperations = [
+    "insert_text", "remove_text", "insert_node", "split_node",
+    "remove_node", "merge_node", "set_node", "move_node"
+];
 
 /**
  * @function applySlateOperations
@@ -27,17 +30,17 @@ var allowedOperations = ["insert_text", "remove_text", "insert_node", "split_nod
  * @param {List} slateOperations - a list of Slate Operations
  * @param {number} clientId - (optional) Id of the client
  */
-var applySlateOperations = exports.applySlateOperations = function applySlateOperations(docSet, docId, slateOperations, clientId) {
-    var currentDoc = docSet.getDoc(docId);
+export const applySlateOperations = (docSet, docId, slateOperations, clientId) => {
+    const currentDoc = docSet.getDoc(docId)
     if (currentDoc) {
-        var message = clientId ? "Client " + clientId : "Change log";
-        var docNew = _automerge2.default.change(currentDoc, message, function (doc) {
+        const message = clientId ? `Client ${clientId}` : "Change log"
+        const docNew = Automerge.change(currentDoc, message, doc => {
             // Use the Slate operations to modify the Automerge document.
-            applySlateOperationsHelper(doc, slateOperations);
-        });
-        docSet.setDoc(docId, docNew);
+            applySlateOperationsHelper(doc, slateOperations)
+        })
+        docSet.setDoc(docId, docNew)
     }
-};
+}
 
 /**
  * @function applySlateOperationsHelper
@@ -45,24 +48,18 @@ var applySlateOperations = exports.applySlateOperations = function applySlateOpe
  * @param {Automerge.document} doc - the Automerge document
  * @param {List} operations - a list of Slate Operations
  */
-var applySlateOperationsHelper = function applySlateOperationsHelper(doc, operations) {
-    operations.forEach(function (op) {
+const applySlateOperationsHelper = (doc, operations) => {
+    operations.forEach(op => {
         if (allowedOperations.indexOf(op.type) === -1) {
             return;
         }
-        var path = op.path,
-            offset = op.offset,
-            text = op.text,
-            length = op.length,
-            mark = op.mark,
-            node = op.node,
-            position = op.position,
-            properties = op.properties,
-            newPath = op.newPath;
-
-        var index = path.get(path.size - 1);
-        var rest = path.slice(0, -1);
-        var currentNode = doc.note;
+        const {
+            path, offset, text, length, mark,
+            node, position, properties, newPath
+        } = op;
+        const index = path.get(path.size - 1);
+        const rest = path.slice(0, -1)
+        let currentNode = doc.note;
         switch (op.type) {
             // NOTE: Marks are definitely broken as of Slate 0.34
             // case "add_mark":
@@ -114,111 +111,109 @@ var applySlateOperationsHelper = function applySlateOperationsHelper(doc, operat
             //     })
             //     break;
             case "insert_text":
-                path.forEach(function (el) {
+                path.forEach(el => {
                     currentNode = currentNode.nodes[el];
-                });
+                })
                 // Assumes no marks and only 1 leaf
                 currentNode.leaves[0].text.insertAt(offset, text);
                 break;
             case "remove_text":
-                path.forEach(function (el) {
+                path.forEach(el => {
                     currentNode = currentNode.nodes[el];
-                });
+                })
                 // Assumes no marks and only 1 leaf
                 currentNode.leaves[0].text.deleteAt(offset, text.length);
                 break;
             case "split_node":
-                rest.forEach(function (el) {
+                rest.forEach(el => {
                     currentNode = currentNode.nodes[el];
-                });
-                var childOne = currentNode.nodes[index];
-                var childTwo = JSON.parse(JSON.stringify(currentNode.nodes[index]));
+                })
+                let childOne = currentNode.nodes[index];
+                let childTwo = JSON.parse(JSON.stringify(currentNode.nodes[index]));
                 if (childOne.object === "text") {
-                    childOne.leaves[0].text.splice(position);
-                    childTwo.leaves[0].text.splice(0, position);
+                    childOne.leaves[0].text.splice(position)
+                    childTwo.leaves[0].text.splice(0, position)
                 } else {
-                    childOne.nodes.splice(position);
-                    childTwo.nodes.splice(0, position);
+                    childOne.nodes.splice(position)
+                    childTwo.nodes.splice(0, position)
                 }
                 currentNode.nodes.insertAt(index + 1, childTwo);
                 if (properties) {
                     if (currentNode.nodes[index + 1].object !== "text") {
-                        var propertiesJSON = (0, _slateCustomToJson2.default)(properties);
-                        Object.keys(propertiesJSON).forEach(function (key) {
+                        let propertiesJSON = slateCustomToJson(properties);
+                        Object.keys(propertiesJSON).forEach(key => {
                             if (propertiesJSON.key) {
                                 currentNode.nodes[index + 1][key] = propertiesJSON.key;
                             }
-                        });
+                        })
                     }
                 }
                 break;
             case "merge_node":
-                rest.forEach(function (el) {
+                rest.forEach(el => {
                     currentNode = currentNode.nodes[el];
-                });
-                var one = currentNode.nodes[index - 1];
-                var two = currentNode.nodes[index];
+                })
+                let one = currentNode.nodes[index - 1];
+                let two = currentNode.nodes[index];
                 if (one.object === "text") {
-                    var _one$leaves$0$text;
-
-                    (_one$leaves$0$text = one.leaves[0].text).push.apply(_one$leaves$0$text, _toConsumableArray(two.leaves[0].text));
+                    one.leaves[0].text.push(...two.leaves[0].text)
                 } else {
-                    var _one$nodes;
-
-                    (_one$nodes = one.nodes).push.apply(_one$nodes, _toConsumableArray(two.nodes));
+                    one.nodes.push(...two.nodes)
                 }
                 currentNode.nodes.deleteAt(index, 1);
                 break;
             case "insert_node":
-                rest.forEach(function (el) {
+                rest.forEach(el => {
                     currentNode = currentNode.nodes[el];
-                });
-                currentNode.nodes.insertAt(index, (0, _slateCustomToJson2.default)(node));
+                })
+                currentNode.nodes.insertAt(index, slateCustomToJson(node));
                 break;
             case "remove_node":
-                rest.forEach(function (el) {
+                rest.forEach(el => {
                     currentNode = currentNode.nodes[el];
-                });
+                })
                 currentNode.nodes.deleteAt(index, 1);
                 break;
             case "set_node":
-                path.forEach(function (el) {
+                path.forEach(el => {
                     currentNode = currentNode.nodes[el];
-                });
-                for (var attrname in properties) {
+                })
+                for (let attrname in properties) {
                     currentNode[attrname] = properties[attrname];
                 }
                 break;
             case "move_node":
-                var newIndex = newPath.get(newPath.size - 1);
-                var newParentPath = newPath.slice(0, -1);
-                var oldParentPath = path.slice(0, -1);
-                var oldIndex = path.get(path.size - 1);
+                const newIndex = newPath.get(newPath.size - 1)
+                let newParentPath = newPath.slice(0, -1)
+                const oldParentPath = path.slice(0, -1)
+                const oldIndex = path.get(path.size - 1)
 
                 // Remove the old node from it's current parent.
-                oldParentPath.forEach(function (el) {
+                oldParentPath.forEach(el => {
                     currentNode = currentNode.nodes[el];
-                });
-                var nodeToMove = currentNode.nodes[oldIndex];
+                })
+                let nodeToMove = currentNode.nodes[oldIndex];
 
                 // Find the new target...
-                if (oldParentPath.every(function (x, i) {
-                    return x === newParentPath.get(i);
-                }) && oldParentPath.size === newParentPath.size) {
+                if (
+                    oldParentPath.every((x, i) => x === newParentPath.get(i)) &&
+                    oldParentPath.size === newParentPath.size
+                ) {
                     // Do nothing
-                } else if (oldParentPath.every(function (x, i) {
-                    return x === newParentPath.get(i);
-                }) && oldIndex < newParentPath.get(oldParentPath.size)) {
+                } else if (
+                    oldParentPath.every((x, i) => x === newParentPath.get(i)) &&
+                    oldIndex < newParentPath.get(oldParentPath.size)
+                ) {
                     // Remove the old node from it's current parent.
                     currentNode.nodes.deleteAt(oldIndex, 1);
 
                     // Otherwise, if the old path removal resulted in the new path being no longer
                     // correct, we need to decrement the new path at the old path's last index.
                     currentNode = doc.note;
-                    newParentPath = newParentPath.set(oldParentPath.size, newParentPath.get(oldParentPath.size) - 1);
-                    newParentPath.forEach(function (el) {
+                    newParentPath = newParentPath.set(oldParentPath.size, newParentPath.get(oldParentPath.size)-1)
+                    newParentPath.forEach(el => {
                         currentNode = currentNode.nodes[el];
-                    });
+                    })
 
                     // TOFIX: This is to strip out the objectId and create a new list.
                     // Not ideal at all but Slate can't do the linking that Automerge can
@@ -233,9 +228,9 @@ var applySlateOperationsHelper = function applySlateOperationsHelper(doc, operat
 
                     // Otherwise, we can just grab the target normally...
                     currentNode = doc.note;
-                    newParentPath.forEach(function (el) {
+                    newParentPath.forEach(el => {
                         currentNode = currentNode.nodes[el];
-                    });
+                    })
 
                     // TOFIX: This is to strip out the objectId and create a new list.
                     // Not ideal at all but Slate can't do the linking that Automerge can
@@ -244,11 +239,12 @@ var applySlateOperationsHelper = function applySlateOperationsHelper(doc, operat
                     nodeToMove = JSON.parse(JSON.stringify(nodeToMove));
                     // Insert the new node to its new parent.
                     currentNode.nodes.insertAt(newIndex, nodeToMove);
+
                 }
                 break;
             default:
-                console.log("In default case");
+                console.log("In default case")
                 break;
         }
-    });
-};
+    })
+}

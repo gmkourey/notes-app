@@ -5,6 +5,7 @@
   "dependencies": {
     "automerge": "^0.9.1",
     "axios": "^0.18.0",
+    "babel-loader": "^8.0.4",
     "express": "^4.16.3",
     "if-env": "^1.0.4",
     "immutable": "^3.8.2",
@@ -30,6 +31,7 @@
     "heroku-postbuild": "npm run build"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
     "concurrently": "^3.5.0",

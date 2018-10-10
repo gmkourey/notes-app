@@ -1,10 +1,11 @@
-// var express = require("express");
-const app = require('express')();
+var express = require("express");
 var mongoose = require("mongoose");
 var bodyParser = require("body-parser");
 var routes = require('./routes/api');
 
 var PORT = 3001;
+
+var app = express()
 
 app.use(bodyParser.urlencoded({extended:true}));
 
@@ -14,7 +15,7 @@ app.use(express.static("public"));
 
 mongoose.connect("mongodb://localhost/notes-app", {useNewUrlParser: true});
 
-require("./routes/html/html-routes")(app);
+// require("./routes/html/html-routes")(app);
 
 app.use(routes);
 
@@ -33,15 +34,26 @@ db.once('open', function() {
   // // pasted slate-automerge
 // // 'use strict';
 
-const http = require('http').Server(app);
-const io = require('socket.io')(http)
-const Automerge = require("automerge")
-const initialValue = require("./client/src/utils/initialSlateValue").initialValue
-const Slate = require("slate")
-const SlateAutomergeBridge = require("./client/src/libs/slateAutomergeBridge")
+// const http = require('http').Server(app);
+// const io = require('socket.io')(http)
+// const Automerge = require("automerge")
+// const initialValue = require("./client/src/utils/initialSlateValue").initialValue
+// const Slate = require("slate")
+// const SlateAutomergeBridge = require("./client/src/libs/slateAutomergeBridge")
 
-const { slateCustomToJson } = SlateAutomergeBridge
-const Value = Slate.Value
+// const { slateCustomToJson } = SlateAutomergeBridge
+// const Value = Slate.Value
+
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+var Automerge = require("automerge");
+var initialValue = require("./client/src/utils/initialSlateValue").initialValue;
+var Slate = require("slate");
+var SlateAutomergeBridge = require("./client/src/libs/slateAutomergeBridge");
+
+var slateCustomToJson = SlateAutomergeBridge.slateCustomToJson;
+
+var Value = Slate.Value;
 
 const createNewDocument = function(docId) {
   let doc = Automerge.init(`server-1234`);
@@ -54,7 +66,7 @@ const createNewDocument = function(docId) {
 
 let connections = {};
 let docSet = new Automerge.DocSet();
-createNewDocument(1)
+//createNewDocument(1)
 
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');

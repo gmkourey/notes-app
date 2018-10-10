@@ -18,8 +18,6 @@ module.exports = {
         db.Note
             .create(req.body)
             .then(dbNote => {
-                console.log(db.User)
-                console.log("text" + req.params.id)
                 return db.User.findOneAndUpdate({
                     _id: req.params.id
                 },
@@ -32,7 +30,6 @@ module.exports = {
                 .then(console.log(dbNote))
             })
             .then(dbUser => {
-                console.log(dbUser)
                 res.json(dbUser)})
             .catch(err => res.status(422).json(err))
     },
