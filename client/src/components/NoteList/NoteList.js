@@ -147,9 +147,9 @@ class NoteList extends Component {
       .catch(err => console.log(err));
   }
 
-  refreshNewNote = () => {
+  refreshNewNote = (email) => {
     console.log('Ran refreshNewNote function from NoteList.js.');
-    API.getNotes()
+    API.getNotes(email)
       .then(res => this.setState({ notes: res.data }))
       .catch(err => console.log(err));
 
