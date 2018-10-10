@@ -91,7 +91,6 @@ class LeftDrawer extends Component {
   constructor(props) {
     super(props);
     this.handleNewNote = this.handleNewNote.bind(this);
-    // this.loadNotes = this.loadNotes.bind(this);
     this.handleSelectedNote = this.props.handleSelectedNote.bind(this);
     this.child = React.createRef();
   }
@@ -147,7 +146,6 @@ class LeftDrawer extends Component {
         <>
         <Hidden mdUp>
           <Drawer
-            // anchor="left"
             variant="temporary"
             open={this.props.leftOpen}
             classes={{

@@ -1,20 +1,25 @@
 import React, { Component } from 'react';
 import API from '../../utils/API';
 import TextField from '@material-ui/core/TextField';
-
-import Menu from '@material-ui/core/Menu';
-
 import PropTypes from 'prop-types';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import DeleteIcon from '@material-ui/icons/Delete';
-// import Paper from '@material-ui/core/Paper';
 import FolderShared from '@material-ui/icons/FolderShared';
 import { withStyles } from '@material-ui/core/styles';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Popover from '@material-ui/core/Popover';
+
 
 const styles = theme => ({
+  root: {
+    display: 'flex',
+  },
+  paper: {
+    marginRight: theme.spacing.unit * 2,
+  },
   menuItem: {
     '&:focus': {
       backgroundColor: theme.palette.primary.main,
@@ -32,8 +37,10 @@ class NoteList extends Component {
     notes: this.props.notes,
     isEditable: [],
     val: [],
-    anchorEl: null, // context menu anchor
-    targetId: null // id for context menu to access
+    targetId: null, // id for context menu to access
+    open: false,
+    positionTop: 300, // should these be null by default?
+    positionLeft: 400,
   };
 
   componentDidMount() {
@@ -70,12 +77,14 @@ class NoteList extends Component {
     // this.forceUpdate();
   }
 
+  // User hits enter
   keyPress(event, id, index) {
     if (event.keyCode === 13) {
       this.handleBlur(event, id, index);
     }
   }
 
+  // User clicks out of active field
   handleBlur (event, id, index) {
     let edit = this.state.isEditable.map((val, index) => {
       return (val = false);
@@ -89,17 +98,32 @@ class NoteList extends Component {
     event.target.select();
   }
 
+  // User right clicks on note title in sidebar
   handleContextMenu = (event, id) => {
     event.preventDefault();
-      console.log('Right clicked');
-      this.setState({ 
-        anchorEl: event.currentTarget,
-        targetId: id
-      });
+    
+    console.log(event);
+    console.log(id); // logs id of note that was right clicked
+
+    // notes:
+    // currently user can't have the context menu open, then immediately close and open a new context menu with one click
+    
+    this.setState({ 
+      positionTop: event.clientY,
+      positionLeft: event.clientX,
+      open: !this.state.open,
+      targetId: id
+    });
   }
 
-  handleClose = () => {
-    this.setState({ anchorEl: null });
+  // Closes context menu. Needs event so we can prevent default when user right clicks outside an open context menu.
+  handleClose = (event) => {
+    event.preventDefault();
+    // this.setState({ anchorEl: null });
+    // if (this.anchorEl.contains(event.target)) {
+    //   return;
+    // }
+    this.setState({ open: false });
   };
 
   loadNotes = () => {
@@ -110,17 +134,23 @@ class NoteList extends Component {
   }
 
   // need to select the "next" note when one note is deleted, otherwise the body stays the same
-  deleteNote = (id) => {
+  deleteNote = (event, id) => {
     console.log('Delete method called.');
-    this.setState({ anchorEl: null });
+    this.handleClose(event);
     API.deleteNote(id)
       .then(res => this.loadNotes())
       .catch(err => console.log(err));
   }
  
   render() {
-    const { anchorEl, targetId } = this.state;
     const { classes } = this.props;
+    const {
+      targetId,
+      open,
+      positionTop,
+      positionLeft,
+    } = this.state;
+    
 
     return(
       <>
@@ -137,9 +167,9 @@ class NoteList extends Component {
                 onFocus={this.handleFocus}
                 defaultValue={note.title}
                 variant="filled"
-                onChange={(event) => this.handleChange(event, note._id, index)}
-                onBlur={(event) => this.handleBlur(event, note._id, index)}
-                onKeyDown={(event) => this.keyPress(event, note._id, index)}
+                onChange={(e) => this.handleChange(e, note._id, index)}
+                onBlur={(e) => this.handleBlur(e, note._id, index)}
+                onKeyDown={(e) => this.keyPress(e, note._id, index)}
               />
             ) : (
               // Read only text field
@@ -151,21 +181,34 @@ class NoteList extends Component {
                 defaultValue={note.title}
                 onClick={() => this.props.handleSelectedNote(note.body)}
                 onDoubleClick={(e) => this.handleDoubleClick(e, index)}
-                aria-owns={anchorEl ? 'simple-menu' : null}
+                aria-owns={open ? 'simple-menu' : null}
                 aria-haspopup="true"
                 onContextMenu={(e) => this.handleContextMenu(e, note._id)}
+                // onClickAway={this.handleClose}
               />
             )}
           </>
           );
         })}
-        {/* <Paper> */}
-        {/* {console.log(targetId)} */}
-        <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={this.handleClose}
+        <Popover
+          open={open}
+          anchorEl={this.anchorEl}
+          anchorReference="anchorPosition"
+          anchorPosition={{ top: positionTop, left: positionLeft }}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          hideBackdrop
+        >
+        
+        <ClickAwayListener 
+          onContextMenu={(e) => this.handleClose(e)} // if ContextMenu is called instead, it does not work
+          onClickAway={(e) => this.handleClose(e)}        
         >
           <MenuList>
             <MenuItem className={classes.menuitem}>
@@ -174,27 +217,15 @@ class NoteList extends Component {
               </ListItemIcon>
               <ListItemText classes={{ primary: classes.primary }} inset primary="Share"/>
             </MenuItem>
-            <MenuItem className={classes.menuitem} onClick={() => this.deleteNote(targetId)}>
+            <MenuItem className={classes.menuitem} onClick={(e) => this.deleteNote(e, targetId)}>
               <ListItemIcon className={classes.icon}>
                 <DeleteIcon/>
               </ListItemIcon>
               <ListItemText classes={{ primary: classes.primary }} inset primary="Delete"/>
             </MenuItem>
           </MenuList>
-        </Menu>
-        {/* </Paper> */}
-        {/* <div>
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={this.handleClose}
-          >
-            <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-            <MenuItem onClick={this.handleClose}>My account</MenuItem>
-            <MenuItem onClick={this.handleClose}>Logout</MenuItem>
-          </Menu>
-        </div> */}
+        </ClickAwayListener>
+        </Popover>
         </>
       ) : (
         // <>
