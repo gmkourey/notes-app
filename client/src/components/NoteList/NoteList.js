@@ -239,7 +239,7 @@ class NoteList extends Component {
               <TextField
                 className={classes.noteField}
                 key={note._id}
-                autoFocus
+                autoFocus={true}
                 onFocus={this.handleFocus}
                 defaultValue={note.title}
                 variant="filled"
@@ -259,6 +259,7 @@ class NoteList extends Component {
               <TextField
                 className={classes.noteField}
                 key={note._id}
+                // variant="filled"
                 InputProps={{
                   readOnly: true,
                   startAdornment: (
