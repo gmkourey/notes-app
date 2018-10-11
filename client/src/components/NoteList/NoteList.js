@@ -41,7 +41,7 @@ const styles = theme => ({
 
 class NoteList extends Component {
   state = {
-    notes: this.props.notes,
+    notes: this.props.notes, // does this even do anything?
     isEditable: [],
     val: [],
     email: "",
@@ -62,13 +62,13 @@ class NoteList extends Component {
   }
 
   // is this necessary? 
-  componentWillReceiveProps(props) {
-    console.log(this.props.notes);
-    console.log("NoteList.js componentWilLReceiveProps()");
-    if (this.props.notes.length) {
-      this.setState({notes: this.props.notes});
-    }
-  }
+  // componentWillReceiveProps(props) {
+  //   // console.log(this.props.notes);
+  //   console.log("NoteList.js componentWilLReceiveProps()");
+  //   if (this.props.notes.length) {
+  //     this.setState({notes: this.props.notes});
+  //   }
+  // }
 
   handleDoubleClick (event, index) {
     let edit = this.state.isEditable.map((val, index) => {
@@ -132,10 +132,6 @@ class NoteList extends Component {
   // Closes context menu. Needs event so we can prevent default when user right clicks outside an open context menu.
   handleClose = (event) => {
     event.preventDefault();
-    // this.setState({ anchorEl: null });
-    // if (this.anchorEl.contains(event.target)) {
-    //   return;
-    // }
     this.setState({ open: false });
   };
 
@@ -143,8 +139,8 @@ class NoteList extends Component {
     console.log('Ran loadNotes function from NoteList.js.')
     console.log(this.state.email);
     API.getNotes(this.state.email)
-      .then(res => this.setState({ notes: res.data }))
-      .catch(err => console.log(err));
+      .then(res => this.setState({ notes: res.data }, () => {console.log(this.state.notes)}))
+      .catch(err => console.log(err));    
   }
 
   refreshNewNote = (email) => {
@@ -153,6 +149,7 @@ class NoteList extends Component {
       .then(res => this.setState({ notes: res.data }))
       .catch(err => console.log(err));
 
+    // consider moving this inside a callback after get?
     setTimeout(
       function() {
         let edit = this.state.isEditable.map((val) => {
@@ -165,6 +162,50 @@ class NoteList extends Component {
       .bind(this),
       310
     );
+  }
+
+  handleSelectRefresh = (id) => {
+    console.log("Hit handleSelectRefresh function.");
+    console.log("Running GET for " + this.state.email);
+    API.getNotes(this.state.email)
+    .then(res => this.setState({ notes: res.data }, () => {
+      console.log(this.state.notes);
+      let newContent;
+      for (var i = 0; i < this.state.notes.length; i++) {
+        if (this.state.notes[i]._id === id) {
+          console.log("ID match: " + this.state.notes[i]._id);
+          console.log(this.state.notes[i].title);
+
+          newContent = this.state.notes[i].content;
+          this.props.handleSelectedNote(id, newContent);
+        }
+      }
+    }))
+    .catch(err => console.log(err));
+      // .then(res => console.log(
+      //   ">>>>>>>>>>>>>> " + JSON.stringify(res.data),
+      //   JSON.parse(JSON.stringify(res.data))
+      // ));
+      
+      
+      // console.log("########################");
+      // console.log(id);
+      // let index = this.state.notes.indexOf(id);
+      // console.log(index);
+      // console.log(this.state.notes);
+
+      // let newContent;
+
+      // for (var i = 0; i < this.state.notes.length; i++) {
+      //   if (this.state.notes[i]._id === id) {
+      //     console.log("ID match: " + this.state.notes[i]._id);
+      //     console.log(this.state.notes[i].title);
+
+      //     newContent = this.state.notes[i].content;
+      //     // console.log(newContent);
+      //     this.props.handleSelectedNote(id, newContent);
+      //   }
+      // }
   }
 
   // need to select the "next" note when one note is deleted, otherwise the body stays the same
@@ -227,7 +268,9 @@ class NoteList extends Component {
                   ),
                 }}
                 defaultValue={note.title}
-                onClick={() => this.props.handleSelectedNote(note.body)}
+                // onClick={() => this.props.handleSelectedNote(note._id, note.content)}
+                onClick={() => this.handleSelectRefresh(note._id)}
+                // onClick={() => { this.loadNotes(); this.props.handleSelectedNote(note._id, note.content); }}
                 onDoubleClick={(e) => this.handleDoubleClick(e, index)}
                 aria-owns={open ? 'simple-menu' : null}
                 aria-haspopup="true"
