@@ -18,6 +18,17 @@ const styles = {
   root: {
     flexGrow: 1,
   },
+  appBar: {
+    boxShadow: 'none'
+  },
+  toolBar: {
+    maxHeight: '40px',
+    minHeight: '40px'
+  },
+  menuButton: {
+    padding: '5px',
+    marginRight: '15px'
+  }
 };
 
 // const Navbar = (props) => {
@@ -32,7 +43,7 @@ class Navbar extends React.Component {
           [classes[`appBarShift-right`]]: this.props.rightOpen
         })}
       >
-        <Toolbar>
+        <Toolbar className={classNames(classes.toolBar)}>
         <AuthUserContext.Consumer>
           {authUser => authUser
             ? (

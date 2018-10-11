@@ -35,7 +35,7 @@ class Content extends React.Component {
             </div> */}
             {/* <Typography>{'You\'re logged in.'}</Typography>
             <Typography>{'Component for draft-js goes here'}</Typography> */}
-            <Note/>
+            {/* <Note/> */}
             </>
           ) : (
             // <SignInPage/>
