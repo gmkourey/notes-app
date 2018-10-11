@@ -37,12 +37,13 @@ class NoteArea extends React.Component {
     })
   }
 
-  componentWillReceiveProps() {
+  // componentWillReceiveProps() {
+  componentDidUpdate(prevProps) {
     console.log('content prop: ' + this.props.selectedNoteBody);
     console.log('id prop: ' + this.props.selectedNoteID);
     console.log("------------------------");
 
-    if (this.props.selectedNoteBody) {
+    if (this.props.selectedNoteID !== prevProps.selectedNoteID) {
       let contentStr = this.props.selectedNoteBody;
       let contentObj = JSON.parse(contentStr);
       let slateContent = Value.fromJSON(contentObj);
@@ -52,6 +53,17 @@ class NoteArea extends React.Component {
         id: this.props.selectedNoteID
       })
     }
+
+    // if (this.props.selectedNoteBody) {
+    //   let contentStr = this.props.selectedNoteBody;
+    //   let contentObj = JSON.parse(contentStr);
+    //   let slateContent = Value.fromJSON(contentObj);
+      
+    //   this.setState({ 
+    //     value: slateContent,
+    //     id: this.props.selectedNoteID
+    //   })
+    // }
   }
 
   state = {

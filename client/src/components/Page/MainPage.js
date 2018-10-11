@@ -68,11 +68,13 @@ class MainPage extends React.Component {
   handleSelectedNote = (id, content) => {
     // console.log(id);
     // console.log(content);
+    console.log(`Selected note function fired in Mainpage. Setting state for selected note:\n id: ${id} \n content: ${content}`);
 
     this.setState({
       selectedNoteID: id,
       selectedNoteBody: content
     })
+    console.log(this.state.selectedNoteID + "\n" + this.state.selectedNoteBody)
   }
 
   handleDeleteAlert = () => {

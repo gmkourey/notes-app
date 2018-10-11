@@ -139,7 +139,7 @@ class LeftDrawer extends Component {
                 object: 'text',
                 leaves: [
                   {
-                    text: "Default text from handleNewNote function in LeftDrawer.js",
+                    text: "DIFFERENT DEFAULT OOOOOOOOOOOOOOOOO",
                   },
                 ],
               },
