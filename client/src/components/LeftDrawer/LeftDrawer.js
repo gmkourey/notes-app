@@ -73,7 +73,8 @@ const styles = theme => ({
     [theme.breakpoints.up('md')]: {
       width: '240px'
     },
-    height: '100vh'
+    // height: '100vh'
+    height: `calc(100vh - 104px)`
   },
   headerPaper: {
     position: 'relative',
