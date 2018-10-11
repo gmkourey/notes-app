@@ -13,7 +13,7 @@ import Divider from '@material-ui/core/Divider';
 import API from '../../utils/API';
 import {firebase} from "../../firebase";
 
-import { Value } from 'slate';
+// import { Value } from 'slate';
 
 // import Typography from '@material-ui/core/Typography';
 // import classNames from 'classnames';
