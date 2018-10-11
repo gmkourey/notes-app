@@ -154,6 +154,10 @@ class LeftDrawer extends Component {
       userId: this.state.email,
       content: JSON.stringify(initialValue)
     })
+<<<<<<< HEAD
+      // .then(this.child.current.loadNotes());
+=======
+>>>>>>> 458e1c0bdf3c26356ef05eff9984c51ad56e6bba
       .then(this.child.current.refreshNewNote(this.state.email));
   };
 

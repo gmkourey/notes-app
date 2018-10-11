@@ -20,9 +20,11 @@ router.route("/:id")
     .put(notesController.updateNote)
     .delete(notesController.deleteNote)
 
-// router.route("/title/:id")
-//     .put(notesController.updateTitle)
- 
+router.route("/:id/:sharedId")
+    .put(notesController.addSharedUser)
+
+router.route("shared/:email")
+    .get(notesController.getSharedNotes)
 // api/note/:id
 // router
 //     .route("/note/:id")

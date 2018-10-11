@@ -36,5 +36,9 @@ export default {
 
     deleteNote: function (id) {
         return axios.delete("/api/" + id);
+    },
+
+    addSharedUser: function(noteId, userId) {
+        return axios.put("/api/" + noteId + "/" + userId)
     }
 }
