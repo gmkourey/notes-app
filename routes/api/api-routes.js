@@ -23,7 +23,7 @@ router.route("/:id")
 router.route("/:id/:sharedId")
     .put(notesController.addSharedUser)
 
-router.route("shared/:id")
+router.route("shared/:email")
     .get(notesController.getSharedNotes)
 // api/note/:id
 // router
