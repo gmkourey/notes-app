@@ -37,6 +37,15 @@ const styles = theme => ({
     justifyContent: 'flex-end',
     width: '100%'
   },
+  noteFieldEdit: {
+    height: '35px',
+  },
+  noteFieldEditInput: {
+    paddingBottom: '10px'
+  },
+  noteFieldIcon: {
+    paddingTop: '10px'
+  }
 });
 
 class NoteList extends Component {
@@ -146,10 +155,10 @@ class NoteList extends Component {
   refreshNewNote = (email) => {
     console.log('Ran refreshNewNote function from NoteList.js.');
     API.getNotes(email)
-      .then(res => this.setState({ notes: res.data }))
+      .then(res => this.setState({ notes: res.data }, () => {this.handleSelectRefresh(this.state.notes[0]._id);}))
       .catch(err => console.log(err));
 
-    // consider moving this inside a callback after get?
+    // this seems clunky
     setTimeout(
       function() {
         let edit = this.state.isEditable.map((val) => {
@@ -182,30 +191,6 @@ class NoteList extends Component {
       }
     }))
     .catch(err => console.log(err));
-      // .then(res => console.log(
-      //   ">>>>>>>>>>>>>> " + JSON.stringify(res.data),
-      //   JSON.parse(JSON.stringify(res.data))
-      // ));
-      
-      
-      // console.log("########################");
-      // console.log(id);
-      // let index = this.state.notes.indexOf(id);
-      // console.log(index);
-      // console.log(this.state.notes);
-
-      // let newContent;
-
-      // for (var i = 0; i < this.state.notes.length; i++) {
-      //   if (this.state.notes[i]._id === id) {
-      //     console.log("ID match: " + this.state.notes[i]._id);
-      //     console.log(this.state.notes[i].title);
-
-      //     newContent = this.state.notes[i].content;
-      //     // console.log(newContent);
-      //     this.props.handleSelectedNote(id, newContent);
-      //   }
-      // }
   }
 
   // need to select the "next" note when one note is deleted, otherwise the body stays the same
@@ -214,7 +199,6 @@ class NoteList extends Component {
     this.handleClose(event);
     API.deleteNote(id)
       .then(res => this.loadNotes())
-      // .then(this.props.handleDeleteAlert())
       .catch(err => console.log(err));
   }
  
@@ -237,7 +221,7 @@ class NoteList extends Component {
             {this.state.isEditable[index] ? (
               // Editable text field
               <TextField
-                className={classes.noteField}
+                className={[classes.noteField, classes.noteFieldEdit]}
                 key={note._id}
                 autoFocus={true}
                 onFocus={this.handleFocus}
@@ -247,8 +231,9 @@ class NoteList extends Component {
                 onBlur={(e) => this.handleBlur(e, note._id, index)}
                 onKeyDown={(e) => this.keyPress(e, note._id, index)}
                 InputProps={{
+                  className: classes.noteFieldEditInput,
                   startAdornment: (
-                    <InputAdornment position="start">
+                    <InputAdornment className={classes.noteFieldIcon} position="start">
                       <Layers />
                     </InputAdornment>
                   ),
@@ -269,9 +254,7 @@ class NoteList extends Component {
                   ),
                 }}
                 defaultValue={note.title}
-                // onClick={() => this.props.handleSelectedNote(note._id, note.content)}
                 onClick={() => this.handleSelectRefresh(note._id)}
-                // onClick={() => { this.loadNotes(); this.props.handleSelectedNote(note._id, note.content); }}
                 onDoubleClick={(e) => this.handleDoubleClick(e, index)}
                 aria-owns={open ? 'simple-menu' : null}
                 aria-haspopup="true"
