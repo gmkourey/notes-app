@@ -13,6 +13,8 @@ import Divider from '@material-ui/core/Divider';
 import API from '../../utils/API';
 import {firebase} from "../../firebase";
 
+import { Value } from 'slate';
+
 // import Typography from '@material-ui/core/Typography';
 // import classNames from 'classnames';
 
@@ -126,12 +128,33 @@ class LeftDrawer extends Component {
     console.log("Hit handleNewNote function");
     console.log(this.state.title);
 
+    const initialValue = {
+      document: {
+        nodes: [
+          {
+            object: 'block',
+            type: 'paragraph',
+            nodes: [
+              {
+                object: 'text',
+                leaves: [
+                  {
+                    text: "DIFFERENT DEFAULT OOOOOOOOOOOOOOOOO",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    }
+
     API.saveNote({
       title: "Untitled",
-      userId: this.state.email
+      userId: this.state.email,
+      content: JSON.stringify(initialValue)
     })
-      // .then(this.child.current.loadNotes());
-      .then(this.child.current.refreshNewNote());
+      .then(this.child.current.refreshNewNote(this.state.email));
   };
 
   render() {

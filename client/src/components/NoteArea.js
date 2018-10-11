@@ -6,6 +6,7 @@ import API from "../utils/API";
 // import AuthUserContext from './AuthUserContext';
 import {firebase} from '../firebase';
 
+
 const initialValue = Value.fromJSON({
   document: {
     nodes: [
@@ -17,7 +18,7 @@ const initialValue = Value.fromJSON({
             object: 'text',
             leaves: [
               {
-                text: 'A line of text in a paragraph.',
+                text: "Stuff from NoteArea",
               },
             ],
           },
@@ -27,20 +28,48 @@ const initialValue = Value.fromJSON({
   },
 })
 
-// Define our app...
+
 class NoteArea extends React.Component {
-  // Set the initial value when the app is first constructed.
 
   componentDidMount() {
     firebase.auth.onAuthStateChanged(authUser => {
       this.setState({ email: authUser.email })
     })
-}
+  }
+
+  // componentWillReceiveProps() {
+  componentDidUpdate(prevProps) {
+    console.log('content prop: ' + this.props.selectedNoteBody);
+    console.log('id prop: ' + this.props.selectedNoteID);
+    console.log("------------------------");
+
+    if (this.props.selectedNoteID !== prevProps.selectedNoteID) {
+      let contentStr = this.props.selectedNoteBody;
+      let contentObj = JSON.parse(contentStr);
+      let slateContent = Value.fromJSON(contentObj);
+      
+      this.setState({ 
+        value: slateContent,
+        id: this.props.selectedNoteID
+      })
+    }
+
+    // if (this.props.selectedNoteBody) {
+    //   let contentStr = this.props.selectedNoteBody;
+    //   let contentObj = JSON.parse(contentStr);
+    //   let slateContent = Value.fromJSON(contentObj);
+      
+    //   this.setState({ 
+    //     value: slateContent,
+    //     id: this.props.selectedNoteID
+    //   })
+    // }
+  }
 
   state = {
     value: initialValue,
-    email: "test",
-    id:this._id
+    id: "",
+    email: "test"
   }
 
   holder = []
@@ -48,23 +77,25 @@ class NoteArea extends React.Component {
 
   // On change, update the app's React state with the new editor value.
   onChange = ({ value }) => {
-    //   console.log(this.state.email);
-    // authUser => authUser
-    //     ? (
-    //       console.log("Getting user info from firebase...");
-    //       console.log(authUser);
-    // ) : (
-    //     console.log("No user")
-    // )
-    this.setState({ value })
+      // console.log(this.state.email);
 
-    API.updateNote({content: JSON.stringify(value), userId: this.state.email,_id:this.state._id});
-     console.log(value)
+    this.setState({ value })
+    // API.saveNote({content: JSON.stringify(value), userId: this.state.email});
+    if (this.props.selectedNoteBody) {
+      API.updateNote(this.state.id, { content: JSON.stringify(value) });
+    }
+    
   }
 
   // Render the editor.
   render() {
-    return <Editor value={this.state.value} onChange={this.onChange} />
+    // return <Editor value={this.state.value} onChange={this.onChange} />
+    return(
+      <Editor 
+        value={this.state.value} 
+        onChange={this.onChange}
+      />
+    ) 
   }
 }
 

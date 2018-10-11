@@ -35,7 +35,8 @@ class MainPage extends React.Component {
       // authUser: null,
       leftOpen: true,
       rightOpen: false,
-      selectedNote: 'start',
+      selectedNoteID: null,
+      selectedNoteBody: null,
       deleteAlertOpen: false
     };
   }
@@ -56,12 +57,24 @@ class MainPage extends React.Component {
     })
   }
 
-  handleSelectedNote = (body) => {
-    console.log(body);
+  // handleSelectedNote = (body) => {
+  //   console.log(body);
+
+  //   this.setState({
+  //     selectedNote: body
+  //   })
+  // }
+
+  handleSelectedNote = (id, content) => {
+    // console.log(id);
+    // console.log(content);
+    console.log(`Selected note function fired in Mainpage. Setting state for selected note:\n id: ${id} \n content: ${content}`);
 
     this.setState({
-      selectedNote: body
+      selectedNoteID: id,
+      selectedNoteBody: content
     })
+    console.log(this.state.selectedNoteID + "\n" + this.state.selectedNoteBody)
   }
 
   handleDeleteAlert = () => {
@@ -116,7 +129,8 @@ class MainPage extends React.Component {
               <Grid item md={8}>
                 <main>
                   <Content
-                    selectedNote={this.state.selectedNote}
+                    selectedNoteID={this.state.selectedNoteID}
+                    selectedNoteBody={this.state.selectedNoteBody}
                   />
                 </main>
               </Grid>
