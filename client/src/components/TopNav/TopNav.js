@@ -56,7 +56,7 @@ class Navbar extends React.Component {
                 <MenuSharp />
               </IconButton>
               <Typography variant="title" color="inherit" style={{flex: 1}}>
-                grantsnotes
+                GrantsNotes
               </Typography>
               <AccountMenu/>
               <IconButton
