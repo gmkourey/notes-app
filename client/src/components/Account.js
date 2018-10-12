@@ -1,17 +1,19 @@
 import React from 'react';
 
 import AuthUserContext from './AuthUserContext';
-import { PasswordForgetForm } from './PasswordForget';
 import PasswordChangeForm from './PasswordChange';
 import withAuthorization from './withAuthorization';
+import Typography from '@material-ui/core/Typography';
 
 
 const AccountPage = () =>
   <AuthUserContext.Consumer>
     {authUser =>
       <div>
-        <h1>Account: {authUser.email}</h1>
-        <PasswordForgetForm />
+        <Typography variant="subtitle1">
+          Account: {authUser.email}
+        </Typography>
+        {console.log(authUser)}
         <PasswordChangeForm />
       </div>
     }

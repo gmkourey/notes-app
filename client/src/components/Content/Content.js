@@ -1,21 +1,10 @@
 import React from 'react';
 import AuthUserContext from '../AuthUserContext';
 import SignUpPage from '../SignUp';
-import Note from "../Note";
+// import Note from "../Note";
 import NoteArea from "../NoteArea";
 
-// import Typography from '@material-ui/core/Typography';
-// import SignInPage from '../SignIn';
-
 class Content extends React.Component {
-  // constructor(props) {
-  //   super(props);
-
-  //   this.state = {
-  //     content: 
-  //   };
-  // }
-
   render() {
 
     return (
@@ -30,15 +19,8 @@ class Content extends React.Component {
               selectedNoteBody={this.props.selectedNoteBody}
               selectedNoteID={this.props.selectedNoteID}
             />
-            {/* <div>
-              {this.props.selectedNote}
-            </div> */}
-            {/* <Typography>{'You\'re logged in.'}</Typography>
-            <Typography>{'Component for draft-js goes here'}</Typography> */}
-            {/* <Note/> */}
             </>
           ) : (
-            // <SignInPage/>
             <SignUpPage/>
             // This page needs info about the app, ie. landing page
           )

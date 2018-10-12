@@ -1,6 +1,46 @@
 import React, { Component } from 'react';
-
 import { auth } from '../firebase';
+
+import PropTypes from 'prop-types';
+import FormControl from '@material-ui/core/FormControl';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import Button from '@material-ui/core/Button';
+import withStyles from '@material-ui/core/styles/withStyles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+
+const styles = theme => ({
+  layout: {
+    width: 'auto',
+    display: 'block', // Fix IE11 issue.
+    marginLeft: theme.spacing.unit * 3,
+    marginRight: theme.spacing.unit * 3,
+    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
+      width: 400,
+      // marginLeft: 'auto',
+      marginRight: 'auto',
+    },
+  },
+  paper: {
+    marginTop: theme.spacing.unit * 8,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'left',
+    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+  },
+  form: {
+    width: '100%', // Fix IE11 issue.
+    marginTop: theme.spacing.unit,
+  },
+  submit: {
+    marginTop: theme.spacing.unit * 3,
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+});
 
 const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,
@@ -34,6 +74,7 @@ class PasswordChangeForm extends Component {
   }
 
   render() {
+    const { classes } = this.props;
     const {
       passwordOne,
       passwordTwo,
@@ -45,27 +86,42 @@ class PasswordChangeForm extends Component {
       passwordOne === '';
 
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          value={passwordOne}
-          onChange={event => this.setState(byPropKey('passwordOne', event.target.value))}
-          type="password"
-          placeholder="New Password"
-        />
-        <input
-          value={passwordTwo}
-          onChange={event => this.setState(byPropKey('passwordTwo', event.target.value))}
-          type="password"
-          placeholder="Confirm New Password"
-        />
-        <button disabled={isInvalid} type="submit">
+      <>
+      <CssBaseline />
+      <main className={classes.layout}>
+      <form className={classes.form} onSubmit={this.onSubmit}>
+        <FormControl margin="normal" required>
+          <InputLabel htmlFor="email">Enter new password</InputLabel>
+          <Input
+            value={passwordOne}
+            onChange={event => this.setState(byPropKey('passwordOne', event.target.value))}
+            type="password"
+            margin="normal"
+            className={classes.textField}
+          />          
+        </FormControl>
+        <FormControl margin="normal" required>
+          <InputLabel htmlFor="email">Confirm new password</InputLabel>
+          <Input
+            value={passwordTwo}
+            onChange={event => this.setState(byPropKey('passwordTwo', event.target.value))}
+            type="password"
+            margin="normal"
+            className={classes.textField}
+          />          
+        </FormControl>
+        <Button disabled={isInvalid} type="submit" variant="contained" color="primary" className={classes.submit}>
           Reset My Password
-        </button>
-
-        { error && <p>{error.message}</p> }
+        </Button>
       </form>
+      </main>
+      </>
     );
   }
 }
 
-export default PasswordChangeForm;
+PasswordChangeForm.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(PasswordChangeForm);
