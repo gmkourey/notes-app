@@ -163,6 +163,7 @@ class NoteList extends Component {
       } else {
         console.log("In array")
       }
+      this.handleModalClose();
     })
   }
   // User hits enter
