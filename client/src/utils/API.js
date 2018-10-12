@@ -41,5 +41,8 @@ export default {
 
     addSharedUser: function(noteId, userId) {
         return axios.put("/api/" + noteId + "/" + userId)
+    },
+    getSharedNotes: function(userId) {
+        return axios.get("/api/shared/" + userId)
     }
 }

@@ -60,9 +60,10 @@ module.exports = {
             .catch(err => res.json(err))
     },
     getSharedNotes: function(req, res) {
+        console.log("Hit this");
         db.Note
-            .findAll({sharedWith: req.params.email})
-            .then(dbModel => releaseEvents.json(dbModel))
+            .find({sharedWith: req.params.email})
+            .then(dbModel => res.json(dbModel))
             .catch(err => res.json(err))
     }
 };
