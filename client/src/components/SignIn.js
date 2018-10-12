@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 // import { PasswordForgetLink } from './PasswordForget';
 import { auth } from '../firebase';
 import * as routes from '../constants/routes';
+import { Link } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 // import Avatar from '@material-ui/core/Avatar';
@@ -19,6 +20,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
+import Navbar from './TopNav/TopNav';
 
 const styles = theme => ({
   layout: {
@@ -113,6 +115,7 @@ class SignInForm extends Component {
 
       return (
         <React.Fragment>
+          <Navbar />
           <CssBaseline />
           <main className={classes.layout}>
             <Paper className={classes.paper}>
@@ -152,7 +155,7 @@ class SignInForm extends Component {
                   Sign in
                 </Button>
                 <div>
-                  <a>Lost your password?</a>
+                  <Link to={routes.PASSWORD_FORGET}>Lost your password?</Link>
                 </div>
               </form>
             </Paper>

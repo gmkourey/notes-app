@@ -17,6 +17,17 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Popover from '@material-ui/core/Popover';
 import Layers from '@material-ui/icons/Layers';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import Collapse from '@material-ui/core/Collapse';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+
+import Fade from '@material-ui/core/Fade';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import FolderSharp from '@material-ui/icons/FolderSharp';
+import FolderSharedSharp from '@material-ui/icons/FolderSharedSharp';
+import InsertDriveFileOutlined from '@material-ui/icons/InsertDriveFileOutlined'
 
 const styles = theme => ({
   root: {
@@ -55,6 +66,16 @@ const styles = theme => ({
   },
   noteFieldIcon: {
     paddingTop: '10px'
+  },
+  noteListItem: {
+    padding: '0',
+    paddingLeft: '12%', // Not an ideal solution
+  },
+  input: {
+    cursor: 'pointer !important',
+  },
+  itemText: {
+    padding: '0',
   }
 });
 
@@ -80,12 +101,14 @@ class SharedNotes extends Component {
     positionTop: 300, // should these be null by default?
     positionLeft: 400,
     modalOpen: false,
-    sharedUser: null
+    sharedUser: null,
+    toggleShared: true,
+    isLoading: false
   };  
 
   componentDidMount() {
     firebase.auth.onAuthStateChanged(authUser => {
-      this.setState({ email: authUser.email }, function() {
+      this.setState({ email: authUser.email, isLoading: true }, function() {
         this.loadNotes();
       })
     })
@@ -215,6 +238,10 @@ class SharedNotes extends Component {
     );
   }
 
+  handleSharedToggle = () => {
+    this.setState({ toggleShared: !this.state.toggleShared });
+  }
+
   handleSelectRefresh = (id) => {
     console.log("Hit handleSelectRefresh function.");
     console.log("Running GET for " + this.state.email);
@@ -266,42 +293,31 @@ class SharedNotes extends Component {
       <>
       {this.state.notes.length ? (
         <>
+        <List>
+        <ListItem button onClick={this.handleSharedToggle}>
+            <ListItemIcon>
+              <FolderSharedSharp />
+            </ListItemIcon>
+            <ListItemText className={classes.itemText} primary="Shared with me" />
+            {this.state.toggleShared ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
         {this.state.notes.map((note, index) => {
           return (
-          <>
-            {this.state.isEditable[index] ? (
-              // Editable text field
-              // <div key={note._id}>
-              <TextField
-                className={[classes.noteField, classes.noteFieldEdit]}
-                key={note._id}
-                autoFocus={true}
-                onFocus={this.handleFocus}
-                defaultValue={note.title}
-                variant="filled"
-                onBlur={(e) => this.handleBlur(e, note._id, index)}
-                onKeyDown={(e) => this.keyPress(e, note._id, index)}
-                InputProps={{
-                  className: classes.noteFieldEditInput,
-                  startAdornment: (
-                    <InputAdornment className={classes.noteFieldIcon} position="start">
-                      <Layers />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            ) : (
-              // Read only text field
+            <Collapse in={this.state.toggleShared} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem button className={[classes.nested, classes.noteListItem]}>
               <TextField
                 className={classes.noteField}
                 key={note._id}
                 // variant="filled"
                 InputProps={{
                   readOnly: true,
+                  className: classes.input,
+                  disableUnderline: true,
                   startAdornment: (
-                    <InputAdornment position="start">
-                      <Layers />
-                    </InputAdornment>
+                    <ListItemIcon position="start">
+                      <InsertDriveFileOutlined />
+                    </ListItemIcon>
                   ),
                 }}
                 defaultValue={note.title}
@@ -311,83 +327,24 @@ class SharedNotes extends Component {
                 aria-haspopup="true"
                 onContextMenu={(e) => this.handleContextMenu(e, note._id)}
               />
-            )}
-          </>
+              </ListItem>
+            </List>
+          </Collapse>
           );
         })}
-        {/* <Popover
-          open={contextOpen}
-          anchorEl={this.anchorEl}
-          anchorReference="anchorPosition"
-          anchorPosition={{ top: positionTop, left: positionLeft }}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-          }}
-          hideBackdrop
-        >
-        
-        <ClickAwayListener 
-          onContextMenu={(e) => this.handleClose(e)} // if ContextMenu is called instead, it does not work
-          onClickAway={(e) => this.handleClose(e)}        
-        >
-          <MenuList>
-            <MenuItem className={classes.menuitem}
-            onClick={(e) => {this.handleOpen(e);}}>
-              <ListItemIcon className={classes.icon}>
-                <FolderShared/>
-              </ListItemIcon>
-              <ListItemText classes={{ primary: classes.primary }} inset primary="Share"/>
-            </MenuItem>
-            <MenuItem 
-              className={classes.menuitem}
-              onClick={(e) => { this.deleteNote(e, targetId); this.props.handleDeleteAlert(); }}>
-              <ListItemIcon className={classes.icon}>
-                <DeleteIcon/>
-              </ListItemIcon>
-              <ListItemText classes={{ primary: classes.primary }} inset primary="Delete"/>
-            </MenuItem>
-          </MenuList>
-        </ClickAwayListener>
-        </Popover>
-        <Modal
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          open={this.state.modalOpen}
-          onClose={this.handleModalClose}
-        >
-          <div style={getModalStyle()} className={classes.modalPaper}>
-            <Typography>
-              Who Do You Want To Share With?
-            </Typography>
-            <TextField
-          id="standard-full-width"
-          label="Please enter an email below"
-          style={{ margin: 8 }}
-          placeholder="Email Address"
-          fullWidth
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          onChange={(event) => this.handleShareChange(event)}
-        />
-              <Button variant="contained" color="primary" className={classes.button} onClick={() =>this.handleSharedSubmit()}>
-        Primary
-      </Button>
-            {/* <SimpleModalWrapped /> */}
-          {/* </div> */}
-        {/* </Modal> */}
+          </List>
         </>
       ) : (
-        // <>
-        <p>No notes</p>
-        // </>
-      )}
+        <>
+        {this.state.isLoading ? (
+
+          <></>
+        ) : (
+          <></>
+        )}
+        </>
+      )
+      }
       </>
     );
   }

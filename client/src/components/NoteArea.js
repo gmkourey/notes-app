@@ -6,6 +6,8 @@ import API from "../utils/API";
 // import AuthUserContext from './AuthUserContext';
 import {firebase} from '../firebase';
 
+import Paper from '@material-ui/core/Paper';
+
 
 const initialValue = Value.fromJSON({
   document: {
@@ -88,10 +90,18 @@ class NoteArea extends React.Component {
   render() {
     // return <Editor value={this.state.value} onChange={this.onChange} />
     return(
+      <Paper>
       <Editor 
         value={this.state.value} 
         onChange={this.onChange}
+        style={{
+          'minHeight':'calc(100vh - 90px)',
+          margin: '20px 0 30px 0',
+          padding: '10px',
+          // overflowY: 'scroll'
+        }}
       />
+      </Paper>
     ) 
   }
 }

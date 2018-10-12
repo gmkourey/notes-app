@@ -2,16 +2,11 @@ import React from 'react';
 import Navbar from '../TopNav/TopNav';
 import { withStyles } from '@material-ui/core/styles';
 import LeftDrawer from '../LeftDrawer/LeftDrawer'
-import RightDrawer from '../RightDrawer/RightDrawer';
+// import RightDrawer from '../RightDrawer/RightDrawer';
 import Grid from '@material-ui/core/Grid';
 import Content from '../Content/Content';
 import DeleteAlert from '../DeleteAlert/DeleteAlert';
-
-// import Typography from '@material-ui/core/Typography';
-// import AuthUserContext from '../AuthUserContext';
-// import SignInPage from '../SignIn';
-// import SignUpPage from '../SignUp';
-// import { firebase } from '../../firebase';
+import { firebase } from '../../firebase';
 
 const styles = {
   root: {
@@ -24,6 +19,10 @@ const styles = {
     position: 'relative',
     // display: 'flex',
     width: '100%'
+  },
+  scroll: {
+    overflowY: 'scroll',
+    height: 'calc(100vh - 40px)'
   }
 }
 
@@ -33,17 +32,13 @@ class MainPage extends React.Component {
 
     this.state = {
       // authUser: null,
-      leftOpen: true,
+      leftOpen: false,
       rightOpen: false,
       selectedNoteID: null,
       selectedNoteBody: null,
       deleteAlertOpen: false
     };
   }
-
-  // componentDidMount() {
-  //   this.handleSelectedNote();
-  // }
 
   handleLeftDrawer = () => {
     this.setState({
@@ -57,18 +52,8 @@ class MainPage extends React.Component {
     })
   }
 
-  // handleSelectedNote = (body) => {
-  //   console.log(body);
-
-  //   this.setState({
-  //     selectedNote: body
-  //   })
-  // }
-
   handleSelectedNote = (id, content) => {
-    // console.log(id);
-    // console.log(content);
-    console.log(`Selected note function fired in Mainpage. Setting state for selected note:\n id: ${id} \n content: ${content}`);
+    // console.log(`Selected note function fired in Mainpage. Setting state for selected note:\n id: ${id} \n content: ${content}`);
 
     this.setState({
       selectedNoteID: id,
@@ -91,13 +76,11 @@ class MainPage extends React.Component {
     this.setState({ deleteAlertOpen: false });
   };
 
-  // componentDidMount() {
-  //   firebase.auth.onAuthStateChanged(authUser => {
-  //     authUser
-  //       ? this.setState({ authUser })
-  //       : this.setState({ authUser: null });
-  //   });
-  // }
+  componentDidMount() {
+    firebase.auth.onAuthStateChanged(authUser => {
+      if (authUser != null) this.setState({ leftOpen: true })
+    })
+  }
 
   render() {
     const { classes } = this.props;
@@ -116,7 +99,7 @@ class MainPage extends React.Component {
               deleteAlertOpen={this.state.deleteAlertOpen}
               handleAlertClose={this.handleAlertClose}
             />
-            <Grid container>
+            <Grid container className={classes.scroll}>
               <Grid item md={2}>
                 <LeftDrawer
                   leftOpen={this.state.leftOpen}
@@ -136,10 +119,10 @@ class MainPage extends React.Component {
               </Grid>
 
               <Grid item md={2}>
-                <RightDrawer
+                {/* <RightDrawer
                   rightOpen={this.state.rightOpen}
                   handleRightDrawer={this.handleRightDrawer}
-                />
+                /> */}
               </Grid>
             </Grid>
           </div>
