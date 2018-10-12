@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
+import SharedNotes from "../SharedNotes/SharedNotes"
 import AddSharp from '@material-ui/icons/AddSharp';
-import CloseSharp from '@material-ui/icons/CloseSharp';
 import VerticalAlignBottomSharp from '@material-ui/icons/VerticalAlignBottomSharp';
 
 import NoteList from '../NoteList/NoteList';
@@ -32,6 +32,7 @@ const styles = theme => ({
     position: 'relative',
     // display: 'flex',
     width: '100%',
+    borderBottom: ""
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -134,7 +135,7 @@ class LeftDrawer extends Component {
                 object: 'text',
                 leaves: [
                   {
-                    text: "DIFFERENT DEFAULT OOOOOOOOOOOOOOOOO",
+                    text: "",
                   },
                 ],
               },
@@ -163,6 +164,10 @@ class LeftDrawer extends Component {
           handleSelectedNote={this.handleSelectedNote}
           handleDeleteAlert={this.props.handleDeleteAlert}
           innerRef={this.child}
+        />
+        <SharedNotes
+        notes={this.state.notes}
+        handleSelectedNote={this.handleSelectedNote}
         />
       </>
     )

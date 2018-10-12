@@ -23,7 +23,8 @@ export default {
     // },
 
     getNote: function(id) {
-        return axios.get("/api/note" + id)
+        console.log(id);
+        return axios.get("/api/" + id)
     },
 
     // updateTitle: function(id, title) {
@@ -40,5 +41,8 @@ export default {
 
     addSharedUser: function(noteId, userId) {
         return axios.put("/api/" + noteId + "/" + userId)
+    },
+    getSharedNotes: function(userId) {
+        return axios.get("/api/shared/" + userId)
     }
 }

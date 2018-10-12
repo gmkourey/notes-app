@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from '../TopNav/TopNav';
 import { withStyles } from '@material-ui/core/styles';
 import LeftDrawer from '../LeftDrawer/LeftDrawer'
-import RightDrawer from '../RightDrawer/RightDrawer';
+// import RightDrawer from '../RightDrawer/RightDrawer';
 import Grid from '@material-ui/core/Grid';
 import Content from '../Content/Content';
 import DeleteAlert from '../DeleteAlert/DeleteAlert';
@@ -19,6 +19,10 @@ const styles = {
     position: 'relative',
     // display: 'flex',
     width: '100%'
+  },
+  scroll: {
+    overflowY: 'scroll',
+    height: 'calc(100vh - 40px)'
   }
 }
 
@@ -95,7 +99,7 @@ class MainPage extends React.Component {
               deleteAlertOpen={this.state.deleteAlertOpen}
               handleAlertClose={this.handleAlertClose}
             />
-            <Grid container>
+            <Grid container className={classes.scroll}>
               <Grid item md={2}>
                 <LeftDrawer
                   leftOpen={this.state.leftOpen}
@@ -115,10 +119,10 @@ class MainPage extends React.Component {
               </Grid>
 
               <Grid item md={2}>
-                <RightDrawer
+                {/* <RightDrawer
                   rightOpen={this.state.rightOpen}
                   handleRightDrawer={this.handleRightDrawer}
-                />
+                /> */}
               </Grid>
             </Grid>
           </div>
