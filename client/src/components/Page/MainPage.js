@@ -38,6 +38,7 @@ class MainPage extends React.Component {
       selectedNoteID: null,
       selectedNoteBody: null,
       deleteAlertOpen: false
+
     };
   }
 
@@ -101,10 +102,12 @@ class MainPage extends React.Component {
 
   render() {
     const { classes } = this.props;
+    console.log('these are the props ===============>',this.props);
+    
 
     return(
       <>        
-        <div className={classes.root}>
+        <div className={classes.root} style={this.props.style}>
           <div className={classes.appFrame}>
             <Navbar
               leftOpen={this.state.leftOpen}

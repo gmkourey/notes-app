@@ -6,6 +6,7 @@ import PasswordChangeForm from './PasswordChange';
 import withAuthorization from './withAuthorization';
 
 
+
 const AccountPage = () =>
   <AuthUserContext.Consumer>
     {authUser =>
@@ -13,7 +14,9 @@ const AccountPage = () =>
         <h1>Account: {authUser.email}</h1>
         <PasswordForgetForm />
         <PasswordChangeForm />
+
       </div>
+      
     }
   </AuthUserContext.Consumer>
 
