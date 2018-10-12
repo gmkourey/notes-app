@@ -23,7 +23,8 @@ export default {
     // },
 
     getNote: function(id) {
-        return axios.get("/api/note" + id)
+        console.log(id);
+        return axios.get("/api/" + id)
     },
 
     // updateTitle: function(id, title) {

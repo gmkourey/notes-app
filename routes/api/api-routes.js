@@ -23,13 +23,10 @@ router.route("/:id")
 router.route("/:id/:sharedId")
     .put(notesController.addSharedUser)
 
-router.route("shared/:email")
+router.route("/shared/:email")
     .get(notesController.getSharedNotes)
 // api/note/:id
-// router
-//     .route("/note/:id")
-//     .get(notesController.findById)
-//     .put(notesController.update)
-//     .delete(notesController.remove)
+// router.route("/note")
+//     .get(notesController.findNote)
 
 module.exports = router; 

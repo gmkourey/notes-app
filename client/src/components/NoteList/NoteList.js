@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import API from '../../utils/API';
+import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Modal from '@material-ui/core/Modal';
 import Typography from "@material-ui/core/Typography";
@@ -125,6 +126,20 @@ class NoteList extends Component {
     this.setState({sharedUser: event.target.value});
     console.log(this.state.sharedUser);
   }
+
+  handleSharedSubmit = () => {
+    console.log(this.state.sharedUser, this.state.targetId, this.state.email);
+    API.getNote(this.state.targetId)
+    .then(res => {
+      let sharedUserArray = res.data.sharedWith;
+      if(sharedUserArray.indexOf(this.state.sharedUser) === -1 && this.state.sharedUser === null) {
+        console.log("Not in array")
+        API.addSharedUser(this.state.targetId, this.state.sharedUser)
+      } else {
+        console.log("In array")
+      }
+    })
+  }
   // User hits enter
   keyPress(event, id, index) {
     if (event.keyCode === 13) {
@@ -224,17 +239,14 @@ class NoteList extends Component {
     event.preventDefault();
     this.handleClose(event);
     this.setState({ modalOpen: true });
-    console.log("handle open fired");
   };
 
   handleModalClose = () => {
     this.setState({ modalOpen: false });
-    console.log("handle modal close fired");
   };
 
   // need to select the "next" note when one note is deleted, otherwise the body stays the same
   deleteNote = (event, id) => {
-    console.log('Delete method called.');
     this.handleClose(event);
     API.deleteNote(id)
       .then(res => this.loadNotes())
@@ -364,6 +376,9 @@ class NoteList extends Component {
           }}
           onChange={(event) => this.handleShareChange(event)}
         />
+              <Button variant="contained" color="primary" className={classes.button} onClick={() =>this.handleSharedSubmit()}>
+        Primary
+      </Button>
             {/* <SimpleModalWrapped /> */}
           </div>
         </Modal>

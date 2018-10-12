@@ -1,4 +1,5 @@
 const db = require("../models");
+const mongoose = require("mongoose");
 
 module.exports = {
     findAll: function(req, res) {
@@ -18,8 +19,6 @@ module.exports = {
         db.Note
             .create(req.body)
             .then(dbNote => {
-                console.log(db.User)
-                console.log("text" + req.params.id)
                 return db.User.findOneAndUpdate({
                     _id: req.params.id
                 },
@@ -29,7 +28,6 @@ module.exports = {
                 {
                     new: true
                 })
-                .then(console.log(dbNote))
             })
             .then(dbUser => {
                 console.log(dbUser)
