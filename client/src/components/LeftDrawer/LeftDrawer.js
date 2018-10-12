@@ -13,7 +13,7 @@ import Divider from '@material-ui/core/Divider';
 import API from '../../utils/API';
 import {firebase} from "../../firebase";
 
-import { Value } from 'slate';
+// import { Value } from 'slate';
 
 // import Typography from '@material-ui/core/Typography';
 // import classNames from 'classnames';
@@ -73,7 +73,8 @@ const styles = theme => ({
     [theme.breakpoints.up('md')]: {
       width: '240px'
     },
-    height: '100vh'
+    // height: '100vh'
+    height: `calc(100vh - 104px)`
   },
   headerPaper: {
     position: 'relative',

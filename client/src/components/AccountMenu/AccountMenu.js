@@ -27,8 +27,12 @@ const styles = theme => ({
     borderRadius: 0
   },
   menu: {
-    top: '9px !important',
+    top: '4px !important',
     zIndex: 1201
+  },
+  menuButton: {
+    padding: '5px',
+    marginRight: '15px'
   }
 });
 
@@ -65,6 +69,7 @@ class AccountMenuList extends React.Component {
             aria-owns={open ? 'menu-list-grow' : null}
             aria-haspopup="true"
             onClick={this.handleAccountToggle}
+            className={classNames(classes.menuButton)}
           >
             <AccountCircle/>  
           </IconButton>

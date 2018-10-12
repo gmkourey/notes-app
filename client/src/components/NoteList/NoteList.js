@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import API from '../../utils/API';
 import TextField from '@material-ui/core/TextField';
+import Modal from '@material-ui/core/Modal';
+import Typography from "@material-ui/core/Typography";
 import {firebase} from "../../firebase";
 import PropTypes from 'prop-types';
 import MenuList from '@material-ui/core/MenuList';
@@ -37,7 +39,34 @@ const styles = theme => ({
     justifyContent: 'flex-end',
     width: '100%'
   },
+  modalPaper: {
+    position: 'absolute',
+    width: theme.spacing.unit * 50,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 4
+  },
+  noteFieldEdit: {
+    height: '35px',
+  },
+  noteFieldEditInput: {
+    paddingBottom: '10px'
+  },
+  noteFieldIcon: {
+    paddingTop: '10px'
+  }
 });
+
+function getModalStyle() {
+  const top = 50;
+  const left = 50;
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
 
 class NoteList extends Component {
   state = {
@@ -46,9 +75,11 @@ class NoteList extends Component {
     val: [],
     email: "",
     targetId: null, // id for context menu to access
-    open: false,
+    contextOpen: false,
     positionTop: 300, // should these be null by default?
     positionLeft: 400,
+    modalOpen: false,
+    sharedUser: null
   };  
 
   componentDidMount() {
@@ -90,6 +121,10 @@ class NoteList extends Component {
     // this.forceUpdate();
   }
 
+  handleShareChange = (event) => {
+    this.setState({sharedUser: event.target.value});
+    console.log(this.state.sharedUser);
+  }
   // User hits enter
   keyPress(event, id, index) {
     if (event.keyCode === 13) {
@@ -124,7 +159,7 @@ class NoteList extends Component {
     this.setState({ 
       positionTop: event.clientY,
       positionLeft: event.clientX,
-      open: !this.state.open,
+      contextOpen: !this.state.contextOpen,
       targetId: id
     });
   }
@@ -132,7 +167,8 @@ class NoteList extends Component {
   // Closes context menu. Needs event so we can prevent default when user right clicks outside an open context menu.
   handleClose = (event) => {
     event.preventDefault();
-    this.setState({ open: false });
+    this.setState({ contextOpen: false });
+    console.log("handleClose() fired");
   };
 
   loadNotes = () => {
@@ -146,10 +182,10 @@ class NoteList extends Component {
   refreshNewNote = (email) => {
     console.log('Ran refreshNewNote function from NoteList.js.');
     API.getNotes(email)
-      .then(res => this.setState({ notes: res.data }))
+      .then(res => this.setState({ notes: res.data }, () => {this.handleSelectRefresh(this.state.notes[0]._id);}))
       .catch(err => console.log(err));
 
-    // consider moving this inside a callback after get?
+    // this seems clunky
     setTimeout(
       function() {
         let edit = this.state.isEditable.map((val) => {
@@ -182,31 +218,19 @@ class NoteList extends Component {
       }
     }))
     .catch(err => console.log(err));
-      // .then(res => console.log(
-      //   ">>>>>>>>>>>>>> " + JSON.stringify(res.data),
-      //   JSON.parse(JSON.stringify(res.data))
-      // ));
-      
-      
-      // console.log("########################");
-      // console.log(id);
-      // let index = this.state.notes.indexOf(id);
-      // console.log(index);
-      // console.log(this.state.notes);
-
-      // let newContent;
-
-      // for (var i = 0; i < this.state.notes.length; i++) {
-      //   if (this.state.notes[i]._id === id) {
-      //     console.log("ID match: " + this.state.notes[i]._id);
-      //     console.log(this.state.notes[i].title);
-
-      //     newContent = this.state.notes[i].content;
-      //     // console.log(newContent);
-      //     this.props.handleSelectedNote(id, newContent);
-      //   }
-      // }
   }
+
+  handleOpen = (event) => {
+    event.preventDefault();
+    this.handleClose(event);
+    this.setState({ modalOpen: true });
+    console.log("handle open fired");
+  };
+
+  handleModalClose = () => {
+    this.setState({ modalOpen: false });
+    console.log("handle modal close fired");
+  };
 
   // need to select the "next" note when one note is deleted, otherwise the body stays the same
   deleteNote = (event, id) => {
@@ -214,7 +238,6 @@ class NoteList extends Component {
     this.handleClose(event);
     API.deleteNote(id)
       .then(res => this.loadNotes())
-      // .then(this.props.handleDeleteAlert())
       .catch(err => console.log(err));
   }
  
@@ -222,7 +245,7 @@ class NoteList extends Component {
     const { classes } = this.props;
     const {
       targetId,
-      open,
+      contextOpen,
       positionTop,
       positionLeft,
     } = this.state;
@@ -237,9 +260,9 @@ class NoteList extends Component {
             {this.state.isEditable[index] ? (
               // Editable text field
               <TextField
-                className={classes.noteField}
+                className={[classes.noteField, classes.noteFieldEdit]}
                 key={note._id}
-                autoFocus
+                autoFocus={true}
                 onFocus={this.handleFocus}
                 defaultValue={note.title}
                 variant="filled"
@@ -247,8 +270,9 @@ class NoteList extends Component {
                 onBlur={(e) => this.handleBlur(e, note._id, index)}
                 onKeyDown={(e) => this.keyPress(e, note._id, index)}
                 InputProps={{
+                  className: classes.noteFieldEditInput,
                   startAdornment: (
-                    <InputAdornment position="start">
+                    <InputAdornment className={classes.noteFieldIcon} position="start">
                       <Layers />
                     </InputAdornment>
                   ),
@@ -259,6 +283,7 @@ class NoteList extends Component {
               <TextField
                 className={classes.noteField}
                 key={note._id}
+                // variant="filled"
                 InputProps={{
                   readOnly: true,
                   startAdornment: (
@@ -268,11 +293,9 @@ class NoteList extends Component {
                   ),
                 }}
                 defaultValue={note.title}
-                // onClick={() => this.props.handleSelectedNote(note._id, note.content)}
                 onClick={() => this.handleSelectRefresh(note._id)}
-                // onClick={() => { this.loadNotes(); this.props.handleSelectedNote(note._id, note.content); }}
                 onDoubleClick={(e) => this.handleDoubleClick(e, index)}
-                aria-owns={open ? 'simple-menu' : null}
+                aria-owns={contextOpen ? 'simple-menu' : null}
                 aria-haspopup="true"
                 onContextMenu={(e) => this.handleContextMenu(e, note._id)}
               />
@@ -281,7 +304,7 @@ class NoteList extends Component {
           );
         })}
         <Popover
-          open={open}
+          open={contextOpen}
           anchorEl={this.anchorEl}
           anchorReference="anchorPosition"
           anchorPosition={{ top: positionTop, left: positionLeft }}
@@ -301,7 +324,8 @@ class NoteList extends Component {
           onClickAway={(e) => this.handleClose(e)}        
         >
           <MenuList>
-            <MenuItem className={classes.menuitem}>
+            <MenuItem className={classes.menuitem}
+            onClick={(e) => {this.handleOpen(e);}}>
               <ListItemIcon className={classes.icon}>
                 <FolderShared/>
               </ListItemIcon>
@@ -318,6 +342,31 @@ class NoteList extends Component {
           </MenuList>
         </ClickAwayListener>
         </Popover>
+        <Modal
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={this.state.modalOpen}
+          onClose={this.handleModalClose}
+        >
+          <div style={getModalStyle()} className={classes.modalPaper}>
+            <Typography>
+              Who Do You Want To Share With?
+            </Typography>
+            <TextField
+          id="standard-full-width"
+          label="Please enter an email below"
+          style={{ margin: 8 }}
+          placeholder="Email Address"
+          fullWidth
+          margin="normal"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          onChange={(event) => this.handleShareChange(event)}
+        />
+            {/* <SimpleModalWrapped /> */}
+          </div>
+        </Modal>
         </>
       ) : (
         // <>
