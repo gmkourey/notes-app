@@ -6,6 +6,7 @@ import withAuthorization from './withAuthorization';
 import Typography from '@material-ui/core/Typography';
 
 
+
 const AccountPage = () =>
   <AuthUserContext.Consumer>
     {authUser =>
@@ -15,7 +16,9 @@ const AccountPage = () =>
         </Typography>
         {console.log(authUser)}
         <PasswordChangeForm />
+
       </div>
+      
     }
   </AuthUserContext.Consumer>
 

@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
 import Close from '@material-ui/icons/Close';
-
+import ToggleButton from "../ToggleButton";
 import Hidden from '@material-ui/core/Hidden';
 import Divider from '@material-ui/core/Divider';
 
@@ -93,6 +93,8 @@ class RightDrawer extends Component {
             />
           </IconButton>
           Right Drawer
+
+        {/* <ToggleButton  /> */}
         </div>
         <Divider/>
       </>
