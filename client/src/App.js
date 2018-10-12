@@ -10,6 +10,7 @@ import PasswordForgetPage from './components/PasswordForget';
 import AccountPage from './components/Account';
 // import Note from "./components/Note";
 
+import ThemeSwitch from 'react-theme-switch'; 
 import withAuthentication from './components/withAuthentication';
 import * as routes from './constants/routes';
 
