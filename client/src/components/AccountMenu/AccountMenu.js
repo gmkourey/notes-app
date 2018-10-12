@@ -11,10 +11,13 @@ import MenuList from '@material-ui/core/MenuList';
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import Modal from '@material-ui/core/Modal';
+import Typography from "@material-ui/core/Typography";
 
 import AuthUserContext from '../AuthUserContext';
 import { auth } from '../../firebase';
 import * as routes from '../../constants/routes';
+import AccountPage from '../Account';
 
 const styles = theme => ({
   root: {
@@ -33,31 +36,61 @@ const styles = theme => ({
   menuButton: {
     padding: '5px',
     marginRight: '15px'
-  }
+  },
+  modalPaper: {
+    position: 'absolute',
+    // width: theme.spacing.unit * 50,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 4,
+    textAlign: 'center',
+  },
 });
+
+function getModalStyle() {
+  const top = 50;
+  const left = 50;
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
 
 class AccountMenuList extends React.Component {
   state = {
     open: false,
+    accountModalOpen: false,
   };
 
   handleAccountToggle = () => {
     this.setState(state => ({ open: !state.open }));
   };
 
-  handleClose = event => {
+  handleAccountClose = event => {
     if (this.anchorEl.contains(event.target)) {
       return;
     }
-
+    
     this.setState({ open: false });
   };
+
+  handleAccountModalOpen = (e) => {
+    this.handleAccountClose(e)
+    this.setState({ accountModalOpen: true });
+  }
+
+  handleAccountModalClose = () => {
+    this.setState({ accountModalOpen: false });
+  }
 
   render() {
     const { classes } = this.props;
     const { open } = this.state;
 
     return (
+      <>
       <div className={classes.root}>
         <div>
           <IconButton
@@ -83,21 +116,19 @@ class AccountMenuList extends React.Component {
                 className={classNames(classes.account)}
               >
                 <Paper>
-                  <ClickAwayListener onClickAway={this.handleClose}>
+                  <ClickAwayListener onClickAway={this.handleAccountClose}>
                     <MenuList>
                       <AuthUserContext.Consumer>
                         {authUser => authUser
                           ? (
                             <>
-                            <MenuItem onClick={this.handleClose}>
-                              <Link to={routes.ACCOUNT} style={{ textDecoration: 'none', color: "#000"}}>
+                            <MenuItem onClick={(e) => this.handleAccountModalOpen(e)}>
                                 Account
-                              </Link>
                             </MenuItem>
                             <MenuItem onClick={auth.doSignOut}>Log out</MenuItem>
                             </>
                           ) : (
-                            <MenuItem onClick={this.handleClose}>
+                            <MenuItem onClick={this.handleAccountClose}>
                               <Link to={routes.SIGN_IN} style={{ textDecoration: 'none', color: "#000"}}>
                                 Sign in
                               </Link>
@@ -113,6 +144,17 @@ class AccountMenuList extends React.Component {
           </Popper>
         </div>
       </div>
+      <Modal
+        aria-labelledby="account-modal"
+        aria-describedby="account-modal-description"
+        open={this.state.accountModalOpen}
+        onClose={this.handleAccountModalClose}
+      >
+        <div style={getModalStyle()} className={classes.modalPaper}>
+          <AccountPage />
+        </div>
+      </Modal>
+      </>
     );
   }
 }

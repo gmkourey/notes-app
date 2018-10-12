@@ -193,7 +193,7 @@ class SignUpForm extends Component {
                   Create Account
                 </Button>
                 <FormControl margin="normal" fullWidth>
-                  <a href="#">Already have an account?</a>
+                  <Link to={routes.SIGN_IN}>Already have an account?</Link>
                 </FormControl>
               </form>
             </Paper>
@@ -209,6 +209,7 @@ const SignUpLink = () =>
     {' '}
     <Link to={routes.SIGN_UP}>Sign Up</Link>
   </p>
+
 SignUpForm.propTypes = {
   classes: PropTypes.object.isRequired,
 };

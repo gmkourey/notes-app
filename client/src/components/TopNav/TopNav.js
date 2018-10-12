@@ -6,8 +6,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import Settings from '@material-ui/icons/Settings';
+import MenuSharp from '@material-ui/icons/MenuSharp';
+import SettingsSharp from '@material-ui/icons/SettingsSharp';
 import AccountMenu from '../AccountMenu/AccountMenu';
 
 import AuthUserContext from '../AuthUserContext';
@@ -31,13 +31,12 @@ const styles = {
   }
 };
 
-// const Navbar = (props) => {
 class Navbar extends React.Component {
 
   render() {
     const { classes } = this.props;
     return(
-      <AppBar position="static" color="default" // style={{maxHeight: 35}}
+      <AppBar position="static" color="default"
         className={classNames(classes.appBar, {
           [classes[`appBarShift-left`]]: this.props.leftOpen,
           [classes[`appBarShift-right`]]: this.props.rightOpen
@@ -54,7 +53,7 @@ class Navbar extends React.Component {
                 onClick={this.props.handleLeftDrawer}
                 className={classNames(classes.menuButton, this.props.leftOpen && classes.hide)}
               >
-                <MenuIcon />
+                <MenuSharp />
               </IconButton>
               <Typography variant="title" color="inherit" style={{flex: 1}}>
                 grantsnotes
@@ -66,7 +65,7 @@ class Navbar extends React.Component {
                 onClick={this.props.handleRightDrawer}
                 className={classNames(classes.menuButton, this.props.rightOpen && classes.hide)}
               >
-                <Settings />
+                <SettingsSharp />
               </IconButton>
             </>
             ) : (

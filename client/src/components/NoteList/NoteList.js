@@ -14,8 +14,20 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Popover from '@material-ui/core/Popover';
-import Layers from '@material-ui/icons/Layers';
-import InputAdornment from '@material-ui/core/InputAdornment';
+
+
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import Collapse from '@material-ui/core/Collapse';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+
+import Fade from '@material-ui/core/Fade';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import FolderSharp from '@material-ui/icons/FolderSharp';
+import FolderSharedSharp from '@material-ui/icons/FolderSharedSharp';
+import InsertDriveFileOutlined from '@material-ui/icons/InsertDriveFileOutlined'
+
 
 const styles = theme => ({
   root: {
@@ -37,7 +49,7 @@ const styles = theme => ({
   icon: {},
   noteField: {
     justifyContent: 'flex-end',
-    width: '100%'
+    width: '100%',
   },
   modalPaper: {
     position: 'absolute',
@@ -50,10 +62,20 @@ const styles = theme => ({
     height: '35px',
   },
   noteFieldEditInput: {
-    paddingBottom: '10px'
+    paddingBottom: '10px',
   },
   noteFieldIcon: {
-    paddingTop: '10px'
+    paddingTop: '10px',
+  },
+  noteListItem: {
+    padding: '0',
+    paddingLeft: '12%', // Not an ideal solution
+  },
+  input: {
+    cursor: 'pointer !important',
+  },
+  itemText: {
+    padding: '0',
   }
 });
 
@@ -79,12 +101,15 @@ class NoteList extends Component {
     positionTop: 300, // should these be null by default?
     positionLeft: 400,
     modalOpen: false,
-    sharedUser: null
+    sharedUser: null,
+    toggleNotes: true,
+    toggleShared: true,
+    isLoading: false
   };  
 
   componentDidMount() {
     firebase.auth.onAuthStateChanged(authUser => {
-      this.setState({ email: authUser.email }, function() {
+      if (authUser != null) this.setState({ email: authUser.email, isLoading: true }, function() {
         this.loadNotes();
       })
     })
@@ -118,13 +143,13 @@ class NoteList extends Component {
       .catch(err => console.log(err));
     }
     notes[index].title = event.target.value;
-    // this.forceUpdate();
   }
 
   handleShareChange = (event) => {
     this.setState({sharedUser: event.target.value});
     console.log(this.state.sharedUser);
   }
+
   // User hits enter
   keyPress(event, id, index) {
     if (event.keyCode === 13) {
@@ -150,11 +175,8 @@ class NoteList extends Component {
   handleContextMenu = (event, id) => {
     event.preventDefault();
     
-    console.log(event);
-    console.log(id); // logs id of note that was right clicked
-
-    // notes:
-    // currently user can't have the context menu open, then immediately close and open a new context menu with one click
+    // console.log(event);
+    // console.log(id);
     
     this.setState({ 
       positionTop: event.clientY,
@@ -165,10 +187,10 @@ class NoteList extends Component {
   }
 
   // Closes context menu. Needs event so we can prevent default when user right clicks outside an open context menu.
-  handleClose = (event) => {
+  handleCloseContext = (event) => {
     event.preventDefault();
     this.setState({ contextOpen: false });
-    console.log("handleClose() fired");
+    console.log("handleCloseContext() fired");
   };
 
   loadNotes = () => {
@@ -201,8 +223,8 @@ class NoteList extends Component {
   }
 
   handleSelectRefresh = (id) => {
-    console.log("Hit handleSelectRefresh function.");
-    console.log("Running GET for " + this.state.email);
+    // console.log("Hit handleSelectRefresh function.");
+    // console.log("Running GET for " + this.state.email);
     API.getNotes(this.state.email)
     .then(res => this.setState({ notes: res.data }, () => {
       console.log(this.state.notes);
@@ -220,25 +242,33 @@ class NoteList extends Component {
     .catch(err => console.log(err));
   }
 
-  handleOpen = (event) => {
+  handleOpenModal = (event) => {
     event.preventDefault();
-    this.handleClose(event);
+    this.handleCloseContext(event);
     this.setState({ modalOpen: true });
-    console.log("handle open fired");
+    // console.log("handle open fired");
   };
 
   handleModalClose = () => {
     this.setState({ modalOpen: false });
-    console.log("handle modal close fired");
+    // console.log("handle modal close fired");
   };
 
   // need to select the "next" note when one note is deleted, otherwise the body stays the same
   deleteNote = (event, id) => {
     console.log('Delete method called.');
-    this.handleClose(event);
+    this.handleCloseContext(event);
     API.deleteNote(id)
       .then(res => this.loadNotes())
       .catch(err => console.log(err));
+  }
+
+  handleNotesToggle = () => {
+    this.setState({ toggleNotes: !this.state.toggleNotes });
+  }
+
+  handleSharedToggle = () => {
+    this.setState({ toggleShared: !this.state.toggleShared });
   }
  
   render() {
@@ -254,9 +284,22 @@ class NoteList extends Component {
       <>
       {this.state.notes.length ? (
         <>
+        <List>
+        <ListItem button onClick={this.handleNotesToggle}>
+          <ListItemIcon>
+            <FolderSharp />
+          </ListItemIcon>
+          <ListItemText className={classes.itemText} primary="My notes" />
+          {this.state.toggleNotes ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
         {this.state.notes.map((note, index) => {
           return (
-          <>
+          // <>
+          <Collapse in={this.state.toggleNotes} timeout="auto" unmountOnExit>
+            {/* <List component="div" disablePadding> */}
+            <List component="div" disablePadding>
+            {/* <ListItem button className={classes.nested}> */}
+            <ListItem button className={[classes.nested, classes.noteListItem]}>
             {this.state.isEditable[index] ? (
               // Editable text field
               <TextField
@@ -272,9 +315,12 @@ class NoteList extends Component {
                 InputProps={{
                   className: classes.noteFieldEditInput,
                   startAdornment: (
-                    <InputAdornment className={classes.noteFieldIcon} position="start">
-                      <Layers />
-                    </InputAdornment>
+                    <ListItemIcon className={classes.noteFieldIcon} position="start">
+                      <InsertDriveFileOutlined />
+                    </ListItemIcon>
+                    // <InputAdornment className={classes.noteFieldIcon} position="start">
+                    //   <InsertDriveFileOutlined />
+                    // </InputAdornment>
                   ),
                 }}
               />
@@ -283,13 +329,18 @@ class NoteList extends Component {
               <TextField
                 className={classes.noteField}
                 key={note._id}
-                // variant="filled"
                 InputProps={{
                   readOnly: true,
+                  className: classes.input,
+                  // style: {cursor: 'pointer !important'},
+                  disableUnderline: true,
                   startAdornment: (
-                    <InputAdornment position="start">
-                      <Layers />
-                    </InputAdornment>
+                    // <InputAdornment position="start">
+                    //   <InsertDriveFileOutlined />
+                    // </InputAdornment>
+                    <ListItemIcon position="start">
+                      <InsertDriveFileOutlined />
+                    </ListItemIcon>
                   ),
                 }}
                 defaultValue={note.title}
@@ -300,9 +351,34 @@ class NoteList extends Component {
                 onContextMenu={(e) => this.handleContextMenu(e, note._id)}
               />
             )}
-          </>
+            </ListItem>
+            </List>
+          </Collapse>
+          // </>
           );
         })}
+        </List>
+        {/* Testing addition of a collapsible List item */}
+        <List>
+        <ListItem button onClick={this.handleSharedToggle}>
+            <ListItemIcon>
+              <FolderSharedSharp />
+            </ListItemIcon>
+            <ListItemText inset className={classes.itemText} primary="Shared with me" />
+            {this.state.toggleShared ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={this.state.toggleShared} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem button className={classes.nested}>
+                <ListItemIcon>
+                  <InsertDriveFileOutlined />
+                </ListItemIcon>
+                <ListItemText inset primary="Placeholder" />
+              </ListItem>
+            </List>
+          </Collapse>
+        </List>
+
         <Popover
           open={contextOpen}
           anchorEl={this.anchorEl}
@@ -320,12 +396,14 @@ class NoteList extends Component {
         >
         
         <ClickAwayListener 
-          onContextMenu={(e) => this.handleClose(e)} // if ContextMenu is called instead, it does not work
-          onClickAway={(e) => this.handleClose(e)}        
+          onContextMenu={(e) => this.handleCloseContext(e)} // if ContextMenu is called instead, it does not work
+          onClickAway={(e) => this.handleCloseContext(e)}        
         >
           <MenuList>
-            <MenuItem className={classes.menuitem}
-            onClick={(e) => {this.handleOpen(e);}}>
+            <MenuItem 
+              className={classes.menuitem}
+              onClick={(e) => {this.handleOpenModal(e)}}
+            >
               <ListItemIcon className={classes.icon}>
                 <FolderShared/>
               </ListItemIcon>
@@ -352,7 +430,7 @@ class NoteList extends Component {
             <Typography>
               Who Do You Want To Share With?
             </Typography>
-            <TextField
+            {/* <TextField
           id="standard-full-width"
           label="Please enter an email below"
           style={{ margin: 8 }}
@@ -363,15 +441,26 @@ class NoteList extends Component {
             shrink: true,
           }}
           onChange={(event) => this.handleShareChange(event)}
-        />
-            {/* <SimpleModalWrapped /> */}
+        /> */}
           </div>
         </Modal>
         </>
       ) : (
-        // <>
-        <p>No notes</p>
-        // </>
+        <>
+        {this.state.isLoading ? (
+          <Fade
+            in={this.state.isLoading}
+            style={{
+              transitionDelay: this.state.isLoading ? '800ms' : '0ms',
+            }}
+            unmountOnExit
+          >
+            <CircularProgress />
+          </Fade>
+        ) : (
+          <p>No notes to display.</p>
+        )}
+        </>
       )}
       </>
     );

@@ -6,12 +6,7 @@ import RightDrawer from '../RightDrawer/RightDrawer';
 import Grid from '@material-ui/core/Grid';
 import Content from '../Content/Content';
 import DeleteAlert from '../DeleteAlert/DeleteAlert';
-
-// import Typography from '@material-ui/core/Typography';
-// import AuthUserContext from '../AuthUserContext';
-// import SignInPage from '../SignIn';
-// import SignUpPage from '../SignUp';
-// import { firebase } from '../../firebase';
+import { firebase } from '../../firebase';
 
 const styles = {
   root: {
@@ -33,17 +28,13 @@ class MainPage extends React.Component {
 
     this.state = {
       // authUser: null,
-      leftOpen: true,
+      leftOpen: false,
       rightOpen: false,
       selectedNoteID: null,
       selectedNoteBody: null,
       deleteAlertOpen: false
     };
   }
-
-  // componentDidMount() {
-  //   this.handleSelectedNote();
-  // }
 
   handleLeftDrawer = () => {
     this.setState({
@@ -57,18 +48,8 @@ class MainPage extends React.Component {
     })
   }
 
-  // handleSelectedNote = (body) => {
-  //   console.log(body);
-
-  //   this.setState({
-  //     selectedNote: body
-  //   })
-  // }
-
   handleSelectedNote = (id, content) => {
-    // console.log(id);
-    // console.log(content);
-    console.log(`Selected note function fired in Mainpage. Setting state for selected note:\n id: ${id} \n content: ${content}`);
+    // console.log(`Selected note function fired in Mainpage. Setting state for selected note:\n id: ${id} \n content: ${content}`);
 
     this.setState({
       selectedNoteID: id,
@@ -91,13 +72,11 @@ class MainPage extends React.Component {
     this.setState({ deleteAlertOpen: false });
   };
 
-  // componentDidMount() {
-  //   firebase.auth.onAuthStateChanged(authUser => {
-  //     authUser
-  //       ? this.setState({ authUser })
-  //       : this.setState({ authUser: null });
-  //   });
-  // }
+  componentDidMount() {
+    firebase.auth.onAuthStateChanged(authUser => {
+      if (authUser != null) this.setState({ leftOpen: true })
+    })
+  }
 
   render() {
     const { classes } = this.props;

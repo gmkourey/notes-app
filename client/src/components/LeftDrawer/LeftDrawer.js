@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
-import Add from '@material-ui/icons/Add';
-import Close from '@material-ui/icons/Close';
+import AddSharp from '@material-ui/icons/AddSharp';
+import CloseSharp from '@material-ui/icons/CloseSharp';
+import VerticalAlignBottomSharp from '@material-ui/icons/VerticalAlignBottomSharp';
 
 import NoteList from '../NoteList/NoteList';
 import Hidden from '@material-ui/core/Hidden';
@@ -56,8 +57,8 @@ const styles = theme => ({
     marginLeft: 0
   },
   menuButton: {
-    marginLeft: 12,
-    marginRight: 20,
+    padding: '5px',
+    borderRadius: 0,
   },
   hide: {
     display: 'none',
@@ -65,16 +66,13 @@ const styles = theme => ({
   drawerPaper: {
     position: 'relative',
     display: 'block',
-    // width: '100%',
-    // width: drawerWidth,
     [theme.breakpoints.down('sm')]: {
       width: '100%'
     },
     [theme.breakpoints.up('md')]: {
       width: '240px'
     },
-    // height: '100vh'
-    height: `calc(100vh - 104px)`
+    height: `calc(100vh - 74px)`
   },
   headerPaper: {
     position: 'relative',
@@ -116,15 +114,11 @@ class LeftDrawer extends Component {
 
   componentDidMount() {
     firebase.auth.onAuthStateChanged(authUser => {
-      this.setState({ email: authUser.email }, function() {
+      if (authUser != null) this.setState({ email: authUser.email }, function() {
       })
     })
-    console.log("LeftDrawer.js componentDidMount()");
-    // this.loadNotes();
   }
 
-
-  // new note doesn't update the note list until the drawer is closed and opened again
   handleNewNote () {
     console.log("Hit handleNewNote function");
     console.log(this.state.title);
@@ -174,18 +168,20 @@ class LeftDrawer extends Component {
     )
 
     const header = (
-      <div className={classes.drawerHeaderL}>
-        <IconButton>
-          <Add 
+      <div className={classes.drawerHeaderL} style={{ minHeight: '34px', maxHeight: '34px'}}>
+        <IconButton 
+          className={classes.menuButton}
+          onClick={this.handleNewNote}>
+          <AddSharp
             title={this.state.title}
-            body={this.state.body}
-            onClick={this.handleNewNote}/>
+            body={this.state.body}/>
         </IconButton>
-          Left Drawer
-        <IconButton onClick={this.props.handleLeftDrawer}>
-          <Close style={{
-              width: 15,
-              height: 15
+        <IconButton 
+          className={classes.menuButton}
+          onClick={this.props.handleLeftDrawer}>
+          <VerticalAlignBottomSharp
+            style={{
+              transform: 'rotate(90deg)',
             }}
           />
         </IconButton>
@@ -224,7 +220,6 @@ class LeftDrawer extends Component {
                 paper: classes.drawerPaper,
               }}
             >
-              {/* {header} */}
               {drawer}
             </Drawer>
         </Hidden>
