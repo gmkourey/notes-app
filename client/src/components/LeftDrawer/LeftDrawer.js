@@ -5,6 +5,7 @@ import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
 import Add from '@material-ui/icons/Add';
 import Close from '@material-ui/icons/Close';
+import SharedNotes from "../SharedNotes/SharedNotes"
 
 import NoteList from '../NoteList/NoteList';
 import Hidden from '@material-ui/core/Hidden';
@@ -164,11 +165,17 @@ class LeftDrawer extends Component {
     const drawer = (
       <>
         <Divider/>
+        <h4>My Notes</h4>
         <NoteList
           notes={this.state.notes}
           handleSelectedNote={this.handleSelectedNote}
           handleDeleteAlert={this.props.handleDeleteAlert}
           innerRef={this.child}
+        />
+        <h4>Shared With Me</h4>
+        <SharedNotes
+        notes={this.state.notes}
+        handleSelectedNote={this.handleSelectedNote}
         />
       </>
     )

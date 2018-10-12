@@ -69,7 +69,7 @@ function getModalStyle() {
   };
 }
 
-class NoteList extends Component {
+class SharedNotes extends Component {
   state = {
     notes: this.props.notes, // does this even do anything?
     isEditable: [],
@@ -134,7 +134,6 @@ class NoteList extends Component {
       let sharedUserArray = res.data.sharedWith;
       if(sharedUserArray.indexOf(this.state.sharedUser) === -1 || this.state.sharedUser === null) {
         console.log("Not in array")
-
         API.addSharedUser(this.state.targetId, this.state.sharedUser)
       } else {
         console.log("In array")
@@ -190,14 +189,14 @@ class NoteList extends Component {
   loadNotes = () => {
     console.log('Ran loadNotes function from NoteList.js.')
     console.log(this.state.email);
-    API.getNotes(this.state.email)
+    API.getSharedNotes(this.state.email)
       .then(res => this.setState({ notes: res.data }, () => {console.log(this.state.notes)}))
       .catch(err => console.log(err));    
   }
 
   refreshNewNote = (email) => {
     console.log('Ran refreshNewNote function from NoteList.js.');
-    API.getNotes(email)
+    API.getSharedNotes(email)
       .then(res => this.setState({ notes: res.data }, () => {this.handleSelectRefresh(this.state.notes[0]._id);}))
       .catch(err => console.log(err));
 
@@ -219,7 +218,7 @@ class NoteList extends Component {
   handleSelectRefresh = (id) => {
     console.log("Hit handleSelectRefresh function.");
     console.log("Running GET for " + this.state.email);
-    API.getNotes(this.state.email)
+    API.getSharedNotes(this.state.email)
     .then(res => this.setState({ notes: res.data }, () => {
       console.log(this.state.notes);
       let newContent;
@@ -280,7 +279,6 @@ class NoteList extends Component {
                 onFocus={this.handleFocus}
                 defaultValue={note.title}
                 variant="filled"
-                onChange={(e) => this.handleChange(e, note._id, index)}
                 onBlur={(e) => this.handleBlur(e, note._id, index)}
                 onKeyDown={(e) => this.keyPress(e, note._id, index)}
                 InputProps={{
@@ -308,7 +306,7 @@ class NoteList extends Component {
                 }}
                 defaultValue={note.title}
                 onClick={() => this.handleSelectRefresh(note._id)}
-                onDoubleClick={(e) => this.handleDoubleClick(e, index)}
+                // onDoubleClick={(e) => this.handleDoubleClick(e, index)}
                 aria-owns={contextOpen ? 'simple-menu' : null}
                 aria-haspopup="true"
                 onContextMenu={(e) => this.handleContextMenu(e, note._id)}
@@ -317,7 +315,7 @@ class NoteList extends Component {
           </>
           );
         })}
-        <Popover
+        {/* <Popover
           open={contextOpen}
           anchorEl={this.anchorEl}
           anchorReference="anchorPosition"
@@ -382,8 +380,8 @@ class NoteList extends Component {
         Primary
       </Button>
             {/* <SimpleModalWrapped /> */}
-          </div>
-        </Modal>
+          {/* </div> */}
+        {/* </Modal> */}
         </>
       ) : (
         // <>
@@ -395,8 +393,8 @@ class NoteList extends Component {
   }
 }
 
-NoteList.propTypes = {
+SharedNotes.propTypes = {
   classes: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(NoteList);
+export default withStyles(styles)(SharedNotes);
