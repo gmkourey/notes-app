@@ -93,8 +93,14 @@ class RightDrawer extends Component {
             />
           </IconButton>
           Right Drawer
+
+              <ThemeSwitch/>
+
+
         </div>
+        
         <Divider/>
+        
       </>
     )
 
