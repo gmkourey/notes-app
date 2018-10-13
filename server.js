@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost/notes-app", {useNewUrlParser: true});
+mongoose.connect("mongodb://cc:abc123@ds117061.mlab.com:17061/heroku_7175wr6b", {useNewUrlParser: true});
 
 require("./routes/html/html-routes")(app);
 app.use(routes);
@@ -24,8 +24,6 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log("connected to db")
 });
-
-
 
 
 app.listen(PORT, function() {
