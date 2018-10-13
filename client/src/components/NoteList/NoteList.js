@@ -73,7 +73,7 @@ const styles = theme => ({
     paddingLeft: '12%', // Not an ideal solution
   },
   input: {
-    cursor: 'pointer !important',
+    cursor: 'default !important',
   },
   itemText: {
     padding: '0',
@@ -105,7 +105,8 @@ class NoteList extends Component {
     sharedUser: null,
     toggleNotes: true,
     toggleShared: true,
-    isLoading: false
+    isLoading: false,
+    selectedIndex: null, // index of the selected note, default to null or -1?
   };  
 
   componentDidMount() {
@@ -258,6 +259,10 @@ class NoteList extends Component {
     .catch(err => console.log(err));
   }
 
+  handleSelectedIndex = (index) => {
+    this.setState({ selectedIndex: index });
+  }
+
   handleOpenModal = (event) => {
     event.preventDefault();
     this.handleCloseContext(event);
@@ -315,7 +320,11 @@ class NoteList extends Component {
             {/* <List component="div" disablePadding> */}
             <List component="div" disablePadding>
             {/* <ListItem button className={classes.nested}> */}
-            <ListItem button className={[classes.nested, classes.noteListItem]}>
+            <ListItem 
+              button 
+              className={[classes.nested, classes.noteListItem]}
+              selected={this.state.selectedIndex === index}
+            >
             {this.state.isEditable[index] ? (
               // Editable text field
               // <div key={note._id}>
@@ -335,9 +344,6 @@ class NoteList extends Component {
                     <ListItemIcon className={classes.noteFieldIcon} position="start">
                       <InsertDriveFileOutlined />
                     </ListItemIcon>
-                    // <InputAdornment className={classes.noteFieldIcon} position="start">
-                    //   <InsertDriveFileOutlined />
-                    // </InputAdornment>
                   ),
                 }}
               />
@@ -346,22 +352,19 @@ class NoteList extends Component {
               <TextField
                 className={classes.noteField}
                 key={note._id}
+                selected={this.state.selected}
                 InputProps={{
                   readOnly: true,
                   className: classes.input,
-                  // style: {cursor: 'pointer !important'},
                   disableUnderline: true,
                   startAdornment: (
-                    // <InputAdornment position="start">
-                    //   <InsertDriveFileOutlined />
-                    // </InputAdornment>
                     <ListItemIcon position="start">
                       <InsertDriveFileOutlined />
                     </ListItemIcon>
                   ),
                 }}
                 defaultValue={note.title}
-                onClick={() => this.handleSelectRefresh(note._id)}
+                onClick={() => {this.handleSelectRefresh(note._id); this.handleSelectedIndex(index); }}
                 onDoubleClick={(e) => this.handleDoubleClick(e, index)}
                 aria-owns={contextOpen ? 'simple-menu' : null}
                 aria-haspopup="true"

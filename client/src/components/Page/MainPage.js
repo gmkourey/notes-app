@@ -113,7 +113,7 @@ class MainPage extends React.Component {
               deleteAlertOpen={this.state.deleteAlertOpen}
               handleAlertClose={this.handleAlertClose}
             />
-            <Grid container className={classes.scroll}>
+            <Grid container>
               <Grid item md={2}>
                 <LeftDrawer
                   leftOpen={this.state.leftOpen}

@@ -7,7 +7,14 @@ import API from "../utils/API";
 import {firebase} from '../firebase';
 
 import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core/styles';
 
+const styles = {
+  scroll: {
+    overflowY: 'scroll',
+    height: 'calc(100vh - 90px)'
+  }
+}
 
 const initialValue = Value.fromJSON({
   document: {
@@ -88,17 +95,19 @@ class NoteArea extends React.Component {
 
   // Render the editor.
   render() {
+    const { classes } = this.props;
     // return <Editor value={this.state.value} onChange={this.onChange} />
     return(
       <Paper>
-      <Editor 
+      <Editor
+        className={classes.scroll} 
         value={this.state.value} 
         onChange={this.onChange}
         style={{
           'minHeight':'calc(100vh - 90px)',
           margin: '20px 0 30px 0',
           padding: '10px',
-          color: this.props.text
+          color: this.props.text,
         }}
       />
       </Paper>
@@ -106,4 +115,4 @@ class NoteArea extends React.Component {
   }
 }
 
-export default NoteArea;
+export default withStyles(styles)(NoteArea);
