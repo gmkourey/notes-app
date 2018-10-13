@@ -120,7 +120,7 @@ class SignInForm extends Component {
           <main className={classes.layout}>
             <Paper className={classes.paper}>
               <Typography variant="headline">Sign in</Typography>
-              <form className={classes.form} onSubmit={this.onSubmit} method="post">
+              <form className={classes.form} onSubmit={this.onSubmit}>
                 <FormControl margin="normal" required fullWidth>
                   <InputLabel htmlFor="email">Email Address</InputLabel>
                   <Input 
