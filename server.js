@@ -2,7 +2,7 @@ var express = require("express");
 var mongoose = require("mongoose");
 var bodyParser = require("body-parser");
 var routes = require('./routes/api');
-var env = require('dotenv').config()
+require('dotenv');
 
 var PORT = 3001;
 
@@ -17,8 +17,8 @@ app.use(express.static("public"));
 mongoose.connect(`mongodb://${process.env.USERNAME}:${process.env.PASSWORD}@ds117061.mlab.com:17061/heroku_7175wr6b`, {useNewUrlParser: true});
 
 require("./routes/html/html-routes")(app);
-app.use(routes);
 
+app.use(routes);
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
