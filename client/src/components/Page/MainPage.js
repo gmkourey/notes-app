@@ -1,12 +1,14 @@
 import React from 'react';
 import Navbar from '../TopNav/TopNav';
-import { withStyles } from '@material-ui/core/styles';
+// import { withStyles } from '@material-ui/core/styles';
 import LeftDrawer from '../LeftDrawer/LeftDrawer'
-// import RightDrawer from '../RightDrawer/RightDrawer';
 import Grid from '@material-ui/core/Grid';
 import Content from '../Content/Content';
 import DeleteAlert from '../DeleteAlert/DeleteAlert';
 import { firebase } from '../../firebase';
+
+import { withStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 const styles = {
   root: {
@@ -33,10 +35,11 @@ class MainPage extends React.Component {
     this.state = {
       // authUser: null,
       leftOpen: false,
-      rightOpen: false,
       selectedNoteID: null,
       selectedNoteBody: null,
-      deleteAlertOpen: false
+      deleteAlertOpen: false,
+      theme: 'light',
+      text: 'black'
     };
   }
 
@@ -45,12 +48,6 @@ class MainPage extends React.Component {
       leftOpen: !this.state.leftOpen
     });
   };
-
-  handleRightDrawer = () => {
-    this.setState({
-      rightOpen: !this.state.rightOpen
-    })
-  }
 
   handleSelectedNote = (id, content) => {
     // console.log(`Selected note function fired in Mainpage. Setting state for selected note:\n id: ${id} \n content: ${content}`);
@@ -83,18 +80,34 @@ class MainPage extends React.Component {
     })
   }
 
+  handleThemeToggle = () => {
+    if (this.state.theme === 'light') {
+      this.setState({ theme: 'dark', text: 'white' })
+    }
+    else {
+      this.setState({ theme: 'light', text: 'black' })
+    }
+  }
+
   render() {
     const { classes } = this.props;
 
+    const theme = createMuiTheme({
+      palette: {
+        type: this.state.theme,
+      },
+    });
+
     return(
-      <>        
+      <>
+      <MuiThemeProvider theme={theme}>
+        <CssBaseline />
         <div className={classes.root}>
           <div className={classes.appFrame}>
             <Navbar
               leftOpen={this.state.leftOpen}
-              rightOpen={this.state.rightOpen}
               handleLeftDrawer={this.handleLeftDrawer}
-              handleRightDrawer={this.handleRightDrawer}
+              handleThemeToggle={this.handleThemeToggle}
             />
             <DeleteAlert
               deleteAlertOpen={this.state.deleteAlertOpen}
@@ -115,22 +128,20 @@ class MainPage extends React.Component {
                   <Content
                     selectedNoteID={this.state.selectedNoteID}
                     selectedNoteBody={this.state.selectedNoteBody}
+                    text={this.state.text}
                   />
                 </main>
               </Grid>
 
-              <Grid item md={2}>
-                {/* <RightDrawer
-                  rightOpen={this.state.rightOpen}
-                  handleRightDrawer={this.handleRightDrawer}
-                /> */}
-              </Grid>
+              {/* <Grid item md={2}>
+              </Grid> */}
             </Grid>
           </div>
         </div>
+      </MuiThemeProvider>
       </>
     );
   }
 }
 
-export default withStyles(styles)(MainPage);
+export default withStyles(styles, {withTheme: true} )(MainPage);

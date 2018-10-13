@@ -18,6 +18,7 @@ class Content extends React.Component {
             <NoteArea 
               selectedNoteBody={this.props.selectedNoteBody}
               selectedNoteID={this.props.selectedNoteID}
+              text={this.props.text}
             />
             </>
           ) : (

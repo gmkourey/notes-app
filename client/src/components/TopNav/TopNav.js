@@ -7,12 +7,22 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuSharp from '@material-ui/icons/MenuSharp';
-import SettingsSharp from '@material-ui/icons/SettingsSharp';
 import AccountMenu from '../AccountMenu/AccountMenu';
-
 import AuthUserContext from '../AuthUserContext';
-// import { auth } from '../../firebase';
-// import * as routes from '../../constants/routes';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+
+// const theme = createMuiTheme({
+//   palette: {
+//     // type: 'dark',
+//     primary: {
+//       main: '#c8e6c9',
+//     },
+//     secondary: {
+//       main: '#e8f5e9',
+//     },
+//   },
+// });
 
 const styles = {
   root: {
@@ -28,13 +38,14 @@ const styles = {
   menuButton: {
     padding: '5px',
     marginRight: '15px'
-  }
+  },
 };
 
 class Navbar extends React.Component {
 
   render() {
     const { classes } = this.props;
+
     return(
       <AppBar position="static" color="default"
         className={classNames(classes.appBar, {
@@ -58,15 +69,16 @@ class Navbar extends React.Component {
               <Typography variant="title" color="inherit" style={{flex: 1}}>
                 GrantsNotes
               </Typography>
+              <FormControlLabel
+                control={
+                  <Switch
+                    onChange={this.props.handleThemeToggle}
+                    value="theme"
+                    color="default"
+                  />
+                }
+              />
               <AccountMenu/>
-              <IconButton
-                color="inherit"
-                aria-label="Open right drawer"
-                onClick={this.props.handleRightDrawer}
-                className={classNames(classes.menuButton, this.props.rightOpen && classes.hide)}
-              >
-                <SettingsSharp />
-              </IconButton>
             </>
             ) : (
             <>
