@@ -108,7 +108,7 @@ class SharedNotes extends Component {
 
   componentDidMount() {
     firebase.auth.onAuthStateChanged(authUser => {
-      this.setState({ email: authUser.email, isLoading: true }, function() {
+      if (authUser != null) this.setState({ email: authUser.email, isLoading: true }, function() {
         this.loadNotes();
       })
     })
