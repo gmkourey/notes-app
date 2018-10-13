@@ -163,6 +163,7 @@ class NoteList extends Component {
       } else {
         console.log("In array")
       }
+      this.handleModalClose();
     })
   }
   // User hits enter
@@ -423,7 +424,7 @@ class NoteList extends Component {
             <Typography>
               Who Do You Want To Share With?
             </Typography>
-            {/* <TextField
+            <TextField
           id="standard-full-width"
           label="Please enter an email below"
           style={{ margin: 8 }}
@@ -434,7 +435,10 @@ class NoteList extends Component {
             shrink: true,
           }}
           onChange={(event) => this.handleShareChange(event)}
-        /> */}
+        />
+                  <Button variant="contained" color="primary" className={classes.button} onClick={() => this.handleSharedSubmit()}>
+        Add User
+      </Button>
           </div>
         </Modal>
         </>
