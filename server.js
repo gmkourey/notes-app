@@ -14,7 +14,9 @@ app.use(bodyParser.json());
 
 app.use(express.static("public"));
 
-mongoose.connect(`mongodb://${process.env.USERNAME}:${process.env.PASSWORD}@ds117061.mlab.com:17061/heroku_7175wr6b`, {useNewUrlParser: true});
+//mongoose.connect(`mongodb://${process.env.USERNAME}:${process.env.PASSWORD}@ds117061.mlab.com:17061/heroku_7175wr6b`, {useNewUrlParser: true});
+
+mongoose.connect("mongodb://localhost/notes-app", {useNewUrlParser: true});
 
 require("./routes/html/html-routes")(app);
 
