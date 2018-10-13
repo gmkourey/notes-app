@@ -5,9 +5,16 @@ import { Value } from 'slate';
 import API from "../utils/API";
 // import AuthUserContext from './AuthUserContext';
 import {firebase} from '../firebase';
-
 import Paper from '@material-ui/core/Paper';
 
+//adding imports for rich text
+import ReactDOM from 'react-dom';
+import styled from 'react-emotion';
+import { Button, Icon, Menu } from '../richtext'
+
+//big chunk of hovering menu
+
+//end of hovering menu chunk
 
 const initialValue = Value.fromJSON({
   document: {
@@ -20,7 +27,7 @@ const initialValue = Value.fromJSON({
             object: 'text',
             leaves: [
               {
-                text: "Stuff from NoteArea",
+                text: "Replace this text to start your note",
               },
             ],
           },
@@ -55,17 +62,6 @@ class NoteArea extends React.Component {
         id: this.props.selectedNoteID
       })
     }
-
-    // if (this.props.selectedNoteBody) {
-    //   let contentStr = this.props.selectedNoteBody;
-    //   let contentObj = JSON.parse(contentStr);
-    //   let slateContent = Value.fromJSON(contentObj);
-      
-    //   this.setState({ 
-    //     value: slateContent,
-    //     id: this.props.selectedNoteID
-    //   })
-    // }
   }
 
   state = {
