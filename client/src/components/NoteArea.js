@@ -49,10 +49,10 @@ class NoteArea extends React.Component {
       let contentStr = this.props.selectedNoteBody;
       let contentObj = JSON.parse(contentStr);
       let slateContent = Value.fromJSON(contentObj);
-      
+
       this.setState({ 
         value: slateContent,
-        id: this.props.selectedNoteID
+        id: this.props.selectedNoteID,
       })
     }
 
@@ -71,7 +71,7 @@ class NoteArea extends React.Component {
   state = {
     value: initialValue,
     id: "",
-    email: "test"
+    email: "test",
   }
 
   // On change, update the app's React state with the new editor value.
@@ -98,7 +98,7 @@ class NoteArea extends React.Component {
           'minHeight':'calc(100vh - 90px)',
           margin: '20px 0 30px 0',
           padding: '10px',
-          // overflowY: 'scroll'
+          color: this.props.text
         }}
       />
       </Paper>

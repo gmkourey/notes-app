@@ -38,16 +38,16 @@ const styles = theme => ({
     marginRight: theme.spacing.unit * 2,
     justifyContent: 'flex-end',
   },
-  menuItem: {
-    '&:focus': {
-      backgroundColor: theme.palette.primary.main,
-      '& $primary, & $icon': {
-        color: theme.palette.common.white,
-      },
-    },
-  },
-  primary: {},
-  icon: {},
+  // menuItem: {
+  //   '&:focus': {
+  //     backgroundColor: theme.palette.primary.main,
+  //     '& $primary, & $icon': {
+  //       color: theme.palette.common.white,
+  //     },
+  //   },
+  // },
+  // primary: {},
+  // icon: {},
   noteField: {
     justifyContent: 'flex-end',
     width: '100%',
@@ -304,7 +304,9 @@ class NoteList extends Component {
             <FolderSharp />
           </ListItemIcon>
           <ListItemText className={classes.itemText} primary="My notes" />
-          {this.state.toggleNotes ? <ExpandLess /> : <ExpandMore />}
+          <ListItemIcon>
+            {this.state.toggleNotes ? <ExpandLess /> : <ExpandMore />}
+          </ListItemIcon>
         </ListItem>
         {this.state.notes.map((note, index) => {
           return (
