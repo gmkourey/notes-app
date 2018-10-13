@@ -8,9 +8,9 @@ import {firebase} from '../firebase';
 import Paper from '@material-ui/core/Paper';
 
 //adding imports for rich text
-import ReactDOM from 'react-dom';
-import styled from 'react-emotion';
-import { Button, Icon, Menu } from '../richtext'
+// import ReactDOM from 'react-dom';
+// import styled from 'react-emotion';
+// import { Button, Icon, Menu } from '../richtext'
 
 //big chunk of hovering menu
 
