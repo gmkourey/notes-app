@@ -79,6 +79,7 @@ class MainPage extends React.Component {
   componentDidMount() {
     firebase.auth.onAuthStateChanged(authUser => {
       if (authUser != null) this.setState({ leftOpen: true })
+      if (!authUser) this.setState({ leftOpen: false })
     })
   }
 

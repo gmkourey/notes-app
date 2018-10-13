@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import * as routes from '../constants/routes';
 import API from "../utils/API";
@@ -53,12 +53,11 @@ const styles = theme => ({
   },
 });
 
-// const SignUpPage = ({ history }) =>
+const SignUpPage = ({ history }) =>
 
-//   <div>
-//     <h1>SignUp</h1>
-//     <SignUpForm history={history} />
-//   </div>
+  <>
+    <SignUpForm history={history} />
+  </>
 
 const INITIAL_STATE = {
   username: '',
@@ -106,14 +105,15 @@ class SignUpForm extends Component {
       .catch(error => {
         this.setState(byPropKey('error', error));
       });
+      event.preventDefault();
 
-      if(this.state.username && this.state.email) {
+      // if(this.state.username && this.state.email) {
         
-        API.saveUser({
-            username: this.state.username,
-            email: this.state.email
-        })}
-    event.preventDefault();
+      //   API.saveUser({
+      //       username: this.state.username,
+      //       email: this.state.email
+      //   })}
+    
   }
 
   render() {
@@ -213,9 +213,16 @@ const SignUpLink = () =>
 SignUpForm.propTypes = {
   classes: PropTypes.object.isRequired,
 };
+
 // export default withRouter(SignUpPage);
-export default withStyles(styles)(SignUpForm);
-export {
-  SignUpForm,
-  SignUpLink,
-};
+export default withRouter(withStyles(styles)(SignUpForm));
+const SignUp1 = withRouter(SignUpPage);
+const SignUp2 = withStyles(styles)(SignUpForm);
+
+// export {
+//   SignUpForm,
+//   SignUpLink,
+// };
+
+export { SignUp1, SignUp2 };
+// export {withStyles(styles)(SignUpForm)};

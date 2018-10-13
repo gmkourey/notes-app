@@ -115,8 +115,7 @@ class LeftDrawer extends Component {
 
   componentDidMount() {
     firebase.auth.onAuthStateChanged(authUser => {
-      if (authUser != null) this.setState({ email: authUser.email }, function() {
-      })
+      if (authUser != null) this.setState({ email: authUser.email })
     })
   }
 

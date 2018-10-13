@@ -213,7 +213,7 @@ class NoteList extends Component {
     console.log('Ran loadNotes function from NoteList.js.')
     console.log(this.state.email);
     API.getNotes(this.state.email)
-      .then(res => this.setState({ notes: res.data }, () => {console.log(this.state.notes)}))
+      .then(res => this.setState({ notes: res.data }, () => this.setState({ isLoading: false })))
       .catch(err => console.log(err));    
   }
 
