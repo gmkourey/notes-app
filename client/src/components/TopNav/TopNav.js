@@ -37,10 +37,7 @@ class Navbar extends React.Component {
 
     return(
       <AppBar position="static" color="default"
-        className={classNames(classes.appBar, {
-          [classes[`appBarShift-left`]]: this.props.leftOpen,
-          [classes[`appBarShift-right`]]: this.props.rightOpen
-        })}
+        className={classes.appBar}
       >
         <Toolbar className={classNames(classes.toolBar)}>
         <AuthUserContext.Consumer>

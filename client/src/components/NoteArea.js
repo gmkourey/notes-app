@@ -2,7 +2,7 @@
 import React from 'react';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
-import API from "../utils/API";
+import API from '../utils/API';
 // import AuthUserContext from './AuthUserContext';
 import {firebase} from '../firebase';
 

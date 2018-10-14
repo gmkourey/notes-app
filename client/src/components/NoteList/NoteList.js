@@ -3,8 +3,8 @@ import API from '../../utils/API';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Modal from '@material-ui/core/Modal';
-import Typography from "@material-ui/core/Typography";
-import {firebase} from "../../firebase";
+import Typography from '@material-ui/core/Typography';
+import {firebase} from '../../firebase';
 import PropTypes from 'prop-types';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -15,7 +15,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Popover from '@material-ui/core/Popover';
-import SharedNotes from "../SharedNotes/SharedNotes";
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -26,7 +25,8 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import Fade from '@material-ui/core/Fade';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import FolderSharp from '@material-ui/icons/FolderSharp';
-import InsertDriveFileOutlined from '@material-ui/icons/InsertDriveFileOutlined'
+import InsertDriveFileOutlined from '@material-ui/icons/InsertDriveFileOutlined';
+import green from '@material-ui/core/colors/green';
 
 const styles = theme => ({
   root: {
@@ -71,7 +71,11 @@ const styles = theme => ({
   },
   itemText: {
     padding: '0',
-  }
+    font: '12px',
+  },
+  collapsers: {
+    marginRight: '0',
+  },
 });
 
 function getModalStyle() {
@@ -220,8 +224,6 @@ class NoteList extends Component {
   };
 
   loadNotes = () => {
-    console.log('Ran loadNotes function from NoteList.js.')
-    console.log(this.state.email);
     API.getNotes(this.state.email)
       .then(res => this.setState({ notes: res.data }, () => this.setState({ isLoading: false })))
       .catch(err => console.log(err));    
@@ -337,15 +339,15 @@ class NoteList extends Component {
       {this.state.notes.length ? (
         <>
         <List>
-        <ListItem button onClick={this.handleNotesToggle}>
-          <ListItemIcon>
-            <FolderSharp />
-          </ListItemIcon>
-          <ListItemText className={classes.itemText} primary="My notes" />
-          <ListItemIcon>
-            {this.state.toggleNotes ? <ExpandLess /> : <ExpandMore />}
-          </ListItemIcon>
-        </ListItem>
+          <ListItem button onClick={this.handleNotesToggle}>
+            <ListItemIcon>
+              <FolderSharp />
+            </ListItemIcon>
+            <ListItemText className={classes.itemText} primary="My notes" />
+            <ListItemIcon className={classes.collapsers}>
+              {this.state.toggleNotes ? <ExpandLess /> : <ExpandMore />}
+            </ListItemIcon>
+          </ListItem>
         {this.state.notes.map((note, index) => {
           return (
           // <>
@@ -353,14 +355,12 @@ class NoteList extends Component {
             <List component="div" disablePadding>
             <ListItem
               button
-              // className={[classes.nested, classes.noteListItem]}
               className={`${classes.nested} ${classes.noteListItem}`}
               selected={this.state.selectedIndex === index}
             >
             {this.state.isEditable[index] ? (
               // Editable text field
               <TextField
-                // className={[classes.noteField, classes.noteFieldEdit]}
                 className={`${classes.noteField} ${classes.noteFieldEdit}`}
                 key={note._id}
                 autoFocus={true}
@@ -494,7 +494,7 @@ class NoteList extends Component {
             }}
             unmountOnExit
           >
-            <CircularProgress />
+            <CircularProgress style={{ color: green[500] }}/>
           </Fade>
         ) : (
           <p>No notes to display.</p>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
-import SharedNotes from "../SharedNotes/SharedNotes"
+import SharedNotes from '../SharedNotes/SharedNotes';
 import AddSharp from '@material-ui/icons/AddSharp';
 import VerticalAlignBottomSharp from '@material-ui/icons/VerticalAlignBottomSharp';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -13,11 +13,6 @@ import Divider from '@material-ui/core/Divider';
 
 import API from '../../utils/API';
 import {firebase} from "../../firebase";
-
-// import { Value } from 'slate';
-
-// import Typography from '@material-ui/core/Typography';
-// import classNames from 'classnames';
 
 const drawerWidth = 240;
 
@@ -50,12 +45,12 @@ const styles = theme => ({
     }),
   },
   'appBarShift-left': {
-    // marginLeft: drawerWidth,
-    marginLeft: 0
+    marginLeft: drawerWidth,
+    // marginLeft: 0
   },
   'appBarShift-right': {
-    // marginRight: drawerWidth,
-    marginLeft: 0
+    marginRight: drawerWidth,
+    // marginLeft: 0
   },
   menuButton: {
     padding: '5px',
@@ -68,12 +63,14 @@ const styles = theme => ({
     position: 'relative',
     display: 'block',
     [theme.breakpoints.down('sm')]: {
-      width: '100%'
+      width: '100%',
+      height: '100vh',
     },
     [theme.breakpoints.up('md')]: {
-      width: '240px'
+      // width: '240px',
+      minWidth: '225px',
+      height: `calc(100vh - 74px)`
     },
-    height: `calc(100vh - 74px)`
   },
   headerPaper: {
     position: 'relative',
@@ -82,7 +79,8 @@ const styles = theme => ({
       width: '100%'
     },
     [theme.breakpoints.up('md')]: {
-      width: '240px'
+      // width: '240px'
+      minWidth: '225px',
     },
   },
   drawerHeaderL: {
@@ -112,8 +110,6 @@ class LeftDrawer extends Component {
     this.handleNewNote = this.handleNewNote.bind(this);
     this.handleSelectedNote = this.props.handleSelectedNote.bind(this);
     this.handleDeleteAlert = this.props.handleDeleteAlert.bind(this);
-    // this.handleSelectedIndex = this.handleSelectedIndex.bind(this);
-    // this.handleSharedIndex = this.handleSharedIndex.bind(this);
     this.child = React.createRef();
   }
 

@@ -1,31 +1,31 @@
 import React, { Component } from 'react';
 import API from '../../utils/API';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Modal from '@material-ui/core/Modal';
-import Typography from "@material-ui/core/Typography";
-import {firebase} from "../../firebase";
+// import Modal from '@material-ui/core/Modal';
+// import Typography from "@material-ui/core/Typography";
+import {firebase} from '../../firebase';
 import PropTypes from 'prop-types';
-import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FolderShared from '@material-ui/icons/FolderShared';
+// import MenuList from '@material-ui/core/MenuList';
+// import MenuItem from '@material-ui/core/MenuItem';
+// import DeleteIcon from '@material-ui/icons/Delete';
+// import FolderShared from '@material-ui/icons/FolderShared';
 import { withStyles } from '@material-ui/core/styles';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Popover from '@material-ui/core/Popover';
-import Layers from '@material-ui/icons/Layers';
-import InputAdornment from '@material-ui/core/InputAdornment';
+// import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+// import Popover from '@material-ui/core/Popover';
+// import Layers from '@material-ui/icons/Layers';
+// import InputAdornment from '@material-ui/core/InputAdornment';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
-import Fade from '@material-ui/core/Fade';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import FolderSharp from '@material-ui/icons/FolderSharp';
+// import Fade from '@material-ui/core/Fade';
+// import CircularProgress from '@material-ui/core/CircularProgress';
+// import FolderSharp from '@material-ui/icons/FolderSharp';
 import FolderSharedSharp from '@material-ui/icons/FolderSharedSharp';
 import InsertDriveFileOutlined from '@material-ui/icons/InsertDriveFileOutlined'
 
@@ -82,7 +82,10 @@ const styles = theme => ({
   },
   itemText: {
     padding: '0',
-  }
+  },
+  collapser: {
+    marginRight: '0',
+  },
 });
 
 function getModalStyle() {
@@ -224,10 +227,9 @@ class SharedNotes extends Component {
   };
 
   loadNotes = () => {
-    console.log('Ran loadNotes function from NoteList.js.')
     console.log(this.state.email);
     API.getSharedNotes(this.state.email)
-      .then(res => this.setState({ notes: res.data }, () => {console.log(this.state.notes)}))
+      .then(res => this.setState({ notes: res.data }))
       .catch(err => console.log(err));    
   }
 
@@ -302,57 +304,57 @@ class SharedNotes extends Component {
     } = this.state;
 
     return(
-      <>
+    <>
       {this.state.notes.length ? (
-        <>
+      <>
         <List>
-        <ListItem button onClick={this.handleSharedToggle}>
-          <ListItemIcon>
-            <FolderSharedSharp />
-          </ListItemIcon>
-          <ListItemText className={classes.itemText} primary="Shared with me" />
-          {this.state.toggleShared ? <ExpandLess /> : <ExpandMore />}
-        </ListItem>
+          <ListItem button onClick={this.handleSharedToggle}>
+            <ListItemIcon>
+              <FolderSharedSharp />
+            </ListItemIcon>
+            <ListItemText className={classes.itemText} primary="Shared with me" />
+            <ListItemIcon className={classes.collapser}>
+              {this.state.toggleShared ? <ExpandLess /> : <ExpandMore />}
+            </ListItemIcon>
+          </ListItem>
         {this.state.notes.map((note, index) => {
           return (
             <Collapse in={this.state.toggleShared} timeout="auto" unmountOnExit key={note._id}>
-            <List component="div" disablePadding>
-              <ListItem 
-                button 
-                // className={[classes.nested, classes.noteListItem]}
-                className={`${classes.nested} ${classes.noteListItem}`}
-                selected={this.state.selectedSharedIndex === index}
-              >
-              <TextField
-                className={classes.noteField}
-                key={note._id}
-                InputProps={{
-                  readOnly: true,
-                  className: classes.input,
-                  disableUnderline: true,
-                  startAdornment: (
-                    <ListItemIcon position="start">
-                      <InsertDriveFileOutlined />
-                    </ListItemIcon>
-                  ),
-                }}
-                defaultValue={note.title}
-                onClick={() => {this.handleSelectRefresh(note._id); this.props.handleSharedIndex(index); }}
-                aria-owns={contextOpen ? 'simple-menu' : null}
-                aria-haspopup="true"
-                onContextMenu={(e) => this.handleContextMenu(e, note._id)}
-              />
-              </ListItem>
-            </List>
-          </Collapse>
-          );
-        })}
-          </List>
-        </>
+              <List component="div" disablePadding>
+                <ListItem 
+                  button
+                  className={`${classes.nested} ${classes.noteListItem}`}
+                  selected={this.state.selectedSharedIndex === index}
+                >
+                <TextField
+                  className={classes.noteField}
+                  key={note._id}
+                  InputProps={{
+                    readOnly: true,
+                    className: classes.input,
+                    disableUnderline: true,
+                    startAdornment: (
+                      <ListItemIcon position="start">
+                        <InsertDriveFileOutlined />
+                      </ListItemIcon>
+                    ),
+                  }}
+                  defaultValue={note.title}
+                  onClick={() => {this.handleSelectRefresh(note._id); this.props.handleSharedIndex(index); }}
+                  aria-owns={contextOpen ? 'simple-menu' : null}
+                  aria-haspopup="true"
+                  onContextMenu={(e) => this.handleContextMenu(e, note._id)}
+                />
+                </ListItem>
+              </List>
+            </Collapse>
+            );
+          })}
+        </List>
+      </>
       ) : (
-        <>
+      <>
         {this.state.isLoading ? (
-
           <></>
         ) : (
           <></>
