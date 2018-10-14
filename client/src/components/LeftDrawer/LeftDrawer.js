@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import SharedNotes from "../SharedNotes/SharedNotes"
 import AddSharp from '@material-ui/icons/AddSharp';
 import VerticalAlignBottomSharp from '@material-ui/icons/VerticalAlignBottomSharp';
-
+import Tooltip from '@material-ui/core/Tooltip';
 import NoteList from '../NoteList/NoteList';
 import Hidden from '@material-ui/core/Hidden';
 import Divider from '@material-ui/core/Divider';
@@ -173,22 +173,26 @@ class LeftDrawer extends Component {
 
     const header = (
       <div className={classes.drawerHeaderL} style={{ minHeight: '34px', maxHeight: '34px'}}>
-        <IconButton 
-          className={classes.menuButton}
-          onClick={this.handleNewNote}>
-          <AddSharp
-            title={this.state.title}
-            body={this.state.body}/>
-        </IconButton>
-        <IconButton 
-          className={classes.menuButton}
-          onClick={this.props.handleLeftDrawer}>
-          <VerticalAlignBottomSharp
-            style={{
-              transform: 'rotate(90deg)',
-            }}
-          />
-        </IconButton>
+        <Tooltip title="New note">
+          <IconButton 
+            className={classes.menuButton}
+            onClick={this.handleNewNote}>
+            <AddSharp
+              title={this.state.title}
+              body={this.state.body}/>
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Close notes panel">
+          <IconButton 
+            className={classes.menuButton}
+            onClick={this.props.handleLeftDrawer}>
+            <VerticalAlignBottomSharp
+              style={{
+                transform: 'rotate(90deg)',
+              }}
+            />
+          </IconButton>
+        </Tooltip>
       </div>
     )
 

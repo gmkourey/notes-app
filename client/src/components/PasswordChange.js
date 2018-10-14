@@ -17,7 +17,7 @@ const styles = theme => ({
     marginRight: theme.spacing.unit * 3,
     [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
       width: 400,
-      // marginLeft: 'auto',
+      marginLeft: 'auto',
       marginRight: 'auto',
     },
   },
@@ -110,8 +110,14 @@ class PasswordChangeForm extends Component {
             className={classes.textField}
           />          
         </FormControl>
-        <Button disabled={isInvalid} type="submit" variant="contained" color="primary" className={classes.submit}>
-          Reset My Password
+        <Button 
+          disabled={isInvalid} 
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="default"
+          className={classes.submit}>
+          Change Password
         </Button>
       </form>
       </main>

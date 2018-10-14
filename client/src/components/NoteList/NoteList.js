@@ -26,9 +26,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import Fade from '@material-ui/core/Fade';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import FolderSharp from '@material-ui/icons/FolderSharp';
-import FolderSharedSharp from '@material-ui/icons/FolderSharedSharp';
 import InsertDriveFileOutlined from '@material-ui/icons/InsertDriveFileOutlined'
-
 
 const styles = theme => ({
   root: {
@@ -38,16 +36,6 @@ const styles = theme => ({
     marginRight: theme.spacing.unit * 2,
     justifyContent: 'flex-end',
   },
-  // menuItem: {
-  //   '&:focus': {
-  //     backgroundColor: theme.palette.primary.main,
-  //     '& $primary, & $icon': {
-  //       color: theme.palette.common.white,
-  //     },
-  //   },
-  // },
-  // primary: {},
-  // icon: {},
   noteField: {
     justifyContent: 'flex-end',
     width: '100%',
@@ -64,9 +52,15 @@ const styles = theme => ({
   },
   noteFieldEditInput: {
     paddingBottom: '10px',
+    '&:after': {
+      borderBottom: 'none',
+    },
+    '&:before': {
+      borderBottom: 'none',
+    }
   },
   noteFieldIcon: {
-    paddingTop: '10px',
+    transform: 'translate(-10px,5px)'
   },
   noteListItem: {
     padding: '0',
@@ -93,6 +87,7 @@ function getModalStyle() {
 
 class NoteList extends Component {
   state = {
+    isMounted: false,
     notes: this.props.notes, // does this even do anything?
     isEditable: [],
     val: [],
@@ -108,16 +103,21 @@ class NoteList extends Component {
     toggleShared: true,
     isLoading: false,
     selectedIndex: null, // index of the selected note, default to null or -1?
-  };  
+  };
 
   componentDidMount() {
-    firebase.auth.onAuthStateChanged(authUser => {
-      if (authUser != null) this.setState({ email: authUser.email, isLoading: true }, function() {
-        this.loadNotes();
+    this.setState({ isMounted: true }, () => {
+      firebase.auth.onAuthStateChanged(authUser => {
+        if (authUser != null && this.state.isMounted) this.setState({ email: authUser.email, isLoading: true }, function() {
+          this.loadNotes();
+        })
       })
-    })
+    });
     console.log("NoteList.js componentDidMount()")
+  }
 
+  componentWillUnount() {
+    this.setState({ isMounted: false });
   }
 
   // is this necessary? 
@@ -232,6 +232,7 @@ class NoteList extends Component {
         let edit = this.state.isEditable.map((val) => {
           return (val = false);
         });
+        this.handleSelectedIndex(0);
         let isEditable = edit.slice();
         isEditable[0] = true;
         this.setState({ isEditable });
@@ -340,20 +341,19 @@ class NoteList extends Component {
         {this.state.notes.map((note, index) => {
           return (
           // <>
-          <Collapse in={this.state.toggleNotes} timeout="auto" unmountOnExit>
-            {/* <List component="div" disablePadding> */}
+          <Collapse in={this.state.toggleNotes} timeout="auto" unmountOnExit key={note._id}>
             <List component="div" disablePadding>
-            {/* <ListItem button className={classes.nested}> */}
-            <ListItem 
-              button 
-              className={[classes.nested, classes.noteListItem]}
+            <ListItem
+              button
+              // className={[classes.nested, classes.noteListItem]}
+              className={`${classes.nested} ${classes.noteListItem}`}
               selected={this.state.selectedIndex === index}
             >
             {this.state.isEditable[index] ? (
               // Editable text field
-              // <div key={note._id}>
               <TextField
-                className={[classes.noteField, classes.noteFieldEdit]}
+                // className={[classes.noteField, classes.noteFieldEdit]}
+                className={`${classes.noteField} ${classes.noteFieldEdit}`}
                 key={note._id}
                 autoFocus={true}
                 onFocus={this.handleFocus}
@@ -454,21 +454,26 @@ class NoteList extends Component {
               Who Do You Want To Share With?
             </Typography>
             <TextField
-          id="standard-full-width"
-          label="Please enter an email below"
-          style={{ margin: 8 }}
-          placeholder="Email Address"
-          fullWidth
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          onChange={(event) => this.handleShareChange(event)}
-        />
-                  <Button variant="contained" color="primary" className={classes.button} onClick={() => this.handleSharedSubmit()}>
-        Add User
-      </Button>
-          </div>
+              id="standard-full-width"
+              label="Please enter an email below"
+              style={{ margin: 8 }}
+              placeholder="Email Address"
+              fullWidth
+              margin="normal"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onChange={(event) => this.handleShareChange(event)}
+            />
+          <Button 
+            variant="contained"
+            color="default"
+            className={classes.button}
+            onClick={() => this.handleSharedSubmit()}
+          >
+            Share
+          </Button>
+        </div>
         </Modal>
         </>
       ) : (

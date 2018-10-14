@@ -62,10 +62,16 @@ const styles = theme => ({
     height: '35px',
   },
   noteFieldEditInput: {
-    paddingBottom: '10px'
+    paddingBottom: '10px',
+    '&:after': {
+      borderBottom: 'none',
+    },
+    '&:before': {
+      borderBottom: 'none',
+    }
   },
   noteFieldIcon: {
-    paddingTop: '10px'
+    transform: 'translate(-10px,5px)'
   },
   noteListItem: {
     padding: '0',
@@ -283,10 +289,7 @@ class SharedNotes extends Component {
   render() {
     const { classes } = this.props;
     const {
-      targetId,
       contextOpen,
-      positionTop,
-      positionLeft,
     } = this.state;
 
     return(
@@ -295,21 +298,24 @@ class SharedNotes extends Component {
         <>
         <List>
         <ListItem button onClick={this.handleSharedToggle}>
-            <ListItemIcon>
-              <FolderSharedSharp />
-            </ListItemIcon>
-            <ListItemText className={classes.itemText} primary="Shared with me" />
-            {this.state.toggleShared ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
+          <ListItemIcon>
+            <FolderSharedSharp />
+          </ListItemIcon>
+          <ListItemText className={classes.itemText} primary="Shared with me" />
+          {this.state.toggleShared ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
         {this.state.notes.map((note, index) => {
           return (
-            <Collapse in={this.state.toggleShared} timeout="auto" unmountOnExit>
+            <Collapse in={this.state.toggleShared} timeout="auto" unmountOnExit key={note._id}>
             <List component="div" disablePadding>
-              <ListItem button className={[classes.nested, classes.noteListItem]}>
+              <ListItem 
+                button 
+                // className={[classes.nested, classes.noteListItem]}
+                className={`${classes.nested} ${classes.noteListItem}`}
+              >
               <TextField
                 className={classes.noteField}
                 key={note._id}
-                // variant="filled"
                 InputProps={{
                   readOnly: true,
                   className: classes.input,
@@ -322,7 +328,6 @@ class SharedNotes extends Component {
                 }}
                 defaultValue={note.title}
                 onClick={() => this.handleSelectRefresh(note._id)}
-                // onDoubleClick={(e) => this.handleDoubleClick(e, index)}
                 aria-owns={contextOpen ? 'simple-menu' : null}
                 aria-haspopup="true"
                 onContextMenu={(e) => this.handleContextMenu(e, note._id)}

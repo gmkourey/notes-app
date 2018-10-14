@@ -11,18 +11,7 @@ import AccountMenu from '../AccountMenu/AccountMenu';
 import AuthUserContext from '../AuthUserContext';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-
-// const theme = createMuiTheme({
-//   palette: {
-//     // type: 'dark',
-//     primary: {
-//       main: '#c8e6c9',
-//     },
-//     secondary: {
-//       main: '#e8f5e9',
-//     },
-//   },
-// });
+import Tooltip from '@material-ui/core/Tooltip';
 
 const styles = {
   root: {
@@ -58,26 +47,30 @@ class Navbar extends React.Component {
           {authUser => authUser
             ? (
             <>
-              <IconButton
-                color="inherit"
-                aria-label="Open left  drawer"
-                onClick={this.props.handleLeftDrawer}
-                className={classNames(classes.menuButton, this.props.leftOpen && classes.hide)}
-              >
-                <MenuSharp />
-              </IconButton>
+              <Tooltip title="Toggle notes panel">
+                <IconButton
+                  color="inherit"
+                  aria-label="Toggle notes panel"
+                  onClick={this.props.handleLeftDrawer}
+                  className={classNames(classes.menuButton, this.props.leftOpen && classes.hide)}
+                >
+                  <MenuSharp />
+                </IconButton>
+              </Tooltip>
               <Typography variant="title" color="inherit" style={{flex: 1}}>
                 GrantsNotes
               </Typography>
-              <FormControlLabel
-                control={
-                  <Switch
-                    onChange={this.props.handleThemeToggle}
-                    value="theme"
-                    color="default"
-                  />
-                }
-              />
+              <Tooltip title="Toggle theme">
+                <FormControlLabel
+                  control={
+                    <Switch
+                      onChange={this.props.handleThemeToggle}
+                      value="theme"
+                      color="default"
+                    />
+                  }
+                />
+              </Tooltip>
               <AccountMenu/>
             </>
             ) : (

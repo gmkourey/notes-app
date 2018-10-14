@@ -149,7 +149,7 @@ class SignInForm extends Component {
                   type="submit"
                   fullWidth
                   variant="raised"
-                  color="primary"
+                  color="default"
                   className={classes.submit}
                 >
                   Sign in

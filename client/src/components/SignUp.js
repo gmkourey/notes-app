@@ -187,7 +187,7 @@ class SignUpForm extends Component {
                   type="submit"
                   fullWidth
                   variant="raised"
-                  color="primary"
+                  color="default"
                   className={classes.submit}
                 >
                   Create Account
