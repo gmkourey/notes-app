@@ -3,8 +3,8 @@ import API from '../../utils/API';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Modal from '@material-ui/core/Modal';
-import Typography from "@material-ui/core/Typography";
-import {firebase} from "../../firebase";
+import Typography from '@material-ui/core/Typography';
+import {firebase} from '../../firebase';
 import PropTypes from 'prop-types';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -15,7 +15,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Popover from '@material-ui/core/Popover';
-import SharedNotes from "../SharedNotes/SharedNotes";
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -26,9 +25,8 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import Fade from '@material-ui/core/Fade';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import FolderSharp from '@material-ui/icons/FolderSharp';
-import FolderSharedSharp from '@material-ui/icons/FolderSharedSharp';
-import InsertDriveFileOutlined from '@material-ui/icons/InsertDriveFileOutlined'
-
+import InsertDriveFileOutlined from '@material-ui/icons/InsertDriveFileOutlined';
+import green from '@material-ui/core/colors/green';
 
 const styles = theme => ({
   root: {
@@ -38,16 +36,6 @@ const styles = theme => ({
     marginRight: theme.spacing.unit * 2,
     justifyContent: 'flex-end',
   },
-  // menuItem: {
-  //   '&:focus': {
-  //     backgroundColor: theme.palette.primary.main,
-  //     '& $primary, & $icon': {
-  //       color: theme.palette.common.white,
-  //     },
-  //   },
-  // },
-  // primary: {},
-  // icon: {},
   noteField: {
     justifyContent: 'flex-end',
     width: '100%',
@@ -64,20 +52,30 @@ const styles = theme => ({
   },
   noteFieldEditInput: {
     paddingBottom: '10px',
+    '&:after': {
+      borderBottom: 'none',
+    },
+    '&:before': {
+      borderBottom: 'none',
+    }
   },
   noteFieldIcon: {
-    paddingTop: '10px',
+    transform: 'translate(-10px,5px)'
   },
   noteListItem: {
     padding: '0',
     paddingLeft: '12%', // Not an ideal solution
   },
   input: {
-    cursor: 'pointer !important',
+    cursor: 'default !important',
   },
   itemText: {
     padding: '0',
-  }
+    font: '12px',
+  },
+  collapsers: {
+    marginRight: '0',
+  },
 });
 
 function getModalStyle() {
@@ -93,11 +91,13 @@ function getModalStyle() {
 
 class NoteList extends Component {
   state = {
+    isMounted: false,
     notes: this.props.notes, // does this even do anything?
     isEditable: [],
     val: [],
     email: "",
     targetId: null, // id for context menu to access
+    targetIndex: null, // index for context menu delete action to check
     contextOpen: false,
     positionTop: 300, // should these be null by default?
     positionLeft: 400,
@@ -105,17 +105,23 @@ class NoteList extends Component {
     sharedUser: null,
     toggleNotes: true,
     toggleShared: true,
-    isLoading: false
-  };  
+    isLoading: false,
+    selectedIndex: this.props.selectedIndex,
+  };
 
   componentDidMount() {
-    firebase.auth.onAuthStateChanged(authUser => {
-      if (authUser != null) this.setState({ email: authUser.email, isLoading: true }, function() {
-        this.loadNotes();
+    this.setState({ isMounted: true }, () => {
+      firebase.auth.onAuthStateChanged(authUser => {
+        if (authUser != null && this.state.isMounted) this.setState({ email: authUser.email, isLoading: true }, function() {
+          this.loadNotes();
+        })
       })
-    })
+    });
     console.log("NoteList.js componentDidMount()")
+  }
 
+  componentWillUnount() {
+    this.setState({ isMounted: false });
   }
 
   // is this necessary? 
@@ -126,6 +132,13 @@ class NoteList extends Component {
   //     this.setState({notes: this.props.notes});
   //   }
   // }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.selectedIndex !== prevProps.selectedIndex) {
+      this.setState({ selectedIndex: this.props.selectedIndex });
+      console.log("component did update index: " + this.props.selectedIndex);
+    }
+  }
 
   handleDoubleClick (event, index) {
     let edit = this.state.isEditable.map((val, index) => {
@@ -188,7 +201,7 @@ class NoteList extends Component {
   }
 
   // User right clicks on note title in sidebar
-  handleContextMenu = (event, id) => {
+  handleContextMenu = (event, id, index) => {
     event.preventDefault();
     
     // console.log(event);
@@ -198,7 +211,8 @@ class NoteList extends Component {
       positionTop: event.clientY,
       positionLeft: event.clientX,
       contextOpen: !this.state.contextOpen,
-      targetId: id
+      targetId: id,
+      targetIndex: index,
     });
   }
 
@@ -210,8 +224,6 @@ class NoteList extends Component {
   };
 
   loadNotes = () => {
-    console.log('Ran loadNotes function from NoteList.js.')
-    console.log(this.state.email);
     API.getNotes(this.state.email)
       .then(res => this.setState({ notes: res.data }, () => this.setState({ isLoading: false })))
       .catch(err => console.log(err));    
@@ -229,6 +241,7 @@ class NoteList extends Component {
         let edit = this.state.isEditable.map((val) => {
           return (val = false);
         });
+        this.props.handleSelectedIndex(0);
         let isEditable = edit.slice();
         isEditable[0] = true;
         this.setState({ isEditable });
@@ -258,6 +271,10 @@ class NoteList extends Component {
     .catch(err => console.log(err));
   }
 
+  // handleSelectedIndex = (index) => {
+  //   this.setState({ selectedIndex: index });
+  // }
+
   handleOpenModal = (event) => {
     event.preventDefault();
     this.handleCloseContext(event);
@@ -268,18 +285,40 @@ class NoteList extends Component {
     this.setState({ modalOpen: false });
   };
 
+  // When user deletes a note, select the note with the same index or index-1 if it's the last note
+  handleDeleteRefresh = (targetIndex) => {
+    API.getNotes(this.state.email)
+    .then(res => this.setState({ notes: res.data }, () => {
+      let index;
+      if (targetIndex === this.state.notes.length) {
+        index = targetIndex - 1;
+      }
+      else {
+        index = targetIndex;
+      }
+      let note = this.state.notes[index]
+      this.props.handleSelectedNote(note._id, note.content);
+      // this.handleSelectedIndex(index);
+      this.props.handleSelectedIndex(index);
+    }))
+    .catch(err => console.log(err));
+  }
+
   // need to select the "next" note when one note is deleted, otherwise the body stays the same
-  deleteNote = (event, id) => {
+  deleteNote = (event, id, targetIndex) => {
     console.log('Delete method called.');
     this.handleCloseContext(event);
     API.deleteNote(id)
-      .then(res => this.loadNotes())
+      .then(res => {
+        if (targetIndex === this.state.selectedIndex) this.handleDeleteRefresh(targetIndex)
+        else this.loadNotes()
+        })
       .catch(err => console.log(err));
-  }
+  };
 
   handleNotesToggle = () => {
     this.setState({ toggleNotes: !this.state.toggleNotes });
-  }
+  };
 
   // handleSharedToggle = () => {
   //   this.setState({ toggleShared: !this.state.toggleShared });
@@ -289,6 +328,7 @@ class NoteList extends Component {
     const { classes } = this.props;
     const {
       targetId,
+      targetIndex,
       contextOpen,
       positionTop,
       positionLeft,
@@ -299,28 +339,29 @@ class NoteList extends Component {
       {this.state.notes.length ? (
         <>
         <List>
-        <ListItem button onClick={this.handleNotesToggle}>
-          <ListItemIcon>
-            <FolderSharp />
-          </ListItemIcon>
-          <ListItemText className={classes.itemText} primary="My notes" />
-          <ListItemIcon>
-            {this.state.toggleNotes ? <ExpandLess /> : <ExpandMore />}
-          </ListItemIcon>
-        </ListItem>
+          <ListItem button onClick={this.handleNotesToggle}>
+            <ListItemIcon>
+              <FolderSharp />
+            </ListItemIcon>
+            <ListItemText className={classes.itemText} primary="My notes" />
+            <ListItemIcon className={classes.collapsers}>
+              {this.state.toggleNotes ? <ExpandLess /> : <ExpandMore />}
+            </ListItemIcon>
+          </ListItem>
         {this.state.notes.map((note, index) => {
           return (
           // <>
-          <Collapse in={this.state.toggleNotes} timeout="auto" unmountOnExit>
-            {/* <List component="div" disablePadding> */}
+          <Collapse in={this.state.toggleNotes} timeout="auto" unmountOnExit key={note._id}>
             <List component="div" disablePadding>
-            {/* <ListItem button className={classes.nested}> */}
-            <ListItem button className={[classes.nested, classes.noteListItem]}>
+            <ListItem
+              button
+              className={`${classes.nested} ${classes.noteListItem}`}
+              selected={this.state.selectedIndex === index}
+            >
             {this.state.isEditable[index] ? (
               // Editable text field
-              // <div key={note._id}>
               <TextField
-                className={[classes.noteField, classes.noteFieldEdit]}
+                className={`${classes.noteField} ${classes.noteFieldEdit}`}
                 key={note._id}
                 autoFocus={true}
                 onFocus={this.handleFocus}
@@ -335,9 +376,6 @@ class NoteList extends Component {
                     <ListItemIcon className={classes.noteFieldIcon} position="start">
                       <InsertDriveFileOutlined />
                     </ListItemIcon>
-                    // <InputAdornment className={classes.noteFieldIcon} position="start">
-                    //   <InsertDriveFileOutlined />
-                    // </InputAdornment>
                   ),
                 }}
               />
@@ -346,26 +384,23 @@ class NoteList extends Component {
               <TextField
                 className={classes.noteField}
                 key={note._id}
+                selected={this.state.selected}
                 InputProps={{
                   readOnly: true,
                   className: classes.input,
-                  // style: {cursor: 'pointer !important'},
                   disableUnderline: true,
                   startAdornment: (
-                    // <InputAdornment position="start">
-                    //   <InsertDriveFileOutlined />
-                    // </InputAdornment>
                     <ListItemIcon position="start">
                       <InsertDriveFileOutlined />
                     </ListItemIcon>
                   ),
                 }}
                 defaultValue={note.title}
-                onClick={() => this.handleSelectRefresh(note._id)}
+                onClick={() => {this.handleSelectRefresh(note._id); this.props.handleSelectedIndex(index); }}
                 onDoubleClick={(e) => this.handleDoubleClick(e, index)}
                 aria-owns={contextOpen ? 'simple-menu' : null}
                 aria-haspopup="true"
-                onContextMenu={(e) => this.handleContextMenu(e, note._id)}
+                onContextMenu={(e) => this.handleContextMenu(e, note._id, index)}
               />
             )}
             </ListItem>
@@ -392,7 +427,7 @@ class NoteList extends Component {
         >
         
         <ClickAwayListener 
-          onContextMenu={(e) => this.handleCloseContext(e)} // if ContextMenu is called instead, it does not work
+          onContextMenu={(e) => this.handleCloseContext(e)}
           onClickAway={(e) => this.handleCloseContext(e)}        
         >
           <MenuList>
@@ -407,7 +442,7 @@ class NoteList extends Component {
             </MenuItem>
             <MenuItem 
               className={classes.menuitem}
-              onClick={(e) => { this.deleteNote(e, targetId); this.props.handleDeleteAlert(); }}>
+              onClick={(e) => { this.deleteNote(e, targetId, targetIndex); this.props.handleDeleteAlert(); }}>
               <ListItemIcon className={classes.icon}>
                 <DeleteIcon/>
               </ListItemIcon>
@@ -427,21 +462,26 @@ class NoteList extends Component {
               Who Do You Want To Share With?
             </Typography>
             <TextField
-          id="standard-full-width"
-          label="Please enter an email below"
-          style={{ margin: 8 }}
-          placeholder="Email Address"
-          fullWidth
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          onChange={(event) => this.handleShareChange(event)}
-        />
-                  <Button variant="contained" color="primary" className={classes.button} onClick={() => this.handleSharedSubmit()}>
-        Add User
-      </Button>
-          </div>
+              id="standard-full-width"
+              label="Please enter an email below"
+              style={{ margin: 8 }}
+              placeholder="Email Address"
+              fullWidth
+              margin="normal"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onChange={(event) => this.handleShareChange(event)}
+            />
+          <Button 
+            variant="contained"
+            color="default"
+            className={classes.button}
+            onClick={() => this.handleSharedSubmit()}
+          >
+            Share
+          </Button>
+        </div>
         </Modal>
         </>
       ) : (
@@ -454,7 +494,7 @@ class NoteList extends Component {
             }}
             unmountOnExit
           >
-            <CircularProgress />
+            <CircularProgress style={{ color: green[500] }}/>
           </Fade>
         ) : (
           <p>No notes to display.</p>

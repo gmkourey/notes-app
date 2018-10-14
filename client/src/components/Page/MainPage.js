@@ -113,7 +113,7 @@ class MainPage extends React.Component {
               deleteAlertOpen={this.state.deleteAlertOpen}
               handleAlertClose={this.handleAlertClose}
             />
-            <Grid container className={classes.scroll}>
+            <Grid container spacing={32}>
               <Grid item md={2}>
                 <LeftDrawer
                   leftOpen={this.state.leftOpen}
@@ -123,7 +123,7 @@ class MainPage extends React.Component {
                 />
               </Grid>
 
-              <Grid item md={8}>
+              <Grid item md={9} xs={12}>
                 <main>
                   <Content
                     selectedNoteID={this.state.selectedNoteID}
