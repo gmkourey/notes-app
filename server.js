@@ -14,8 +14,14 @@ app.use(bodyParser.json());
 
 app.use(express.static("public"));
 
-mongoose.connect(`mongodb://${process.env.USERNAME}:${process.env.PASSWORD}@ds117061.mlab.com:17061/heroku_7175wr6b`, {useNewUrlParser: true});
+// mongoose.connect(`mongodb://${process.env.USERNAME}:${process.env.PASSWORD}@ds117061.mlab.com:17061/heroku_7175wr6b`, {useNewUrlParser: true});
+// mongoose.connect(`mongodb://${process.env.USERNAME}:${process.env.PASSWORD}@ds131903.mlab.com:31903/heroku_x35lf8pl`, {useNewUrlParser: true});
 // mongoose.connect("mongodb://localhost/notes-app", {useNewUrlParser: true});
+
+var MONGODB_URI = process.env.MONGODB_URI;
+mongoose.Promise = Promise;
+mongoose.connect(MONGODB_URI);
+
 require("./routes/html/html-routes")(app);
 
 app.use(routes);
