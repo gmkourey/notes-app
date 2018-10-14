@@ -98,6 +98,7 @@ class NoteList extends Component {
     val: [],
     email: "",
     targetId: null, // id for context menu to access
+    targetIndex: null, // index for context menu delete action to check
     contextOpen: false,
     positionTop: 300, // should these be null by default?
     positionLeft: 400,
@@ -189,7 +190,7 @@ class NoteList extends Component {
   }
 
   // User right clicks on note title in sidebar
-  handleContextMenu = (event, id) => {
+  handleContextMenu = (event, id, index) => {
     event.preventDefault();
     
     // console.log(event);
@@ -199,7 +200,8 @@ class NoteList extends Component {
       positionTop: event.clientY,
       positionLeft: event.clientX,
       contextOpen: !this.state.contextOpen,
-      targetId: id
+      targetId: id,
+      targetIndex: index,
     });
   }
 
@@ -273,18 +275,39 @@ class NoteList extends Component {
     this.setState({ modalOpen: false });
   };
 
+  // When user deletes a note, select the note with the same index or index-1 if it's the last note
+  handleDeleteRefresh = (targetIndex) => {
+    API.getNotes(this.state.email)
+    .then(res => this.setState({ notes: res.data }, () => {
+      let index;
+      if (targetIndex === this.state.notes.length) {
+        index = targetIndex - 1;
+      }
+      else {
+        index = targetIndex;
+      }
+      let note = this.state.notes[index]
+      this.props.handleSelectedNote(note._id, note.content);
+      this.handleSelectedIndex(index);
+    }))
+    .catch(err => console.log(err));
+  }
+
   // need to select the "next" note when one note is deleted, otherwise the body stays the same
-  deleteNote = (event, id) => {
+  deleteNote = (event, id, targetIndex) => {
     console.log('Delete method called.');
     this.handleCloseContext(event);
     API.deleteNote(id)
-      .then(res => this.loadNotes())
+      .then(res => {
+        if (targetIndex === this.state.selectedIndex) this.handleDeleteRefresh(targetIndex)
+        else this.loadNotes()
+        })
       .catch(err => console.log(err));
-  }
+  };
 
   handleNotesToggle = () => {
     this.setState({ toggleNotes: !this.state.toggleNotes });
-  }
+  };
 
   // handleSharedToggle = () => {
   //   this.setState({ toggleShared: !this.state.toggleShared });
@@ -294,6 +317,7 @@ class NoteList extends Component {
     const { classes } = this.props;
     const {
       targetId,
+      targetIndex,
       contextOpen,
       positionTop,
       positionLeft,
@@ -368,7 +392,7 @@ class NoteList extends Component {
                 onDoubleClick={(e) => this.handleDoubleClick(e, index)}
                 aria-owns={contextOpen ? 'simple-menu' : null}
                 aria-haspopup="true"
-                onContextMenu={(e) => this.handleContextMenu(e, note._id)}
+                onContextMenu={(e) => this.handleContextMenu(e, note._id, index)}
               />
             )}
             </ListItem>
@@ -395,7 +419,7 @@ class NoteList extends Component {
         >
         
         <ClickAwayListener 
-          onContextMenu={(e) => this.handleCloseContext(e)} // if ContextMenu is called instead, it does not work
+          onContextMenu={(e) => this.handleCloseContext(e)}
           onClickAway={(e) => this.handleCloseContext(e)}        
         >
           <MenuList>
@@ -410,7 +434,7 @@ class NoteList extends Component {
             </MenuItem>
             <MenuItem 
               className={classes.menuitem}
-              onClick={(e) => { this.deleteNote(e, targetId); this.props.handleDeleteAlert(); }}>
+              onClick={(e) => { this.deleteNote(e, targetId, targetIndex); this.props.handleDeleteAlert(); }}>
               <ListItemIcon className={classes.icon}>
                 <DeleteIcon/>
               </ListItemIcon>
