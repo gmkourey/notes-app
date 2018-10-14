@@ -1,8 +1,8 @@
 var express = require("express");
 var mongoose = require("mongoose");
 var bodyParser = require("body-parser");
-var routes = require('./routes/api');
-require('dotenv').config()
+var routes = require('./routes');
+// require('dotenv').config()
 
 var PORT = process.env.PORT || 3001;
 
@@ -35,5 +35,5 @@ db.once('open', function() {
 
 
 app.listen(PORT, function() {
-    console.log("App running on port 3001!");
+    console.log(`App running on port ${PORT}!`);
   });
