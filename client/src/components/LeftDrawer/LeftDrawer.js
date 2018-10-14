@@ -103,6 +103,8 @@ class LeftDrawer extends Component {
     body: "",
     notes: [],
     email: "",
+    selectedIndex: null,
+    selectedSharedIndex: null,
   }
 
   constructor(props) {
@@ -110,6 +112,8 @@ class LeftDrawer extends Component {
     this.handleNewNote = this.handleNewNote.bind(this);
     this.handleSelectedNote = this.props.handleSelectedNote.bind(this);
     this.handleDeleteAlert = this.props.handleDeleteAlert.bind(this);
+    // this.handleSelectedIndex = this.handleSelectedIndex.bind(this);
+    // this.handleSharedIndex = this.handleSharedIndex.bind(this);
     this.child = React.createRef();
   }
 
@@ -152,6 +156,19 @@ class LeftDrawer extends Component {
       .then(this.child.current.refreshNewNote(this.state.email));
   };
 
+  handleSelectedIndex = (index) => {
+    console.log(index);
+    console.log("LEFTDRAWER HANDLE SELECTED INDEX FUNCTION")
+    // console.log(this.state.selectedIndex);
+    this.setState({ selectedIndex: index, selectedSharedIndex: null });
+  }
+
+  handleSharedIndex = (index) => {
+    console.log(index);
+    console.log(this.state.selectedSharedIndex);
+    this.setState({ selectedSharedIndex: index, selectedIndex: null })
+  }
+
   render() {
     const { classes } = this.props;
 
@@ -163,10 +180,14 @@ class LeftDrawer extends Component {
           handleSelectedNote={this.handleSelectedNote}
           handleDeleteAlert={this.props.handleDeleteAlert}
           innerRef={this.child}
+          selectedIndex={this.state.selectedIndex}
+          handleSelectedIndex={this.handleSelectedIndex}
         />
         <SharedNotes
-        notes={this.state.notes}
-        handleSelectedNote={this.handleSelectedNote}
+          notes={this.state.notes}
+          handleSelectedNote={this.handleSelectedNote}
+          selectedSharedIndex={this.state.selectedSharedIndex}
+          handleSharedIndex={this.handleSharedIndex}
         />
       </>
     )

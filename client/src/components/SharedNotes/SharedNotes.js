@@ -109,7 +109,8 @@ class SharedNotes extends Component {
     modalOpen: false,
     sharedUser: null,
     toggleShared: true,
-    isLoading: false
+    isLoading: false,
+    selectedSharedIndex: this.props.selectedSharedIndex,
   };  
 
   componentDidMount() {
@@ -120,6 +121,13 @@ class SharedNotes extends Component {
     })
     console.log("NoteList.js componentDidMount()")
 
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.selectedSharedIndex !== prevProps.selectedSharedIndex) {
+      this.setState({ selectedSharedIndex: this.props.selectedSharedIndex });
+      console.log("component did update index: " + this.props.selectedSharedIndex);
+    }
   }
 
   // is this necessary? 
@@ -223,26 +231,27 @@ class SharedNotes extends Component {
       .catch(err => console.log(err));    
   }
 
-  refreshNewNote = (email) => {
-    console.log('Ran refreshNewNote function from NoteList.js.');
-    API.getSharedNotes(email)
-      .then(res => this.setState({ notes: res.data }, () => {this.handleSelectRefresh(this.state.notes[0]._id);}))
-      .catch(err => console.log(err));
+  // refreshNewNote = (email) => {
+  //   console.log('Ran refreshNewNote function from NoteList.js.');
+  //   API.getSharedNotes(email)
+  //     .then(res => this.setState({ notes: res.data }, () => {this.handleSelectRefresh(this.state.notes[0]._id);}))
+  //     .catch(err => console.log(err));
 
-    // this seems clunky
-    setTimeout(
-      function() {
-        let edit = this.state.isEditable.map((val) => {
-          return (val = false);
-        });
-        let isEditable = edit.slice();
-        isEditable[0] = true;
-        this.setState({ isEditable });
-      }
-      .bind(this),
-      310
-    );
-  }
+  //   // this seems clunky
+  //   setTimeout(
+  //     function() {
+  //       let edit = this.state.isEditable.map((val) => {
+  //         return (val = false);
+  //       });
+  //       this.props.handleSelectedIndex(0);
+  //       let isEditable = edit.slice();
+  //       isEditable[0] = true;
+  //       this.setState({ isEditable });
+  //     }
+  //     .bind(this),
+  //     310
+  //   );
+  // }
 
   handleSharedToggle = () => {
     this.setState({ toggleShared: !this.state.toggleShared });
@@ -312,6 +321,7 @@ class SharedNotes extends Component {
                 button 
                 // className={[classes.nested, classes.noteListItem]}
                 className={`${classes.nested} ${classes.noteListItem}`}
+                selected={this.state.selectedSharedIndex === index}
               >
               <TextField
                 className={classes.noteField}
@@ -327,7 +337,7 @@ class SharedNotes extends Component {
                   ),
                 }}
                 defaultValue={note.title}
-                onClick={() => this.handleSelectRefresh(note._id)}
+                onClick={() => {this.handleSelectRefresh(note._id); this.props.handleSharedIndex(index); }}
                 aria-owns={contextOpen ? 'simple-menu' : null}
                 aria-haspopup="true"
                 onContextMenu={(e) => this.handleContextMenu(e, note._id)}

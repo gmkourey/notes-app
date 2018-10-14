@@ -102,7 +102,7 @@ class NoteList extends Component {
     toggleNotes: true,
     toggleShared: true,
     isLoading: false,
-    selectedIndex: null, // index of the selected note, default to null or -1?
+    selectedIndex: this.props.selectedIndex,
   };
 
   componentDidMount() {
@@ -128,6 +128,13 @@ class NoteList extends Component {
   //     this.setState({notes: this.props.notes});
   //   }
   // }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.selectedIndex !== prevProps.selectedIndex) {
+      this.setState({ selectedIndex: this.props.selectedIndex });
+      console.log("component did update index: " + this.props.selectedIndex);
+    }
+  }
 
   handleDoubleClick (event, index) {
     let edit = this.state.isEditable.map((val, index) => {
@@ -232,7 +239,7 @@ class NoteList extends Component {
         let edit = this.state.isEditable.map((val) => {
           return (val = false);
         });
-        this.handleSelectedIndex(0);
+        this.props.handleSelectedIndex(0);
         let isEditable = edit.slice();
         isEditable[0] = true;
         this.setState({ isEditable });
@@ -262,9 +269,9 @@ class NoteList extends Component {
     .catch(err => console.log(err));
   }
 
-  handleSelectedIndex = (index) => {
-    this.setState({ selectedIndex: index });
-  }
+  // handleSelectedIndex = (index) => {
+  //   this.setState({ selectedIndex: index });
+  // }
 
   handleOpenModal = (event) => {
     event.preventDefault();
@@ -289,7 +296,8 @@ class NoteList extends Component {
       }
       let note = this.state.notes[index]
       this.props.handleSelectedNote(note._id, note.content);
-      this.handleSelectedIndex(index);
+      // this.handleSelectedIndex(index);
+      this.props.handleSelectedIndex(index);
     }))
     .catch(err => console.log(err));
   }
@@ -388,7 +396,7 @@ class NoteList extends Component {
                   ),
                 }}
                 defaultValue={note.title}
-                onClick={() => {this.handleSelectRefresh(note._id); this.handleSelectedIndex(index); }}
+                onClick={() => {this.handleSelectRefresh(note._id); this.props.handleSelectedIndex(index); }}
                 onDoubleClick={(e) => this.handleDoubleClick(e, index)}
                 aria-owns={contextOpen ? 'simple-menu' : null}
                 aria-haspopup="true"
