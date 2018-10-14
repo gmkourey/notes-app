@@ -1,3 +1,4 @@
+var path = require("path");
 var router = require("express").Router();
 var apiRoute = require("./api-routes");
 
