@@ -21,7 +21,7 @@ app.use(express.static("client/build"));
 
 var MONGODB_URI = process.env.MONGODB_URI;
 mongoose.Promise = Promise;
-mongoose.connect(MONGODB_URI);
+mongoose.connect(MONGODB_URI, {useNewUrlParser: true});
 
 // require("./routes/html/html-routes")(app);
 
