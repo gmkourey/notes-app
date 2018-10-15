@@ -1,26 +1,28 @@
-var express = require("express");
-var mongoose = require("mongoose");
-var bodyParser = require("body-parser");
-var routes = require('./routes/api');
+const express = require("express");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const routes = require('./routes/api');
 // require('dotenv').config()
 
-var PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3001;
 
-var app = express();
+const app = express();
 
 app.use(bodyParser.urlencoded({extended:true}));
-
 app.use(bodyParser.json());
 
-app.use(express.static("public"));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
+else {
+  app.use(express.static("public"));
+}
 
-var MONGODB_URI = "mongodb://localhost/notes-app";
-mongoose.Promise = Promise;
-mongoose.connect(MONGODB_URI, {useNewUrlParser: true});
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/notes-app", {useNewUrlParser: true});
 
 app.use(routes);
 
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log("connected to db")

@@ -17,19 +17,7 @@ module.exports = {
     createNote: function(req, res) {
         db.Note
             .create(req.body)
-            .then(dbNote => {
-                return db.User.findOneAndUpdate({
-                    _id: req.params.id
-                },
-                {
-                    $push: {notes: dbNote }
-                },
-                {
-                    new: true
-                })
-            })
-            .then(dbUser => {
-                res.json(dbUser)})
+            .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err))
     },
     updateNote: function (req, res) {
