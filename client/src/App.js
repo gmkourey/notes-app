@@ -8,7 +8,7 @@ import AccountPage from './components/Account';
 // import Note from "./components/Note";
 
 import withAuthentication from './components/withAuthentication';
-import routes from './constants/routes';
+// import routes from './constants/routes';
 
 // currently unused components, shouldn't need them in the end
 // import Navigation from './components/Navigation';
@@ -19,12 +19,18 @@ const App = () =>
   <Router>
     <>
       <Switch>
-        <Route exact path={routes.LANDING} component={MainPage} />
+        <Route exact path="/" component={MainPage} />
+        <Route exact path="/signup" compon={SignUpPage} ent/>
+        <Route exact path="/signin" component={SignInPage} />
+        {/* <Route exact path={routes.PASSWORD_FORGET} component={PasswordForgetPage} /> */}
+        {/* <Route exact path={routes.HOME} component={MainPage} /> */}
+        {/* <Route exact path={routes.ACCOUNT} component={AccountPage} /> */}
+        {/* <Route exact path={routes.LANDING} component={MainPage} />
         <Route exact path={routes.SIGN_UP} compon={SignUpPage} ent/>
         <Route exact path={routes.SIGN_IN} component={SignInPage} />
         <Route exact path={routes.PASSWORD_FORGET} component={PasswordForgetPage} />
         <Route exact path={routes.HOME} component={MainPage} />
-        <Route exact path={routes.ACCOUNT} component={AccountPage} />
+        <Route exact path={routes.ACCOUNT} component={AccountPage} /> */}
       </Switch>
     </>
   </Router>
