@@ -11,7 +11,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 const styles = {
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   appFrame: {
     height: '100vh', // Important
@@ -27,6 +27,8 @@ const styles = {
 }
 
 class MainPage extends React.Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
 
@@ -68,10 +70,15 @@ class MainPage extends React.Component {
   };
 
   componentDidMount() {
-    firebase.auth.onAuthStateChanged(authUser => {
-      if (authUser != null) this.setState({ leftOpen: true })
-      if (!authUser) this.setState({ leftOpen: false })
-    })
+    this._isMounted = true;
+      firebase.auth.onAuthStateChanged(authUser => {
+        if (authUser != null && this._isMounted) this.setState({ leftOpen: true })
+        if (!authUser && this._isMounted) this.setState({ leftOpen: false })
+    });
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   handleThemeToggle = () => {

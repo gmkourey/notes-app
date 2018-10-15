@@ -76,6 +76,10 @@ const styles = theme => ({
   collapsers: {
     marginRight: '0',
   },
+  loader: {
+    marginLeft: '40%',
+    marginTop: '10%',
+  },
 });
 
 function getModalStyle() {
@@ -90,8 +94,9 @@ function getModalStyle() {
 }
 
 class NoteList extends Component {
+  _isMounted = false;
+
   state = {
-    isMounted: false,
     notes: this.props.notes,
     isEditable: [],
     val: [],
@@ -110,17 +115,16 @@ class NoteList extends Component {
   };
 
   componentDidMount() {
-    this.setState({ isMounted: true }, () => {
-      firebase.auth.onAuthStateChanged(authUser => {
-        if (authUser != null && this.state.isMounted) this.setState({ email: authUser.email, isLoading: true }, function() {
-          this.loadNotes();
-        })
+    this._isMounted = true;
+    firebase.auth.onAuthStateChanged(authUser => {
+      if (authUser != null && this._isMounted) this.setState({ email: authUser.email, isLoading: true }, function() {
+        this.loadNotes();
       })
     });
   }
 
-  componentWillUnount() {
-    this.setState({ isMounted: false });
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   componentDidUpdate(prevProps) {
@@ -270,8 +274,11 @@ class NoteList extends Component {
         index = targetIndex;
       }
       let note = this.state.notes[index]
-      this.props.handleSelectedNote(note._id, note.content);
-      this.props.handleSelectedIndex(index);
+
+      if (this.state.notes.length) {
+        this.props.handleSelectedNote(note._id, note.content);
+        this.props.handleSelectedIndex(index);
+      }
     }))
     .catch(err => console.log(err));
   }
@@ -459,7 +466,7 @@ class NoteList extends Component {
             }}
             unmountOnExit
           >
-            <CircularProgress style={{ color: green[500] }}/>
+            <CircularProgress className={classes.loader} style={{ color: green[500] }}/>
           </Fade>
         ) : (
           <p>No notes to display.</p>
