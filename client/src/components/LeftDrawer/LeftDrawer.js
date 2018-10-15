@@ -115,7 +115,9 @@ class LeftDrawer extends Component {
       if (authUser != null) this.setState({ email: authUser.email })
     })
   }
-
+// componentWillUnmount() {
+//   this.setState({ email: null })
+// }
   handleNewNote () {
 
     const initialValue = {
