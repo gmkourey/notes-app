@@ -64,6 +64,7 @@ const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,
 });
 
+
 class SignUpForm extends Component {
   constructor(props) {
     super(props);
@@ -71,7 +72,7 @@ class SignUpForm extends Component {
 
   this.state = { ...INITIAL_STATE };
   }
-
+  
   onSubmit = (event) => {
     const {
       username,
@@ -109,7 +110,6 @@ class SignUpForm extends Component {
       email,
       passwordOne,
       passwordTwo,
-      // error,
     } = this.state;
 
     const isInvalid =

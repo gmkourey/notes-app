@@ -42,7 +42,9 @@ class NoteArea extends React.Component {
 
   componentDidMount() {
     firebase.auth.onAuthStateChanged(authUser => {
+      if(this.state.email === null) {
       this.setState({ email: authUser.email })
+      }
     })
   }
 
