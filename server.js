@@ -1,26 +1,26 @@
-var express = require("express");
-var mongoose = require("mongoose");
-var bodyParser = require("body-parser");
-var routes = require('./routes/api');
-require('dotenv').config()
-
-var PORT = process.env.PORT || 3001;
-
-var app = express();
+const express = require("express");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const routes = require('./routes/api');
+const app = express();
+const PORT = process.env.PORT || 3001;
+// require('dotenv').config()
 
 app.use(bodyParser.urlencoded({extended:true}));
-
 app.use(bodyParser.json());
 
-app.use(express.static("public"));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
 
 // mongoose.connect(`mongodb://${process.env.USERNAME}:${process.env.PASSWORD}@ds117061.mlab.com:17061/heroku_7175wr6b`, {useNewUrlParser: true});
+mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
 mongoose.connect("mongodb://localhost/notes-app", {useNewUrlParser: true});
 require("./routes/html/html-routes")(app);
 
 app.use(routes);
 
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log("connected to db")
@@ -28,5 +28,5 @@ db.once('open', function() {
 
 
 app.listen(PORT, function() {
-    console.log("App running on port 3001!");
+    console.log(`App running on port ${PORT}!`);
   });
