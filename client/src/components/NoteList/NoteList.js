@@ -270,8 +270,11 @@ class NoteList extends Component {
         index = targetIndex;
       }
       let note = this.state.notes[index]
-      this.props.handleSelectedNote(note._id, note.content);
-      this.props.handleSelectedIndex(index);
+
+      if (this.state.notes.length) {
+        this.props.handleSelectedNote(note._id, note.content);
+        this.props.handleSelectedIndex(index);
+      }
     }))
     .catch(err => console.log(err));
   }
