@@ -78,7 +78,6 @@ class PasswordChangeForm extends Component {
     const {
       passwordOne,
       passwordTwo,
-      error,
     } = this.state;
 
     const isInvalid =

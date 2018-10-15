@@ -64,7 +64,7 @@ const styles = theme => ({
   },
   noteListItem: {
     padding: '0',
-    paddingLeft: '12%', // Not an ideal solution
+    paddingLeft: '12%',
   },
   input: {
     cursor: 'default !important',
@@ -92,14 +92,14 @@ function getModalStyle() {
 class NoteList extends Component {
   state = {
     isMounted: false,
-    notes: this.props.notes, // does this even do anything?
+    notes: this.props.notes,
     isEditable: [],
     val: [],
     email: "",
     targetId: null, // id for context menu to access
     targetIndex: null, // index for context menu delete action to check
     contextOpen: false,
-    positionTop: 300, // should these be null by default?
+    positionTop: 300,
     positionLeft: 400,
     modalOpen: false,
     sharedUser: null,
@@ -117,26 +117,15 @@ class NoteList extends Component {
         })
       })
     });
-    console.log("NoteList.js componentDidMount()")
   }
 
   componentWillUnount() {
     this.setState({ isMounted: false });
   }
 
-  // is this necessary? 
-  // componentWillReceiveProps(props) {
-  //   // console.log(this.props.notes);
-  //   console.log("NoteList.js componentWilLReceiveProps()");
-  //   if (this.props.notes.length) {
-  //     this.setState({notes: this.props.notes});
-  //   }
-  // }
-
   componentDidUpdate(prevProps) {
     if (this.props.selectedIndex !== prevProps.selectedIndex) {
       this.setState({ selectedIndex: this.props.selectedIndex });
-      console.log("component did update index: " + this.props.selectedIndex);
     }
   }
 
@@ -161,20 +150,16 @@ class NoteList extends Component {
 
   handleShareChange = (event) => {
     this.setState({sharedUser: event.target.value});
-    console.log(this.state.sharedUser);
   }
 
   handleSharedSubmit = () => {
-    console.log(this.state.sharedUser, this.state.targetId, this.state.email);
     API.getNote(this.state.targetId)
     .then(res => {
       let sharedUserArray = res.data.sharedWith;
       if(sharedUserArray.indexOf(this.state.sharedUser) === -1 || this.state.sharedUser === null) {
-        console.log("Not in array")
 
         API.addSharedUser(this.state.targetId, this.state.sharedUser)
       } else {
-        console.log("In array")
       }
       this.handleModalClose();
     })
@@ -204,9 +189,6 @@ class NoteList extends Component {
   handleContextMenu = (event, id, index) => {
     event.preventDefault();
     
-    // console.log(event);
-    // console.log(id);
-    
     this.setState({ 
       positionTop: event.clientY,
       positionLeft: event.clientX,
@@ -220,7 +202,6 @@ class NoteList extends Component {
   handleCloseContext = (event) => {
     event.preventDefault();
     this.setState({ contextOpen: false });
-    console.log("handleCloseContext() fired");
   };
 
   loadNotes = () => {
@@ -230,7 +211,6 @@ class NoteList extends Component {
   }
 
   refreshNewNote = (email) => {
-    console.log('Ran refreshNewNote function from NoteList.js.');
     API.getNotes(email)
       .then(res => this.setState({ notes: res.data }, () => {this.handleSelectRefresh(this.state.notes[0]._id);}))
       .catch(err => console.log(err));
@@ -256,12 +236,9 @@ class NoteList extends Component {
     // console.log("Running GET for " + this.state.email);
     API.getNotes(this.state.email)
     .then(res => this.setState({ notes: res.data }, () => {
-      console.log(this.state.notes);
       let newContent;
       for (var i = 0; i < this.state.notes.length; i++) {
         if (this.state.notes[i]._id === id) {
-          console.log("ID match: " + this.state.notes[i]._id);
-          console.log(this.state.notes[i].title);
 
           newContent = this.state.notes[i].content;
           this.props.handleSelectedNote(id, newContent);
@@ -270,10 +247,6 @@ class NoteList extends Component {
     }))
     .catch(err => console.log(err));
   }
-
-  // handleSelectedIndex = (index) => {
-  //   this.setState({ selectedIndex: index });
-  // }
 
   handleOpenModal = (event) => {
     event.preventDefault();
@@ -298,7 +271,6 @@ class NoteList extends Component {
       }
       let note = this.state.notes[index]
       this.props.handleSelectedNote(note._id, note.content);
-      // this.handleSelectedIndex(index);
       this.props.handleSelectedIndex(index);
     }))
     .catch(err => console.log(err));
@@ -306,7 +278,6 @@ class NoteList extends Component {
 
   // need to select the "next" note when one note is deleted, otherwise the body stays the same
   deleteNote = (event, id, targetIndex) => {
-    console.log('Delete method called.');
     this.handleCloseContext(event);
     API.deleteNote(id)
       .then(res => {
@@ -319,10 +290,6 @@ class NoteList extends Component {
   handleNotesToggle = () => {
     this.setState({ toggleNotes: !this.state.toggleNotes });
   };
-
-  // handleSharedToggle = () => {
-  //   this.setState({ toggleShared: !this.state.toggleShared });
-  // }
  
   render() {
     const { classes } = this.props;
@@ -350,7 +317,6 @@ class NoteList extends Component {
           </ListItem>
         {this.state.notes.map((note, index) => {
           return (
-          // <>
           <Collapse in={this.state.toggleNotes} timeout="auto" unmountOnExit key={note._id}>
             <List component="div" disablePadding>
             <ListItem
@@ -406,7 +372,6 @@ class NoteList extends Component {
             </ListItem>
             </List>
           </Collapse>
-          // </>
           );
         })}
         </List>

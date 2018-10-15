@@ -18,7 +18,6 @@ app.use(express.static("public"));
 var MONGODB_URI = "mongodb://gmkourey:abc123@ds131963.mlab.com:31963/heroku_vtnm8z12" || "mongodb://localhost/notes-app";
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI, {useNewUrlParser: true});
-require("./routes/html/html-routes")(app);
 
 app.use(routes);
 

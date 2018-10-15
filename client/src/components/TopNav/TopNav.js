@@ -73,7 +73,7 @@ class Navbar extends React.Component {
             ) : (
             <>
               <Typography variant="title" color="inherit" style={{flex: 1}}>
-                grantsnotes
+                GrantsNotes
               </Typography>
               <AccountMenu/>
             </>

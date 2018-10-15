@@ -1,31 +1,16 @@
 import React, { Component } from 'react';
 import API from '../../utils/API';
-// import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-// import Modal from '@material-ui/core/Modal';
-// import Typography from "@material-ui/core/Typography";
 import {firebase} from '../../firebase';
 import PropTypes from 'prop-types';
-// import MenuList from '@material-ui/core/MenuList';
-// import MenuItem from '@material-ui/core/MenuItem';
-// import DeleteIcon from '@material-ui/icons/Delete';
-// import FolderShared from '@material-ui/icons/FolderShared';
 import { withStyles } from '@material-ui/core/styles';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-// import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-// import Popover from '@material-ui/core/Popover';
-// import Layers from '@material-ui/icons/Layers';
-// import InputAdornment from '@material-ui/core/InputAdornment';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-
-// import Fade from '@material-ui/core/Fade';
-// import CircularProgress from '@material-ui/core/CircularProgress';
-// import FolderSharp from '@material-ui/icons/FolderSharp';
 import FolderSharedSharp from '@material-ui/icons/FolderSharedSharp';
 import InsertDriveFileOutlined from '@material-ui/icons/InsertDriveFileOutlined'
 
@@ -75,7 +60,7 @@ const styles = theme => ({
   },
   noteListItem: {
     padding: '0',
-    paddingLeft: '12%', // Not an ideal solution
+    paddingLeft: '12%',
   },
   input: {
     cursor: 'pointer !important',
@@ -88,26 +73,26 @@ const styles = theme => ({
   },
 });
 
-function getModalStyle() {
-  const top = 50;
-  const left = 50;
+// function getModalStyle() {
+//   const top = 50;
+//   const left = 50;
 
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
-  };
-}
+//   return {
+//     top: `${top}%`,
+//     left: `${left}%`,
+//     transform: `translate(-${top}%, -${left}%)`,
+//   };
+// }
 
 class SharedNotes extends Component {
   state = {
-    notes: this.props.notes, // does this even do anything?
+    notes: this.props.notes,
     isEditable: [],
     val: [],
     email: "",
     targetId: null, // id for context menu to access
     contextOpen: false,
-    positionTop: 300, // should these be null by default?
+    positionTop: 300,
     positionLeft: 400,
     modalOpen: false,
     sharedUser: null,
@@ -122,25 +107,14 @@ class SharedNotes extends Component {
         this.loadNotes();
       })
     })
-    console.log("NoteList.js componentDidMount()")
 
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.selectedSharedIndex !== prevProps.selectedSharedIndex) {
       this.setState({ selectedSharedIndex: this.props.selectedSharedIndex });
-      console.log("component did update index: " + this.props.selectedSharedIndex);
     }
   }
-
-  // is this necessary? 
-  // componentWillReceiveProps(props) {
-  //   // console.log(this.props.notes);
-  //   console.log("NoteList.js componentWilLReceiveProps()");
-  //   if (this.props.notes.length) {
-  //     this.setState({notes: this.props.notes});
-  //   }
-  // }
 
   handleDoubleClick (event, index) {
     let edit = this.state.isEditable.map((val, index) => {
@@ -159,24 +133,18 @@ class SharedNotes extends Component {
       .catch(err => console.log(err));
     }
     notes[index].title = event.target.value;
-    // this.forceUpdate();
   }
 
   handleShareChange = (event) => {
     this.setState({sharedUser: event.target.value});
-    console.log(this.state.sharedUser);
   }
 
   handleSharedSubmit = () => {
-    console.log(this.state.sharedUser, this.state.targetId, this.state.email);
     API.getNote(this.state.targetId)
     .then(res => {
       let sharedUserArray = res.data.sharedWith;
       if(sharedUserArray.indexOf(this.state.sharedUser) === -1 || this.state.sharedUser === null) {
-        console.log("Not in array")
         API.addSharedUser(this.state.targetId, this.state.sharedUser)
-      } else {
-        console.log("In array")
       }
     })
   }
@@ -207,9 +175,6 @@ class SharedNotes extends Component {
     
     console.log(event);
     console.log(id); // logs id of note that was right clicked
-
-    // notes:
-    // currently user can't have the context menu open, then immediately close and open a new context menu with one click
     
     this.setState({ 
       positionTop: event.clientY,
@@ -223,53 +188,24 @@ class SharedNotes extends Component {
   handleClose = (event) => {
     event.preventDefault();
     this.setState({ contextOpen: false });
-    console.log("handleClose() fired");
   };
 
   loadNotes = () => {
-    console.log(this.state.email);
     API.getSharedNotes(this.state.email)
       .then(res => this.setState({ notes: res.data }))
       .catch(err => console.log(err));    
   }
-
-  // refreshNewNote = (email) => {
-  //   console.log('Ran refreshNewNote function from NoteList.js.');
-  //   API.getSharedNotes(email)
-  //     .then(res => this.setState({ notes: res.data }, () => {this.handleSelectRefresh(this.state.notes[0]._id);}))
-  //     .catch(err => console.log(err));
-
-  //   // this seems clunky
-  //   setTimeout(
-  //     function() {
-  //       let edit = this.state.isEditable.map((val) => {
-  //         return (val = false);
-  //       });
-  //       this.props.handleSelectedIndex(0);
-  //       let isEditable = edit.slice();
-  //       isEditable[0] = true;
-  //       this.setState({ isEditable });
-  //     }
-  //     .bind(this),
-  //     310
-  //   );
-  // }
 
   handleSharedToggle = () => {
     this.setState({ toggleShared: !this.state.toggleShared });
   }
 
   handleSelectRefresh = (id) => {
-    console.log("Hit handleSelectRefresh function.");
-    console.log("Running GET for " + this.state.email);
     API.getSharedNotes(this.state.email)
     .then(res => this.setState({ notes: res.data }, () => {
-      console.log(this.state.notes);
       let newContent;
       for (var i = 0; i < this.state.notes.length; i++) {
         if (this.state.notes[i]._id === id) {
-          console.log("ID match: " + this.state.notes[i]._id);
-          console.log(this.state.notes[i].title);
 
           newContent = this.state.notes[i].content;
           this.props.handleSelectedNote(id, newContent);

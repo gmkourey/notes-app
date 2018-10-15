@@ -1,6 +1,5 @@
 import React from 'react';
 import Navbar from '../TopNav/TopNav';
-// import { withStyles } from '@material-ui/core/styles';
 import LeftDrawer from '../LeftDrawer/LeftDrawer'
 import Grid from '@material-ui/core/Grid';
 import Content from '../Content/Content';
@@ -19,7 +18,6 @@ const styles = {
     zIndex: 1,
     overflow: 'hidden',
     position: 'relative',
-    // display: 'flex',
     width: '100%'
   },
   scroll: {
@@ -33,7 +31,6 @@ class MainPage extends React.Component {
     super(props);
 
     this.state = {
-      // authUser: null,
       leftOpen: false,
       selectedNoteID: null,
       selectedNoteBody: null,
@@ -50,17 +47,14 @@ class MainPage extends React.Component {
   };
 
   handleSelectedNote = (id, content) => {
-    // console.log(`Selected note function fired in Mainpage. Setting state for selected note:\n id: ${id} \n content: ${content}`);
 
     this.setState({
       selectedNoteID: id,
       selectedNoteBody: content
     })
-    console.log(this.state.selectedNoteID + "\n" + this.state.selectedNoteBody)
   }
 
   handleDeleteAlert = () => {
-    console.log("Delete alert function fired.");
     this.setState({
       deleteAlertOpen: true
     })
@@ -132,9 +126,6 @@ class MainPage extends React.Component {
                   />
                 </main>
               </Grid>
-
-              {/* <Grid item md={2}>
-              </Grid> */}
             </Grid>
           </div>
         </div>

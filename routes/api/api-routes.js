@@ -1,6 +1,5 @@
 var router = require("express").Router();
 var notesController = require("../../controllers/NotesController");
-var userController = require("../../controllers/UserController");
 
 // api/note
 router.route("/note")
@@ -8,12 +7,6 @@ router.route("/note")
 
 router.route("/notes/user/:email")
     .get(notesController.findAll)
-// router.route("/note/:id")
-//     .post(notesController.createNote);
-
-router.route("/user")
-    .get(userController.findAll)
-    .post(userController.createUser)
 
 router.route("/:id")
     .get(notesController.findNote)
@@ -25,8 +18,5 @@ router.route("/:id/:sharedId")
 
 router.route("/shared/:email")
     .get(notesController.getSharedNotes)
-// api/note/:id
-// router.route("/note")
-//     .get(notesController.findNote)
 
 module.exports = router; 
