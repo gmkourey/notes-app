@@ -42,15 +42,14 @@ class NoteArea extends React.Component {
 
   componentDidMount() {
     firebase.auth.onAuthStateChanged(authUser => {
+      if(this.state.email === null) {
       this.setState({ email: authUser.email })
+      }
     })
   }
 
   // componentWillReceiveProps() {
   componentDidUpdate(prevProps) {
-    console.log('content prop: ' + this.props.selectedNoteBody);
-    console.log('id prop: ' + this.props.selectedNoteID);
-    console.log("------------------------");
 
     if (this.props.selectedNoteID !== prevProps.selectedNoteID) {
       let contentStr = this.props.selectedNoteBody;
@@ -62,17 +61,6 @@ class NoteArea extends React.Component {
         id: this.props.selectedNoteID,
       })
     }
-
-    // if (this.props.selectedNoteBody) {
-    //   let contentStr = this.props.selectedNoteBody;
-    //   let contentObj = JSON.parse(contentStr);
-    //   let slateContent = Value.fromJSON(contentObj);
-      
-    //   this.setState({ 
-    //     value: slateContent,
-    //     id: this.props.selectedNoteID
-    //   })
-    // }
   }
 
   state = {
@@ -83,10 +71,8 @@ class NoteArea extends React.Component {
 
   // On change, update the app's React state with the new editor value.
   onChange = ({ value }) => {
-      // console.log(this.state.email);
 
     this.setState({ value })
-    // API.saveNote({content: JSON.stringify(value), userId: this.state.email});
     if (this.props.selectedNoteBody) {
       API.updateNote(this.state.id, { content: JSON.stringify(value) });
     }
@@ -96,7 +82,6 @@ class NoteArea extends React.Component {
   // Render the editor.
   render() {
     const { classes } = this.props;
-    // return <Editor value={this.state.value} onChange={this.onChange} />
     return(
       <Paper>
       <Editor

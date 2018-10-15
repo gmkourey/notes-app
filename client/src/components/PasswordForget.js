@@ -82,8 +82,7 @@ class PasswordForgetForm extends Component {
     const { classes } = this.props;
 
     const {
-      email,
-      error,
+      email
     } = this.state;
 
     const isInvalid = email === '';

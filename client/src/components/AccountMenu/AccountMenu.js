@@ -12,7 +12,6 @@ import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Modal from '@material-ui/core/Modal';
-import Typography from "@material-ui/core/Typography";
 
 import AuthUserContext from '../AuthUserContext';
 import { auth } from '../../firebase';

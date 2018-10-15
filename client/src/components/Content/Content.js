@@ -12,9 +12,6 @@ class Content extends React.Component {
         {authUser => authUser
           ? (
             <>
-            {/* For testing */}
-            {/* {console.log("Getting user info from firebase...")}
-            {console.log(authUser)} */}
             <NoteArea 
               selectedNoteBody={this.props.selectedNoteBody}
               selectedNoteID={this.props.selectedNoteID}
@@ -23,7 +20,6 @@ class Content extends React.Component {
             </>
           ) : (
             <SignUpPage/>
-            // This page needs info about the app, ie. landing page
           )
         }
       </AuthUserContext.Consumer>

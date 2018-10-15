@@ -67,7 +67,6 @@ const styles = theme => ({
       height: '100vh',
     },
     [theme.breakpoints.up('md')]: {
-      // width: '240px',
       minWidth: '225px',
       height: `calc(100vh - 74px)`
     },
@@ -79,12 +78,10 @@ const styles = theme => ({
       width: '100%'
     },
     [theme.breakpoints.up('md')]: {
-      // width: '240px'
       minWidth: '225px',
     },
   },
   drawerHeaderL: {
-    // position: 'absolute',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
@@ -118,10 +115,10 @@ class LeftDrawer extends Component {
       if (authUser != null) this.setState({ email: authUser.email })
     })
   }
-
+// componentWillUnmount() {
+//   this.setState({ email: null })
+// }
   handleNewNote () {
-    console.log("Hit handleNewNote function");
-    console.log(this.state.title);
 
     const initialValue = {
       document: {
@@ -153,15 +150,10 @@ class LeftDrawer extends Component {
   };
 
   handleSelectedIndex = (index) => {
-    console.log(index);
-    console.log("LEFTDRAWER HANDLE SELECTED INDEX FUNCTION")
-    // console.log(this.state.selectedIndex);
     this.setState({ selectedIndex: index, selectedSharedIndex: null });
   }
 
   handleSharedIndex = (index) => {
-    console.log(index);
-    console.log(this.state.selectedSharedIndex);
     this.setState({ selectedSharedIndex: index, selectedIndex: null })
   }
 
