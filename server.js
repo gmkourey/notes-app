@@ -2,7 +2,7 @@ var express = require("express");
 var mongoose = require("mongoose");
 var bodyParser = require("body-parser");
 var routes = require('./routes/api');
-require('dotenv').config()
+// require('dotenv').config()
 
 var PORT = process.env.PORT || 3001;
 
@@ -15,7 +15,9 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 
 // mongoose.connect(`mongodb://${process.env.USERNAME}:${process.env.PASSWORD}@ds117061.mlab.com:17061/heroku_7175wr6b`, {useNewUrlParser: true});
-mongoose.connect("mongodb://localhost/notes-app", {useNewUrlParser: true});
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/notes-app";
+mongoose.Promise = Promise;
+mongoose.connect(MONGODB_URI, {useNewUrlParser: true});
 require("./routes/html/html-routes")(app);
 
 app.use(routes);
