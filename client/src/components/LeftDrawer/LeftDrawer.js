@@ -92,6 +92,7 @@ const styles = theme => ({
 
 
 class LeftDrawer extends Component {
+  _isMounted = false;
 
   state = {
     title: "Untitled",
@@ -111,13 +112,16 @@ class LeftDrawer extends Component {
   }
 
   componentDidMount() {
-    firebase.auth.onAuthStateChanged(authUser => {
-      if (authUser != null) this.setState({ email: authUser.email })
-    })
+    this._isMounted = true;
+      firebase.auth.onAuthStateChanged(authUser => {
+        if (authUser != null && this._isMounted) this.setState({ email: authUser.email })
+      })
   }
-// componentWillUnmount() {
-//   this.setState({ email: null })
-// }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   handleNewNote () {
 
     const initialValue = {

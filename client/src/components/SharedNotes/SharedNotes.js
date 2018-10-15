@@ -85,6 +85,8 @@ const styles = theme => ({
 // }
 
 class SharedNotes extends Component {
+  _isMounted = false;
+
   state = {
     notes: this.props.notes,
     isEditable: [],
@@ -99,15 +101,19 @@ class SharedNotes extends Component {
     toggleShared: true,
     isLoading: false,
     selectedSharedIndex: this.props.selectedSharedIndex,
-  };  
+  };
 
   componentDidMount() {
+    this._isMounted = true;
     firebase.auth.onAuthStateChanged(authUser => {
-      if (authUser != null) this.setState({ email: authUser.email, isLoading: true }, function() {
+      if (authUser != null && this._isMounted) this.setState({ email: authUser.email, isLoading: true }, function() {
         this.loadNotes();
       })
-    })
+    });
+  }
 
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   componentDidUpdate(prevProps) {

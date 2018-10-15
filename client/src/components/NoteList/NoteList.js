@@ -90,8 +90,9 @@ function getModalStyle() {
 }
 
 class NoteList extends Component {
+  _isMounted = false;
+
   state = {
-    isMounted: false,
     notes: this.props.notes,
     isEditable: [],
     val: [],
@@ -110,17 +111,16 @@ class NoteList extends Component {
   };
 
   componentDidMount() {
-    this.setState({ isMounted: true }, () => {
-      firebase.auth.onAuthStateChanged(authUser => {
-        if (authUser != null && this.state.isMounted) this.setState({ email: authUser.email, isLoading: true }, function() {
-          this.loadNotes();
-        })
+    this._isMounted = true;
+    firebase.auth.onAuthStateChanged(authUser => {
+      if (authUser != null && this._isMounted) this.setState({ email: authUser.email, isLoading: true }, function() {
+        this.loadNotes();
       })
     });
   }
 
-  componentWillUnount() {
-    this.setState({ isMounted: false });
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   componentDidUpdate(prevProps) {
