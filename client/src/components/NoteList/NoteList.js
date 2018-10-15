@@ -76,6 +76,10 @@ const styles = theme => ({
   collapsers: {
     marginRight: '0',
   },
+  loader: {
+    marginLeft: '40%',
+    marginTop: '10%',
+  },
 });
 
 function getModalStyle() {
@@ -462,7 +466,7 @@ class NoteList extends Component {
             }}
             unmountOnExit
           >
-            <CircularProgress style={{ color: green[500] }}/>
+            <CircularProgress className={classes.loader} style={{ color: green[500] }}/>
           </Fade>
         ) : (
           <p>No notes to display.</p>

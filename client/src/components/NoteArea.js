@@ -27,12 +27,40 @@ const initialValue = Value.fromJSON({
             object: 'text',
             leaves: [
               {
-                text: "Stuff from NoteArea",
+                text: "Welcome to GrantsNotes!",
               },
             ],
           },
         ],
       },
+      {
+        object: 'block',
+        type: 'paragraph',
+        nodes: [
+          {
+            object: 'text',
+            leaves: [
+              {
+                text: "",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        object: 'block',
+        type: 'paragraph',
+        nodes: [
+          {
+            object: 'text',
+            leaves: [
+              {
+                text: "You can use the panel on the left to create a new note and get started.",
+              },
+            ],
+          },
+        ],
+      }
     ],
   },
 })
