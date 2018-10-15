@@ -17,8 +17,8 @@
     "slate-react": "^0.18.10"
   },
   "scripts": {
-    "start": "npm run start:prod",
-    "start:prod": "concurrently \"node server.js\" \"npm run client\"",
+    "start": "node server.js",
+    "start:prod": "npm install concurrently \"node server.js\" \"npm run client\"",
     "start:dev": "concurrently \"nodemon server.js\" \"npm run client\"",
     "client": "npm start --prefix client",
     "seed": "node scripts/seedDB.js",
