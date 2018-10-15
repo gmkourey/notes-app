@@ -1,5 +1,4 @@
 const db = require("../models");
-const mongoose = require("mongoose");
 
 module.exports = {
     findAll: function(req, res) {
@@ -30,7 +29,6 @@ module.exports = {
                 })
             })
             .then(dbUser => {
-                console.log(dbUser)
                 res.json(dbUser)})
             .catch(err => res.status(422).json(err))
     },
@@ -60,7 +58,6 @@ module.exports = {
             .catch(err => res.json(err))
     },
     getSharedNotes: function(req, res) {
-        console.log("Hit this");
         db.Note
             .find({sharedWith: req.params.email})
             .then(dbModel => res.json(dbModel))

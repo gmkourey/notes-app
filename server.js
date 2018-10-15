@@ -14,8 +14,7 @@ app.use(bodyParser.json());
 
 app.use(express.static("public"));
 
-// mongoose.connect(`mongodb://${process.env.USERNAME}:${process.env.PASSWORD}@ds117061.mlab.com:17061/heroku_7175wr6b`, {useNewUrlParser: true});
-var MONGODB_URI = "mongodb://gmkourey:abc123@ds131963.mlab.com:31963/heroku_vtnm8z12" || "mongodb://localhost/notes-app";
+var MONGODB_URI = "mongodb://localhost/notes-app";
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI, {useNewUrlParser: true});
 
