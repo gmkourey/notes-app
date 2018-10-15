@@ -11,7 +11,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 const styles = {
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   appFrame: {
     height: '100vh', // Important
