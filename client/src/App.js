@@ -15,7 +15,7 @@ import withAuthentication from './components/withAuthentication';
 // import LandingPage from './components/Landing';
 // import HomePage from './components/Home';
 
-const App = () =>
+const App = () => (
   <Router>
     <>
       <Switch>
@@ -34,5 +34,6 @@ const App = () =>
       </Switch>
     </>
   </Router>
+);
 
 export default withAuthentication(App);
