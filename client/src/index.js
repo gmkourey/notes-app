@@ -7,9 +7,10 @@ import store from './stores';
 // import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(
-  <Provider { ...store }>
-    <App />
-  </Provider>,
+  // <Provider { ...store }>
+  //   <App />
+  // </Provider>,
+  <h1>Fuck this shit</h1>,
   document.getElementById('root')
 );
 
