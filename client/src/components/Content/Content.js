@@ -1,7 +1,6 @@
 import React from 'react';
 import AuthUserContext from '../AuthUserContext';
 import SignUpPage from '../SignUp';
-// import Note from "../Note";
 import NoteArea from "../NoteArea";
 
 class Content extends React.Component {

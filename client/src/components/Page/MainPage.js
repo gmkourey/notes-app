@@ -5,7 +5,6 @@ import Grid from '@material-ui/core/Grid';
 import Content from '../Content/Content';
 import DeleteAlert from '../DeleteAlert/DeleteAlert';
 import { firebase } from '../../firebase';
-
 import { withStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
@@ -121,6 +120,7 @@ class MainPage extends React.Component {
                   handleLeftDrawer={this.handleLeftDrawer}
                   handleSelectedNote={this.handleSelectedNote}
                   handleDeleteAlert={this.handleDeleteAlert}
+                  text={this.state.text}
                 />
               </Grid>
 

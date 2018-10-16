@@ -73,17 +73,6 @@ const styles = theme => ({
   },
 });
 
-// function getModalStyle() {
-//   const top = 50;
-//   const left = 50;
-
-//   return {
-//     top: `${top}%`,
-//     left: `${left}%`,
-//     transform: `translate(-${top}%, -${left}%)`,
-//   };
-// }
-
 class SharedNotes extends Component {
   _isMounted = false;
 
