@@ -33,10 +33,6 @@ const styles = theme => ({
     alignItems: 'left',
     padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
   },
-  // avatar: {
-  //   margin: theme.spacing.unit,
-  //   backgroundColor: theme.palette.secondary.main,
-  // },
   form: {
     width: '100%', // Fix IE11 issue.
     marginTop: theme.spacing.unit,
@@ -89,7 +85,7 @@ class SignUpForm extends Component {
         db.doCreateUser(authUser.user.uid, username, email)
           .then(() => {
             this.setState({ ...INITIAL_STATE });
-            history.push(routes.HOME);
+            history.push(routes.LANDING);
           })
           .catch(error => {
             this.setState(byPropKey('error', error));
@@ -188,10 +184,9 @@ class SignUpForm extends Component {
   }
 }
 
-// export default withRouter(SignUpPage);
+
 export default withRouter(withStyles(styles)(SignUpForm));
 const SignUp1 = withRouter(SignUpPage);
 const SignUp2 = withStyles(styles)(SignUpForm);
 
 export { SignUp1, SignUp2 };
-// export {withStyles(styles)(SignUpForm)};

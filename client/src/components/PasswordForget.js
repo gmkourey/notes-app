@@ -22,7 +22,6 @@ const styles = theme => ({
     marginRight: theme.spacing.unit * 3,
     [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
       width: 400,
-      // marginLeft: 'auto',
       marginRight: 'auto',
     },
   },
@@ -41,12 +40,6 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3,
   },
 });
-
-// const PasswordForgetPage = () =>
-//   <div>
-//     <h1>PasswordForget</h1>
-//     <PasswordForgetForm />
-//   </div>
 
 const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,
@@ -98,13 +91,10 @@ class PasswordForgetForm extends Component {
           <InputLabel htmlFor="email">Email</InputLabel>
           <Input
             type="email"
-            // autoComplete="email"
             margin="normal"
             value={this.state.email}
             onChange={event => this.setState(byPropKey('email', event.target.value))}
           />
-
-          
         </FormControl>
         <Button disabled={isInvalid} type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
           Reset My Password
@@ -127,7 +117,6 @@ PasswordForgetForm.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-// export default PasswordForgetPage;
 export default withStyles(styles)(PasswordForgetForm);
 export {
   PasswordForgetForm,

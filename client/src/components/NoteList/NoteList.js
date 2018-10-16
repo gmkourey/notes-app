@@ -15,13 +15,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Popover from '@material-ui/core/Popover';
-
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-
 import Fade from '@material-ui/core/Fade';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import FolderSharp from '@material-ui/icons/FolderSharp';
@@ -236,8 +234,6 @@ class NoteList extends Component {
   }
 
   handleSelectRefresh = (id) => {
-    // console.log("Hit handleSelectRefresh function.");
-    // console.log("Running GET for " + this.state.email);
     API.getNotes(this.state.email)
     .then(res => this.setState({ notes: res.data }, () => {
       let newContent;
@@ -469,7 +465,9 @@ class NoteList extends Component {
             <CircularProgress className={classes.loader} style={{ color: green[500] }}/>
           </Fade>
         ) : (
-          <p>No notes to display.</p>
+          <p style={{ marginLeft: '20px', color: this.props.text, }}>
+            No notes to display.
+          </p>
         )}
         </>
       )}

@@ -3,12 +3,6 @@ import React from 'react';
 import AuthUserContext from './AuthUserContext';
 import { firebase } from '../firebase';
 
-// trying to implement the user frontend
-// import Navbar from './TopNav/TopNav';
-// import LeftDrawer from './LeftDrawer/LeftDrawer';
-// import RightDrawer from './RightDrawer/RightDrawer';
-// import Typography from '@material-ui/core/Typography';
-
 const withAuthentication = (Component) =>
   class WithAuthentication extends React.Component {
     constructor(props) {

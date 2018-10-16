@@ -25,7 +25,6 @@ const styles = theme => ({
     zIndex: 1,
     overflow: 'hidden',
     position: 'relative',
-    // display: 'flex',
     width: '100%',
     borderBottom: ""
   },
@@ -46,11 +45,9 @@ const styles = theme => ({
   },
   'appBarShift-left': {
     marginLeft: drawerWidth,
-    // marginLeft: 0
   },
   'appBarShift-right': {
     marginRight: drawerWidth,
-    // marginLeft: 0
   },
   menuButton: {
     padding: '5px',
@@ -174,6 +171,7 @@ class LeftDrawer extends Component {
           innerRef={this.child}
           selectedIndex={this.state.selectedIndex}
           handleSelectedIndex={this.handleSelectedIndex}
+          text={this.props.text}
         />
         <SharedNotes
           notes={this.state.notes}

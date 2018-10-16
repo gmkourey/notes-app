@@ -12,7 +12,6 @@ import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Modal from '@material-ui/core/Modal';
-
 import AuthUserContext from '../AuthUserContext';
 import { auth } from '../../firebase';
 import * as routes from '../../constants/routes';
@@ -38,7 +37,6 @@ const styles = theme => ({
   },
   modalPaper: {
     position: 'absolute',
-    // width: theme.spacing.unit * 50,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing.unit * 4,
