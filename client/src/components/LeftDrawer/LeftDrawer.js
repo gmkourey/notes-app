@@ -145,7 +145,8 @@ class LeftDrawer extends Component {
     API.saveNote({
       title: "Untitled",
       userId: this.state.email,
-      content: JSON.stringify(initialValue)
+      // content: JSON.stringify(initialValue)
+      content: initialValue
     })
       .then(this.child.current.refreshNewNote(this.state.email));
   };
