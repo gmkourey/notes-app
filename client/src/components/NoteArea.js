@@ -93,7 +93,6 @@ class NoteArea extends React.Component {
     })
   }
 
-  // componentWillReceiveProps() {
   componentDidUpdate(prevProps) {
 
     if (this.props.selectedNoteID !== prevProps.selectedNoteID) {
@@ -115,15 +114,15 @@ class NoteArea extends React.Component {
     email: "test",
   }
 
-  // On change, update the app's React state with the new editor value.
+  // On change, update the app's React state with the new editor value & update DB
   onChange = ({ value }) => {
-    // this.setState({ value });
-    console.log(value.toJSON());
     // if (this.props.selectedNoteBody) {
     if (value.document !== this.state.value.document) {
       // API.updateNote(this.state.id, { content: JSON.stringify(value) });
       // API.updateNote(this.state.id, { content: JSON.stringify(value.toJSON()) });
-      API.updateNote(this.state.id, { content: value.toJSON() });
+      if (this.state.id) {
+        API.updateNote(this.state.id, { content: value.toJSON() });
+      }
     }
 
     this.setState({ value });
