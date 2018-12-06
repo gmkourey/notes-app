@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
@@ -12,6 +13,7 @@ import AuthUserContext from '../AuthUserContext';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Tooltip from '@material-ui/core/Tooltip';
+import * as routes from '../../constants/routes';
 
 const styles = {
   root: {
@@ -55,7 +57,7 @@ class Navbar extends React.Component {
                 </IconButton>
               </Tooltip>
               <Typography variant="title" color="inherit" style={{flex: 1}}>
-                GrantsNotes
+                  GrantsNotes
               </Typography>
               <Tooltip title="Toggle theme">
                 <FormControlLabel
@@ -73,7 +75,9 @@ class Navbar extends React.Component {
             ) : (
             <>
               <Typography variant="title" color="inherit" style={{flex: 1}}>
-                GrantsNotes
+                <Link to={routes.LANDING} style={{ textDecoration: 'none', color: "#000"}}>
+                  GrantsNotes
+                </Link>
               </Typography>
               <AccountMenu/>
             </>
