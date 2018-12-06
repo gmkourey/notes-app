@@ -9,8 +9,10 @@ var NoteSchema = new Schema({
         type: String
     },
     content: {
-        type: String,
-        unique: false
+        // type: String,
+        type: Object,
+        // unique: false
+        index: false
     },
     dateAdded: {
         type: Date,

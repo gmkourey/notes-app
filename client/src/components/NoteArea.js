@@ -93,12 +93,12 @@ class NoteArea extends React.Component {
     })
   }
 
-  // componentWillReceiveProps() {
   componentDidUpdate(prevProps) {
 
     if (this.props.selectedNoteID !== prevProps.selectedNoteID) {
-      let contentStr = this.props.selectedNoteBody;
-      let contentObj = JSON.parse(contentStr);
+      // let contentStr = this.props.selectedNoteBody;
+      // let contentObj = JSON.parse(contentStr);
+      let contentObj = this.props.selectedNoteBody;
       let slateContent = Value.fromJSON(contentObj);
 
       this.setState({ 
@@ -114,12 +114,18 @@ class NoteArea extends React.Component {
     email: "test",
   }
 
-  // On change, update the app's React state with the new editor value.
+  // On change, update the app's React state with the new editor value & update DB
   onChange = ({ value }) => {
-    this.setState({ value });
-    if (this.props.selectedNoteBody) {
-      API.updateNote(this.state.id, { content: JSON.stringify(value) });
+    // if (this.props.selectedNoteBody) {
+    if (value.document !== this.state.value.document) {
+      // API.updateNote(this.state.id, { content: JSON.stringify(value) });
+      // API.updateNote(this.state.id, { content: JSON.stringify(value.toJSON()) });
+      if (this.state.id) {
+        API.updateNote(this.state.id, { content: value.toJSON() });
+      }
     }
+
+    this.setState({ value });
   };
 
   onKeyDown = (e, change) => {
@@ -226,7 +232,7 @@ class NoteArea extends React.Component {
         </div>
         <Editor
           className={classes.scroll} 
-          value={this.state.value} 
+          value={this.state.value}
           onChange={this.onChange}
           onKeyDown={this.onKeyDown}
           renderMark={this.renderMark}

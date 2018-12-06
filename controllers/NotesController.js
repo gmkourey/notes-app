@@ -24,7 +24,8 @@ module.exports = {
         db.Note
             .findOneAndUpdate({_id: req.params.id}, req.body)
             .then(dbModel => res.json(dbModel))
-            .catch(err => res.json(err))
+            // .catch(err => res.json(err))
+            .catch(err => console.log(err))
     },
     findNote: function(req, res) {
         db.Note

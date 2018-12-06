@@ -137,6 +137,7 @@ class SignUpForm extends Component {
                     id="email"
                     name="email"
                     autoComplete="email"
+                    type="email"
                     onChange={event => this.setState(byPropKey('email', event.target.value))}
                     placeholder="Your email address will be used for logging in."
                   />
