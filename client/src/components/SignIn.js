@@ -14,6 +14,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Navbar from './TopNav/TopNav';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 const styles = theme => ({
   layout: {
@@ -63,6 +64,7 @@ class SignInForm extends Component {
     const {
       email,
       password,
+      // error
     } = this.state;
 
     const { history } = this.props;
@@ -74,8 +76,10 @@ class SignInForm extends Component {
       })
       .catch(error => {
         this.setState(byPropKey('error', error));
+        console.log("Login failed");
       });
 
+    console.log("Submit function was called.");
     event.preventDefault();
   }
 
@@ -106,8 +110,12 @@ class SignInForm extends Component {
                     id="email"
                     name="email"
                     autoComplete="email"
+                    type="email"
                     onChange={event => this.setState(byPropKey('email', event.target.value))}
                     autoFocus />
+                    {this.state.error ? (
+                      <FormHelperText error id="component-error-text">Invalid login</FormHelperText>
+                    ) : ( <> </> )}
                 </FormControl>
                 <FormControl margin="normal" required fullWidth>
                   <InputLabel htmlFor="password">Password</InputLabel>
